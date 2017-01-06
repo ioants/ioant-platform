@@ -56,9 +56,9 @@ app.get('/liststreams', function (req, res) {
         index = total_streams-number_of_remaining_streams
         row = rows[index]
         value_field = "";
-        if ( row[column_message_type] == 0 || row[column_message_type] == 1 || row[column_message_type] == 2 || row[column_message_type] == 3)
+        if ( row[column_message_type] == 4 || row[column_message_type] == 5 || row[column_message_type] == 6 || row[column_message_type] == 8)
             value_field = ", value AS latestvalue";
-        else if (row[column_message_type] == 9 ){
+        else if (row[column_message_type] == 2 ){
             value_field = ", reference_link AS latestvalue";
         }
         else{
