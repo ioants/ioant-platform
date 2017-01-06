@@ -1,7 +1,7 @@
 #!/bin/sh
 # Run this script from terminal within atom to get it running with platformio virtual environment
-apt-get install python-dev libmysqlclient-dev
-apt-get install python-pip
+sudo apt-get install python-dev libmysqlclient-dev
+sudo apt-get install python-pip
 
 #Python dependencies used by clients
 pip install 'protobuf>=3.1.0'
