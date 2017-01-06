@@ -56,15 +56,14 @@ app.get('/liststreams', function (req, res) {
         index = total_streams-number_of_remaining_streams
         row = rows[index]
         value_field = "";
-        if ( row[column_message_type] == 4 || row[column_message_type] == 5 || row[column_message_type] == 6 || row[column_message_type] == 8)
-            value_field = ", value AS latestvalue";
-        else if (row[column_message_type] == 2 ){
-            value_field = ", reference_link AS latestvalue";
-        }
-        else{
-            value_field = "";
-        }
-
+        // if ( row[column_message_type] == 4 || row[column_message_type] == 5 || row[column_message_type] == 6 || row[column_message_type] == 8)
+        //     value_field = ", value AS latestvalue";
+        // else if (row[column_message_type] == 2 ){
+        //     value_field = ", reference_link AS latestvalue";
+        // }
+        // else{
+        //     value_field = "";
+        // }
 
         query = `SELECT ts ${value_field} from ${table_prefix}${row[column_sid_name]}_${row[column_message_name]} ORDER BY ts DESC LIMIT 1`;
         request_from_database(query)
