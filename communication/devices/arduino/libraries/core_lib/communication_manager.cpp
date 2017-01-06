@@ -14,7 +14,7 @@ namespace ioant{
 
     CommunicationManager* CommunicationManager::instance_ = NULL;
 
-    const int NUMBER_OF_CONFIGRATION_FIELDS = 14;
+    const int NUMBER_OF_CONFIGURATION_FIELDS = 14;
     String CSS = ".form-style-8{font-family:arial,sans;width:500px;padding:30px;background:#FFF;margin:50px auto;box-shadow:0 0 15px rgba(0,0,0,.22);-moz-box-shadow:0 0 15px rgba(0,0,0,.22);-webkit-box-shadow:0 0 15px rgba(0,0,0,.22)}.form-style-8 h2{background:#4D4D4D;text-transform:uppercase;font-family:sans-serif;color:#797979;font-size:18px;font-weight:100;padding:20px;margin:-30px -30px 30px}.form-style-8 input[type=text],.form-style-8 input[type=date],.form-style-8 input[type=datetime],.form-style-8 input[type=email],.form-style-8 input[type=number],.form-style-8 input[type=search],.form-style-8 input[type=time],.form-style-8 input[type=url],.form-style-8 input[type=password],.form-style-8 select,.form-style-8 textarea{box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;outline:0;display:block;width:100%;padding:7px;border:none;border-bottom:1px solid #ddd;background:0 0;margin-bottom:10px;font:16px Arial,Helvetica,sans-serif;height:45px}.form-style-8 textarea{resize:none;overflow:hidden}.form-style-8 input[type=submit],.form-style-8 input[type=button]{-moz-box-shadow:inset 0 1px 0 0 #45D6D6;-webkit-box-shadow:inset 0 1px 0 0 #45D6D6;box-shadow:inset 0 1px 0 0 #45D6D6;background-color:#2CBBBB;border:1px solid #27A0A0;display:inline-block;cursor:pointer;color:#FFF;font-family:sans-serif;font-size:14px;padding:8px 18px;text-decoration:none;text-transform:uppercase}.form-style-8 input[type=submit]:hover,.form-style-8 input[type=button]:hover{background:linear-gradient(to bottom,#34CACA 5%,#30C9C9 100%);background-color:#34CACA}";
     String CONFIGURATION_FIELDS[NUMBER_OF_CONFIGRATION_FIELDS] = { "client_id",
                                                                    "topic_global",
@@ -44,7 +44,7 @@ namespace ioant{
                                                                           "Port (UDP debugging)",
                                                                           "Low Power Mode (true/false)",
                                                                           "Status LED Pin (Flashes when messages are sent)",
-                                                                          "Client Delay (E.g delay between sensor readings)"};
+                                                                          "Communication Delay (E.g delay between sensor readings)"};
 
 
     CommunicationManager* CommunicationManager::GetInstance(){
@@ -83,7 +83,7 @@ namespace ioant{
 
         form += "<div class='form-style-8'><form action='configuration'>"
                 "<h2>Nabton Client Configuration</h2>";
-        for (int i=0; i < NUMBER_OF_CONFIGRATION_FIELDS; i++){
+        for (int i=0; i < NUMBER_OF_CONFIGURATION_FIELDS; i++){
             form += "<input type='text' name='"+CONFIGURATION_FIELDS[i]+"' placeholder='"+CONFIGURATION_FIELDS_READABLE[i]+"'>";
         }
 
@@ -104,7 +104,7 @@ namespace ioant{
             uint32_t cycles = ESP.getCycleCount();
             uint16_t pseudo_random = (cycles & 0xFFFF);
             String softAPname = "IANT_"+String(pseudo_random);
-            WiFi.softAP(softAPname.c_str(), "test12345678");
+            WiFi.softAP(softAPname.c_str(), "test1234");
             IPAddress myIP = WiFi.softAPIP();
             ULOG_DEBUG << "Hosting AP: " << "UIANT_"+String(pseudo_random);
             ULOG_DEBUG << "Ip address if AP: " << AddressToString(myIP);
@@ -176,7 +176,7 @@ namespace ioant{
                 config_.broker_user =  web_server_->arg("broker_user");
             if (web_server_->arg("broker_password").length() > 0)
                 config_.broker_password =  web_server_->arg("broker_password");
-            if (web_server_->arg("low_power").length() > 0)
+            if (web_server_->arg("udp_url").length() > 0)
                 config_.udp_url =  web_server_->arg("udp_url");
             if (web_server_->arg("udp_port").toInt())
                 config_.udp_port =  web_server_->arg("udp_port").toInt();
