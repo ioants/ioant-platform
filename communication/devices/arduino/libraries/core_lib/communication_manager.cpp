@@ -160,21 +160,23 @@ namespace ioant{
 
     void CommunicationManager::HandleFormConfiguration(){
 
-        ULOG << "--- WEBSERVER DATA ---";
-        ULOG << "client_id" << web_server_->arg("client_id");
-        ULOG << "wifi_ssid" << web_server_->arg("wifi_ssid");
-        ULOG << "wifi_password" << web_server_->arg("wifi_password");
-        ULOG << "broker_url" << web_server_->arg("broker_url");
-        ULOG << "broker_port" << web_server_->arg("broker_port")
-        ULOG << "broker_user" << web_server_->arg("broker_user");
-        ULOG << "broker_password" << web_server_->arg("broker_password");
-        ULOG << "udp_url" << web_server_->arg("udp_url");
-        ULOG << "udp_port" << web_server_->arg("udp_port");
-        ULOG << "status_led" << web_server_->arg("status_led");
-        ULOG << "topic_global" << web_server_->arg("topic_global");
-        ULOG << "topic_local" << web_server_->arg("topic_local");
-        ULOG << "communication_delay" << web_server_->arg("communication_delay");
 
+        ULOG_DEBUG << "asd";
+
+        ULOG_DEBUG << "--- WEBSERVER DATA ---";
+        ULOG_DEBUG << "client_id" << String(web_server_->arg("client_id"));
+        ULOG_DEBUG << "wifi_ssid" << String(web_server_->arg("wifi_ssid"));
+        ULOG_DEBUG << "wifi_password" << String(web_server_->arg("wifi_password"));
+        ULOG_DEBUG << "broker_url" << String(web_server_->arg("broker_url"));
+        ULOG_DEBUG << "broker_port" << web_server_->arg("broker_port");
+        ULOG_DEBUG << "broker_user" << String(web_server_->arg("broker_user"));
+        ULOG_DEBUG << "broker_password" << String(web_server_->arg("broker_password"));
+        ULOG_DEBUG << "udp_url" << String(web_server_->arg("udp_url"));
+        ULOG_DEBUG << "udp_port" << web_server_->arg("udp_port");
+        ULOG_DEBUG << "status_led" << web_server_->arg("status_led");
+        ULOG_DEBUG << "topic_global" << String(web_server_->arg("topic_global"));
+        ULOG_DEBUG << "topic_local" << String(web_server_->arg("topic_local"));
+        ULOG_DEBUG << "communication_delay" << web_server_->arg("communication_delay");
 
         if (web_server_){
             if (web_server_->arg("client_id").length() > 0)
