@@ -1,6 +1,6 @@
-# Nabton common area
+# IoAnt common area
 
 - Configuration file for server installation
 - Setup shell scripts
-- Nabton SDK for python development
+- IOAnt SDK for python development
 - Useful tools for development
