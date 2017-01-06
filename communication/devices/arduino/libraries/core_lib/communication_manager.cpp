@@ -81,7 +81,7 @@ namespace ioant{
         String form = "<head><title>IOAnt Device Configuration Form</title></head>";
         form += "<style type='text/css'>"+CSS+"</style>";
 
-        form += "<div class='form-style-8'><form action='configuration'>"
+        form += "<div class='form-style-8'><form action='configuration' method='POST'>"
                 "<h2>IOAnt Client Configuration</h2>";
         for (int i=0; i < NUMBER_OF_CONFIGURATION_FIELDS; i++){
             form += "<input type='text' name='"+CONFIGURATION_FIELDS[i]+"' placeholder='"+CONFIGURATION_FIELDS_READABLE[i]+"'>";
@@ -104,7 +104,7 @@ namespace ioant{
             String softAPname = "IOANT_DEVICE";
             WiFi.softAP(softAPname.c_str(), "test1234");
             IPAddress myIP = WiFi.softAPIP();
-            ULOG_DEBUG << "Hosting AP: " << "IOANT_";
+            ULOG_DEBUG << "Hosting AP: " << "IOANT";
             ULOG_DEBUG << "Ip address if AP: " << AddressToString(myIP);
 
             web_server_->on("/", [](){
@@ -164,19 +164,19 @@ namespace ioant{
         ULOG_DEBUG << "asd";
 
         ULOG_DEBUG << "--- WEBSERVER DATA ---";
-        ULOG_DEBUG << "client_id" << String(web_server_->arg("client_id"));
-        ULOG_DEBUG << "wifi_ssid" << String(web_server_->arg("wifi_ssid"));
-        ULOG_DEBUG << "wifi_password" << String(web_server_->arg("wifi_password"));
-        ULOG_DEBUG << "broker_url" << String(web_server_->arg("broker_url"));
-        ULOG_DEBUG << "broker_port" << web_server_->arg("broker_port");
-        ULOG_DEBUG << "broker_user" << String(web_server_->arg("broker_user"));
-        ULOG_DEBUG << "broker_password" << String(web_server_->arg("broker_password"));
-        ULOG_DEBUG << "udp_url" << String(web_server_->arg("udp_url"));
-        ULOG_DEBUG << "udp_port" << web_server_->arg("udp_port");
-        ULOG_DEBUG << "status_led" << web_server_->arg("status_led");
-        ULOG_DEBUG << "topic_global" << String(web_server_->arg("topic_global"));
-        ULOG_DEBUG << "topic_local" << String(web_server_->arg("topic_local"));
-        ULOG_DEBUG << "communication_delay" << web_server_->arg("communication_delay");
+        ULOG_DEBUG << "client_id: " << String(web_server_->arg("client_id"));
+        ULOG_DEBUG << "wifi_ssid: " << String(web_server_->arg("wifi_ssid"));
+        ULOG_DEBUG << "wifi_password: " << String(web_server_->arg("wifi_password"));
+        ULOG_DEBUG << "broker_url: " << String(web_server_->arg("broker_url"));
+        ULOG_DEBUG << "broker_port: " << web_server_->arg("broker_port");
+        ULOG_DEBUG << "broker_user: " << String(web_server_->arg("broker_user"));
+        ULOG_DEBUG << "broker_password: " << String(web_server_->arg("broker_password"));
+        ULOG_DEBUG << "udp_url: " << String(web_server_->arg("udp_url"));
+        ULOG_DEBUG << "udp_port: " << web_server_->arg("udp_port");
+        ULOG_DEBUG << "status_ledv: " << web_server_->arg("status_led");
+        ULOG_DEBUG << "topic_global: " << String(web_server_->arg("topic_global"));
+        ULOG_DEBUG << "topic_local: " << String(web_server_->arg("topic_local"));
+        ULOG_DEBUG << "communication_delay: " << web_server_->arg("communication_delay");
 
         if (web_server_){
             if (web_server_->arg("client_id").length() > 0)
