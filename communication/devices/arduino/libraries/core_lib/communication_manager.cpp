@@ -44,7 +44,7 @@ namespace ioant{
                                                                           "Port (UDP debugging)",
                                                                           "Low Power Mode (true/false)",
                                                                           "Status LED Pin (Flashes when messages are sent)",
-                                                                          "Client Delay (E.g delay between sensor readings)"};
+                                                                          "Communication Delay (E.g delay between sensor readings)"};
 
 
     CommunicationManager* CommunicationManager::GetInstance(){
@@ -83,7 +83,7 @@ namespace ioant{
 
         form += "<div class='form-style-8'><form action='configuration'>"
                 "<h2>Nabton Client Configuration</h2>";
-        for (int i=0; i < NUMBER_OF_CONFIGRATION_FIELDS; i++){
+        for (int i=0; i < NUMBER_OF_CONFIGURATION_FIELDS; i++){
             form += "<input type='text' name='"+CONFIGURATION_FIELDS[i]+"' placeholder='"+CONFIGURATION_FIELDS_READABLE[i]+"'>";
         }
 
@@ -104,7 +104,7 @@ namespace ioant{
             uint32_t cycles = ESP.getCycleCount();
             uint16_t pseudo_random = (cycles & 0xFFFF);
             String softAPname = "IANT_"+String(pseudo_random);
-            WiFi.softAP(softAPname.c_str(), "test12345678");
+            WiFi.softAP(softAPname.c_str(), "test1234");
             IPAddress myIP = WiFi.softAPIP();
             ULOG_DEBUG << "Hosting AP: " << "UIANT_"+String(pseudo_random);
             ULOG_DEBUG << "Ip address if AP: " << AddressToString(myIP);
