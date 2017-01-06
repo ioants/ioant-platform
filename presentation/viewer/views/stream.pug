@@ -1,0 +1,34 @@
+extend default
+
+block content
+    link(rel="stylesheet", type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css")
+
+    // Toolbar
+    label.
+        Select time frame:
+    input(type="text", name="daterange", value="" class="datepicker")
+    label.
+        Filter
+    if settings
+        input(type="text", name="filter", value=settings.filter, id="filter")
+    else
+        input(type="text", name="filter", value="1", id="filter")
+    label(id="aggregatelabel").
+        Aggregated
+    input(type="checkbox", name="aggregate", checked, id="aggregate")
+    label(id="datapoints").
+        Data points:
+    label(id="datapts").
+    label(id="rawpts").
+    // Toolbar - End
+
+    // Stream chart area
+    block streamarea
+
+    if settings
+        if settings.dataTable.show
+            // Table area
+            #streamTable
+    else
+        // Table area
+        #streamTable

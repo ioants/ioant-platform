@@ -1,0 +1,8 @@
+{
+    "mysqlDatabase" : {
+        "host": "localhost",
+        "user" : "dbUser",
+        "password" : "myDBPassword",
+	"db" : "myDb"
+    }
+}

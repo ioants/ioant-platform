@@ -1,0 +1,10 @@
+{
+    "os" : "linux",
+    "mqtt" : {
+        "mqttClientId" : "prango",
+        "broker" : "thisIsYourBrokerDomainAddressOrIp",
+        "user" : "hero",
+        "password" : "test",
+    	"port" : 1883
+    }
+}

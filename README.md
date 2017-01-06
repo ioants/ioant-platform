@@ -1,2 +1,1 @@
-# ioant
-The IOAnt IoT platform
+# IOAnt Iot platform

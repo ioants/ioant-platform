@@ -1,0 +1,4 @@
+node_modules
+public/css/index.css
+configuration.json
+proto/messages.proto

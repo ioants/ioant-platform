@@ -1,0 +1,10 @@
+{
+  "name": "rest-server-nabton",
+  "version": "0.1.0",
+  "dependencies": {
+    "express": "^4.10.6",
+    "mysql": "^2.5.4",
+    "moment": "^2.4.0",
+    "bluebird": "^3.0"
+  }
+}

@@ -1,0 +1,20 @@
+{
+    "os": "raspbian",
+    "mqtt" : {
+        "clientId" : "picamera",
+        "broker" : "thisIsYourBrokerDomainAddressOrIp",
+        "user" : "hero",
+        "password" : "test",
+    	"port" : 1883,
+        "topic" : {
+                "global" : "kil",
+                "local" : "kvv32"}
+    },
+
+    "ncis" : {
+        "ncis_user" : "test",
+        "ncis_url" : "test.com",
+        "ncis_internal_path" : ":/var/www/html",
+        "ncis_prefix" : "/images/"
+    }
+}

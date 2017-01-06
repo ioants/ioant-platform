@@ -1,0 +1,96 @@
+//=============================================================================
+//  Global variables
+//=============================================================================
+var isNewData = true;
+var streamId = $_GET('sid')
+var messageType = $_GET('mid')
+var streamValues;
+var streamInfo;
+var streamConfig
+var chartsArray = [];
+var currentRange = [];
+var streamTableId = "#streamTable";
+
+//=============================================================================
+//  On load of template
+//=============================================================================
+$(function() {
+    var latestValueDate = $_GET('startdate')
+    $('#aggregate').hide();
+    $('#aggregatelabel').hide();
+    start = moment(latestValueDate);
+    deriveRange(start, start);
+    loadData(start, start);
+});
+
+function deriveRange(start, end){
+    var dateFormat = d3.time.format.iso;
+    s = dateFormat.parse(start.toDate())
+    e = dateFormat.parse(end.toDate())
+    diff = e-s;
+    if (diff === 0){
+        e = dateFormat.parse(moment(end).add(1,'days'));
+    }
+    currentRange = [s,e];
+}
+
+//=============================================================================
+//  Toolbar event functions
+//=============================================================================
+
+// Trigger on value changed
+$('#filter').change(function(){
+    start =  moment(currentRange[0]);
+    end = moment(currentRange[1]);
+    loadData(start, end);
+});
+
+// Trigger on checkbox changed
+$('#aggregate').change(function(){
+    //toAggregate = $('#aggregate').is(":checked");
+    //renderCharts();
+    $('#aggregate').hide();
+});
+
+// Trigger on daterange changed
+$('input[name="daterange"]').daterangepicker(
+{
+    locale: {
+      format: 'YYYY-MM-DD'
+    },
+    startDate: $_GET('startdate'),
+    endDate: $_GET('startdate')
+},
+
+function(start, end, label) {
+    deriveRange(start, end);
+    loadData(start, end);
+});
+
+
+//=============================================================================
+//  loadData function
+//  Desc: Will request data from stream given a specific timeframe (start, end)
+//=============================================================================
+function loadData(start, end){
+    console.log("datareq")
+    var filter = $('#filter').val();
+    if ($.isNumeric(filter) == false){
+        filter = 1;
+    }
+    isNewData = true;
+
+    var rest_request_values = "/stream/getstreamdata?streamid="+streamId
+                    +"&startdate="+start.format('YYYY-MM-DD')
+                    +"&enddate="+end.format('YYYY-MM-DD')
+                    +"&filter=" + filter;
+
+    var rest_request_info = "/stream/getstreaminfo?streamid="+streamId;
+    var rest_request_setting = "/streams/settings?streamid="+streamId+"&msgtype="+messageType;
+
+    queue()
+        .defer(d3.json, rest_request_values)
+        .defer(d3.json, rest_request_info)
+        .defer(d3.json, rest_request_setting)
+        .awaitAll(handleData);
+}

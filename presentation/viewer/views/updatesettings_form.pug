@@ -1,0 +1,9 @@
+extend default
+
+block content
+    .form-nab
+        h2= title
+        form(name="add-estimation", method="get")
+            input(type="text", name="database" placeholder="Rest api url")
+            input(type="text", name="title" placeholder="Full Name")
+            input(type="submit", value="Update")

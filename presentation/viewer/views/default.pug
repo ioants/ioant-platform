@@ -1,0 +1,43 @@
+doctype html
+html
+    head
+        link(rel="stylesheet", type="text/css" href="//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css")
+        link(rel="stylesheet", href="/lib/css/dc.css")
+        link(rel='stylesheet', href='/css/index.css')
+
+        script(src="//cdn.jsdelivr.net/jquery/1/jquery.min.js")
+        script(src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js")
+        script(src="/lib/js/queue.js")
+        script(src="/lib/js/d3.js")
+        script(src="/lib/js/bootstrap.min.js")
+        title IOAnt Viewer
+    body
+        .header
+            h1.page-title IOAnt Viewer
+
+        ul.nav
+            li: a(href='/') Home
+            li: a(href='streams') Streams
+            li: a(href='about') About
+
+        .main-content
+            block content
+
+        .footer
+            p
+                | Copyright © 2016 IOAnt Version 0.4.0
+            p
+                | Icons made by
+                =  ' '
+                a(href="http://www.flaticon.com/authors/freepik", title="Freepik") Freepik
+                =  ' '
+                | or
+                =  ' '
+                a(href="http://www.flaticon.com/authors/bogdanrosu", title="Bogdan Rosu" ) Bogdan Rosu
+                =  ' '
+                | from
+                =  ' '
+                a(href="http://www.flaticon.com" title="Flaticon" ,value="www.flaticon.com") www.flaticon.com
+                | licensed by
+                =  ' '
+                a(href="http://creativecommons.org/licenses/by/3.0/", title="Creative Commons BY 3.0", target="_blank") CC 3.0 BY

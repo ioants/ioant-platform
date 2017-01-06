@@ -1,0 +1,17 @@
+.pioenvs
+.clang_complete
+.gcc-flags.json
+.piolibdeps
+
+#build files
+*.gch
+
+#Generated python byte code
+*.pyc
+
+#Generated sqlite3 dbs
+*.sqlite3
+
+#Proto generated files
+#*_pb2.py
+#proto_nab.py

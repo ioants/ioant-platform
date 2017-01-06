@@ -1,0 +1,10 @@
+{
+    "os": "linux",
+    "mqtt" : {
+        "clientId" : "heatercontrol",
+        "broker" : "thisIsYourBrokerDomainAddressOrIp",
+        "user" : "hero",
+        "password" : "test",
+    	"port" : 1883
+    }
+}

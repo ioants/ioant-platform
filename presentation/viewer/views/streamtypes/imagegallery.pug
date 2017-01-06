@@ -1,0 +1,18 @@
+extend ../stream
+
+block streamarea
+    link(rel="stylesheet", type="text/css" href="/lib/css/gallery.css")
+    link(rel="stylesheet", type="text/css" href="/lib/css/magnific-popup.css")
+
+    h1(id="gTitle")
+    label(id="brokenImagesLabel", style="display:none;" ).
+        Number of broken images found:
+    label(id="brokenImages", style="display:none;").
+
+    ul(id="portfolio", class="clearfix")
+
+    script(type="text/javascript", src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js")
+    script(src="/js/utils.js", type='text/javascript')
+    script(type="text/javascript", src="/lib/js/jquery.magnific-popup.min.js")
+    script(src="/js/streamtypes/imagegallery.js", type='text/javascript')
+    script(src="/js/stream.js", type='text/javascript')
