@@ -48,7 +48,7 @@ exports.getInfo = function(streamId, cb) {
           console.log(streamInfo)
           var streamInformation = streamInfo[0];
           if(!error){
-              protoio.getProtoMessage(streamInformation.nb_message_type ,function (message){
+              protoio.getProtoMessage(streamInformation.message_type ,function (message){
                   fields = Object.keys(message.fields);
                   for (var i = 0; i < fields.length; i++) {
                       var msg_type = message.fields[fields[i]].type;

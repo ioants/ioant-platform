@@ -272,6 +272,7 @@ namespace ioant
                     ULOG_DEBUG << "broker_url: " << configuration.broker_url ;
                     ULOG_DEBUG << "broker_port: " << configuration.broker_port ;
                     ULOG_DEBUG << "broker_user: " << configuration.broker_user ;
+                    ULOG_DEBUG << "broker_password: " << configuration.broker_password ;
                     ULOG_DEBUG << "udp_url: " << configuration.udp_url ;
                     ULOG_DEBUG << "udp_port: " << configuration.udp_port ;
                     ULOG_DEBUG << "low_power: " << configuration.low_power ;

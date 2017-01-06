@@ -1,7 +1,7 @@
 var db = require('../db');
 var config = require('../configuration.json');
 var streamOptions = require('./stream_options');
-var nabproto = require('./../proto/protoio');
+var protoio = require('./../proto/protoio');
 const winston = require('winston');
 
 var streamSetting = {
@@ -100,7 +100,7 @@ function populateDocument(queryResults){
 }
 
 exports.get = function(streamId, messageType, cb) {
-    nabproto.getProtoMessage(messageType ,function (message){
+    protoio.getProtoMessage(messageType ,function (message){
         chartSetting.fieldName = Object.keys(message.fields);
         var collection = db.get().collection(config.mongoDbServer.streamConfigurationCollectionName)
         collection.findOne({streamId: parseInt(streamId)}, function (err, config) {

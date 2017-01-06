@@ -16,7 +16,7 @@ namespace ioant{
 
     const int NUMBER_OF_CONFIGURATION_FIELDS = 14;
     String CSS = ".form-style-8{font-family:arial,sans;width:500px;padding:30px;background:#FFF;margin:50px auto;box-shadow:0 0 15px rgba(0,0,0,.22);-moz-box-shadow:0 0 15px rgba(0,0,0,.22);-webkit-box-shadow:0 0 15px rgba(0,0,0,.22)}.form-style-8 h2{background:#4D4D4D;text-transform:uppercase;font-family:sans-serif;color:#797979;font-size:18px;font-weight:100;padding:20px;margin:-30px -30px 30px}.form-style-8 input[type=text],.form-style-8 input[type=date],.form-style-8 input[type=datetime],.form-style-8 input[type=email],.form-style-8 input[type=number],.form-style-8 input[type=search],.form-style-8 input[type=time],.form-style-8 input[type=url],.form-style-8 input[type=password],.form-style-8 select,.form-style-8 textarea{box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;outline:0;display:block;width:100%;padding:7px;border:none;border-bottom:1px solid #ddd;background:0 0;margin-bottom:10px;font:16px Arial,Helvetica,sans-serif;height:45px}.form-style-8 textarea{resize:none;overflow:hidden}.form-style-8 input[type=submit],.form-style-8 input[type=button]{-moz-box-shadow:inset 0 1px 0 0 #45D6D6;-webkit-box-shadow:inset 0 1px 0 0 #45D6D6;box-shadow:inset 0 1px 0 0 #45D6D6;background-color:#2CBBBB;border:1px solid #27A0A0;display:inline-block;cursor:pointer;color:#FFF;font-family:sans-serif;font-size:14px;padding:8px 18px;text-decoration:none;text-transform:uppercase}.form-style-8 input[type=submit]:hover,.form-style-8 input[type=button]:hover{background:linear-gradient(to bottom,#34CACA 5%,#30C9C9 100%);background-color:#34CACA}";
-    String CONFIGURATION_FIELDS[NUMBER_OF_CONFIGURATION_FIELDS] = { "client_id",
+    String CONFIGURATION_FIELDS[NUMBER_OF_CONFIGURATION_FIELDS] = {"client_id",
                                                                    "topic_global",
                                                                    "topic_local",
                                                                    "wifi_ssid",
@@ -78,11 +78,11 @@ namespace ioant{
 
     String BuildConfigurationForm(){
 
-        String form = "<head><title>Nabton Client Configuration Form</title></head>";
+        String form = "<head><title>IOAnt Device Configuration Form</title></head>";
         form += "<style type='text/css'>"+CSS+"</style>";
 
         form += "<div class='form-style-8'><form action='configuration'>"
-                "<h2>Nabton Client Configuration</h2>";
+                "<h2>IOAnt Client Configuration</h2>";
         for (int i=0; i < NUMBER_OF_CONFIGURATION_FIELDS; i++){
             form += "<input type='text' name='"+CONFIGURATION_FIELDS[i]+"' placeholder='"+CONFIGURATION_FIELDS_READABLE[i]+"'>";
         }
@@ -101,12 +101,10 @@ namespace ioant{
         else if(CommunicationState::WEBSERVER == state){
             web_server_ = new ESP8266WebServer(80);
             WiFi.mode(WIFI_AP);
-            uint32_t cycles = ESP.getCycleCount();
-            uint16_t pseudo_random = (cycles & 0xFFFF);
-            String softAPname = "IANT_"+String(pseudo_random);
+            String softAPname = "IOANT_DEVICE";
             WiFi.softAP(softAPname.c_str(), "test1234");
             IPAddress myIP = WiFi.softAPIP();
-            ULOG_DEBUG << "Hosting AP: " << "UIANT_"+String(pseudo_random);
+            ULOG_DEBUG << "Hosting AP: " << "IOANT_";
             ULOG_DEBUG << "Ip address if AP: " << AddressToString(myIP);
 
             web_server_->on("/", [](){
@@ -161,6 +159,23 @@ namespace ioant{
     }
 
     void CommunicationManager::HandleFormConfiguration(){
+
+        ULOG << "--- WEBSERVER DATA ---";
+        ULOG << "client_id" << web_server_->arg("client_id");
+        ULOG << "wifi_ssid" << web_server_->arg("wifi_ssid");
+        ULOG << "wifi_password" << web_server_->arg("wifi_password");
+        ULOG << "broker_url" << web_server_->arg("broker_url");
+        ULOG << "broker_port" << web_server_->arg("broker_port")
+        ULOG << "broker_user" << web_server_->arg("broker_user");
+        ULOG << "broker_password" << web_server_->arg("broker_password");
+        ULOG << "udp_url" << web_server_->arg("udp_url");
+        ULOG << "udp_port" << web_server_->arg("udp_port");
+        ULOG << "status_led" << web_server_->arg("status_led");
+        ULOG << "topic_global" << web_server_->arg("topic_global");
+        ULOG << "topic_local" << web_server_->arg("topic_local");
+        ULOG << "communication_delay" << web_server_->arg("communication_delay");
+
+
         if (web_server_){
             if (web_server_->arg("client_id").length() > 0)
                 config_.client_id =  web_server_->arg("client_id");
