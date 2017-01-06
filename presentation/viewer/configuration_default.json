@@ -1,0 +1,12 @@
+{
+    "os": "linux",
+    "port": 8080,
+    "restApiServer": {
+        "url" : "http://domain.com",
+        "port": 1881
+    },
+    "mongoDbServer": {
+        "port": 11510,
+        "streamConfigurationCollectionName" : "StreamConfiguration"
+    }
+}
