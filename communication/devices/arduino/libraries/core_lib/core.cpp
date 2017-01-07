@@ -172,6 +172,10 @@ namespace ioant
         ProtoIO::MessageMeta meta = msg.GetMessageMeta();
 
         if (meta.valid){
+            if (topic.stream_index < 0){
+                topic.stream_index = 0;
+            }
+
             String Core_topic =  "live/" + topic.global + "/" + topic.local + "/"
                                     + topic.client_id + "/"
                                     + String(meta.message_type)
@@ -265,6 +269,7 @@ namespace ioant
                     configuration.topic_global = msg.data.topic_global;
                     configuration.topic_local = msg.data.topic_local;
                     configuration.communication_delay = msg.data.communication_delay;
+                    configuration.application_generic = msg.data.application_generic;
 
                     ULOG_DEBUG << "client_id: " << configuration.client_id ;
                     ULOG_DEBUG << "wifi_ssid: " << configuration.wifi_ssid ;
@@ -280,6 +285,7 @@ namespace ioant
                     ULOG_DEBUG << "topic_global: " << configuration.topic_global ;
                     ULOG_DEBUG << "topic_local: " << configuration.topic_local ;
                     ULOG_DEBUG << "communication_delay: " << configuration.communication_delay ;
+                    ULOG_DEBUG << "application_generic: " << configuration.application_generic ;
                 }
                 else{
                     ULOG_ERROR << "Failed to decode configuration settings";
@@ -346,6 +352,7 @@ namespace ioant
         msg.data.topic_global = (char*)configuration.topic_global.c_str();
         msg.data.topic_local = (char*)configuration.topic_local.c_str();
         msg.data.communication_delay = configuration.communication_delay;
+        msg.data.application_generic = configuration.application_generic;
 
         msg.Encode();
 
@@ -420,6 +427,8 @@ namespace ioant
         if (String(msg->data.topic_local).length() == 0)
             msg->data.topic_local = (char*)loaded_configuration.topic_local.c_str();
         if (msg->data.communication_delay == 0)
+            msg->data.communication_delay = loaded_configuration.communication_delay;
+        if (msg->data.application_generic < 0)
             msg->data.communication_delay = loaded_configuration.communication_delay;
 
         ULOG_DEBUG << "wifi ssid after:" << msg->data.wifi_ssid;

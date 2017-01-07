@@ -44,7 +44,6 @@ namespace ioant
         }};
         virtual ~ProtoIO(){{
             if (send_buffer_ != NULL)
-                Serial.println("Heap Freed!");
                 free(send_buffer_);
         }};
         static ProtoIO* CreateMessage(int message_type);

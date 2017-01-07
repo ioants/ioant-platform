@@ -14,7 +14,7 @@ namespace ioant{
 
     CommunicationManager* CommunicationManager::instance_ = NULL;
 
-    const int NUMBER_OF_CONFIGURATION_FIELDS = 14;
+    const int NUMBER_OF_CONFIGURATION_FIELDS = 15;
     String CSS = ".form-style-8{font-family:arial,sans;width:500px;padding:30px;background:#FFF;margin:50px auto;box-shadow:0 0 15px rgba(0,0,0,.22);-moz-box-shadow:0 0 15px rgba(0,0,0,.22);-webkit-box-shadow:0 0 15px rgba(0,0,0,.22)}.form-style-8 h2{background:#4D4D4D;text-transform:uppercase;font-family:sans-serif;color:#797979;font-size:18px;font-weight:100;padding:20px;margin:-30px -30px 30px}.form-style-8 input[type=text],.form-style-8 input[type=date],.form-style-8 input[type=datetime],.form-style-8 input[type=email],.form-style-8 input[type=number],.form-style-8 input[type=search],.form-style-8 input[type=time],.form-style-8 input[type=url],.form-style-8 input[type=password],.form-style-8 select,.form-style-8 textarea{box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;outline:0;display:block;width:100%;padding:7px;border:none;border-bottom:1px solid #ddd;background:0 0;margin-bottom:10px;font:16px Arial,Helvetica,sans-serif;height:45px}.form-style-8 textarea{resize:none;overflow:hidden}.form-style-8 input[type=submit],.form-style-8 input[type=button]{-moz-box-shadow:inset 0 1px 0 0 #45D6D6;-webkit-box-shadow:inset 0 1px 0 0 #45D6D6;box-shadow:inset 0 1px 0 0 #45D6D6;background-color:#2CBBBB;border:1px solid #27A0A0;display:inline-block;cursor:pointer;color:#FFF;font-family:sans-serif;font-size:14px;padding:8px 18px;text-decoration:none;text-transform:uppercase}.form-style-8 input[type=submit]:hover,.form-style-8 input[type=button]:hover{background:linear-gradient(to bottom,#34CACA 5%,#30C9C9 100%);background-color:#34CACA}";
     String CONFIGURATION_FIELDS[NUMBER_OF_CONFIGURATION_FIELDS] = {"client_id",
                                                                    "topic_global",
@@ -29,7 +29,8 @@ namespace ioant{
                                                                    "udp_port",
                                                                    "low_power",
                                                                    "status_led",
-                                                                   "communication_delay"};
+                                                                   "communication_delay",
+                                                                   "application_generic"};
 
    String CONFIGURATION_FIELDS_READABLE[NUMBER_OF_CONFIGURATION_FIELDS] = {"Client id",
                                                                           "Topic Global",
@@ -39,12 +40,13 @@ namespace ioant{
                                                                           "URL (MQTT broker)",
                                                                           "Port (MQTT broker)",
                                                                           "User (MQTT)",
-                                                                          "Password (MQTT),"
+                                                                          "Password (MQTT)",
                                                                           "URL/IP (UDP debugging)",
                                                                           "Port (UDP debugging)",
                                                                           "Low Power Mode (true/false)",
                                                                           "Status LED Pin (Flashes when messages are sent)",
-                                                                          "Communication Delay (E.g delay between sensor readings)"};
+                                                                          "Communication Delay (E.g delay between sensor readings)",
+                                                                          "Application Generic configuration"};
 
 
     CommunicationManager* CommunicationManager::GetInstance(){
@@ -104,7 +106,7 @@ namespace ioant{
             String softAPname = "IOANT_DEVICE";
             WiFi.softAP(softAPname.c_str(), "test1234");
             IPAddress myIP = WiFi.softAPIP();
-            ULOG_DEBUG << "Hosting AP: " << "IOANT";
+            ULOG_DEBUG << "Hosting AP: " << "IOANT_DEVICE";
             ULOG_DEBUG << "Ip address if AP: " << AddressToString(myIP);
 
             web_server_->on("/", [](){
@@ -114,6 +116,7 @@ namespace ioant{
             web_server_->on("/configuration", [](){
                 ULOG_DEBUG << "Configuration update request!";
                 COM_MGR->HandleFormConfiguration();
+                COM_MGR->web_server_->send(200, "text/html", "<h2>OK!</h2>");
             });
 
             web_server_->begin();
@@ -160,24 +163,6 @@ namespace ioant{
 
     void CommunicationManager::HandleFormConfiguration(){
 
-
-        ULOG_DEBUG << "asd";
-
-        ULOG_DEBUG << "--- WEBSERVER DATA ---";
-        ULOG_DEBUG << "client_id: " << String(web_server_->arg("client_id"));
-        ULOG_DEBUG << "wifi_ssid: " << String(web_server_->arg("wifi_ssid"));
-        ULOG_DEBUG << "wifi_password: " << String(web_server_->arg("wifi_password"));
-        ULOG_DEBUG << "broker_url: " << String(web_server_->arg("broker_url"));
-        ULOG_DEBUG << "broker_port: " << web_server_->arg("broker_port");
-        ULOG_DEBUG << "broker_user: " << String(web_server_->arg("broker_user"));
-        ULOG_DEBUG << "broker_password: " << String(web_server_->arg("broker_password"));
-        ULOG_DEBUG << "udp_url: " << String(web_server_->arg("udp_url"));
-        ULOG_DEBUG << "udp_port: " << web_server_->arg("udp_port");
-        ULOG_DEBUG << "status_ledv: " << web_server_->arg("status_led");
-        ULOG_DEBUG << "topic_global: " << String(web_server_->arg("topic_global"));
-        ULOG_DEBUG << "topic_local: " << String(web_server_->arg("topic_local"));
-        ULOG_DEBUG << "communication_delay: " << web_server_->arg("communication_delay");
-
         if (web_server_){
             if (web_server_->arg("client_id").length() > 0)
                 config_.client_id =  web_server_->arg("client_id");
@@ -209,6 +194,8 @@ namespace ioant{
                 config_.topic_local =  web_server_->arg("topic_local");
             if (web_server_->arg("communication_delay").toInt())
                 config_.communication_delay =  web_server_->arg("communication_delay").toInt();
+            if (web_server_->arg("application_generic").toInt())
+                config_.application_generic =  web_server_->arg("application_generic").toInt();
 
             configuration_updated_ = true;
         }

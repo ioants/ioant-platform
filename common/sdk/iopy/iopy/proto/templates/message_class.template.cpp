@@ -8,8 +8,6 @@
 
     bool {messageName}Message::Encode(){{
         if (send_buffer_ == NULL){{
-            Serial.print("Heap taken! ");
-            Serial.println("{messageName}");
             send_buffer_ = (uint8_t*)calloc(128, sizeof(uint8_t));
         }}
         pb_ostream_t stream = pb_ostream_from_buffer(send_buffer_, 128);

@@ -45,6 +45,7 @@ namespace ioant
             String topic_local;
             String client_id;
             int communication_delay;
+            int application_generic;
             Configuration(){
                 wifi_ssid = "";
                 wifi_password= "";
@@ -60,6 +61,7 @@ namespace ioant
                 topic_local= "";
                 client_id= "";
                 communication_delay = 1000;
+                application_generic = 0;
             };
         };
 
