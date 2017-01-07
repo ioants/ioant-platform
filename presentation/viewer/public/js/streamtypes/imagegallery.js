@@ -24,7 +24,7 @@ function handleData(error, streamData) {
 
     $("#portfolio").empty();
     var imageReferences = streamValues;
-    $("#gTitle").text("Gallery: "+streamInfo.nb_global+" / "+streamInfo.nb_local+" / " +streamInfo.nb_client_id);
+    $("#gTitle").text("Gallery: "+streamInfo.global+" / "+streamInfo.local+" / " +streamInfo.client_id);
 
     imageReferences.forEach(function (item){
         $("#portfolio").append('<li><a href="http://'+item.reference_link+'" title="'+item.reference_link+'">\
