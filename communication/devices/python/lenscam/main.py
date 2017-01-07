@@ -6,7 +6,7 @@ import os
 def init_ascii():
     message = "\
 =========================================================================\n\
-|                        PiCamera Client                                |\n\
+|                        LensCamera Device                                |\n\
 ========================================================================="
     return message
 
@@ -22,10 +22,10 @@ if __name__ == "__main__":
     mqtt_broker = configuration_dict['mqtt']['broker']
     mqtt_port = configuration_dict['mqtt']['port']
 
-    client = nabcam.initiate_client(mqtt_broker,
+    client = lenscam.initiate_client(mqtt_broker,
                                       mqtt_port,
                                       configuration_dict)
     if client:
-        nabcam.loop_mqtt_client(client)
+        lenscam.loop_mqtt_client(client)
 
     sys.exit()

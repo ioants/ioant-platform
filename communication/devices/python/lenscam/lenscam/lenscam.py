@@ -69,7 +69,8 @@ def process_message(client,payload, topic):
     msg.reference_link = ncis_url + ncis_prefix + ncis_image_name
 
     payload = msg.SerializeToString()
-    pub_topic = "image/"+configurations['mqtt']['topic']['global']+"/"+configurations['mqtt']['topic']['local']+"/"+configurations['mqtt']['clientId']+"/10/0"
+    msg_type = str(ProtoIO.message_type_index_dict.get('Image'))
+    pub_topic = "image/"+configurations['mqtt']['topic']['global']+"/"+configurations['mqtt']['topic']['local']+"/"+configurations['mqtt']['clientId']+"/"+msg_type+"/0"
     (result, mid) = client.publish(pub_topic, bytearray(payload))
 
     if result is not 0:
