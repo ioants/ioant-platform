@@ -118,8 +118,9 @@ def generate_python_proto_nab(message_list, output_file_path):
 
 
 def find_messages_in_proto(proto_file_contents):
-    regex = r"message\s+([a-z A-Z \d]+)\s"
+    regex = r"message\s+([a-z A-Z \d]+)\s*"
     matches = re.findall(regex, proto_file_contents, flags=0)
+    print matches;
     return matches
 
 

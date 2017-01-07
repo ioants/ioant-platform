@@ -71,7 +71,7 @@ message Mass {
     Unit unit = 2;
 }
 
-message  PHconcentration{
+message PHconcentration {
     float value = 1;
 }
 
