@@ -103,7 +103,13 @@ namespace ioant{
         else if(CommunicationState::WEBSERVER == state){
             web_server_ = new ESP8266WebServer(80);
             WiFi.mode(WIFI_AP);
-            String softAPname = "IOANT_DEVICE";
+            String softAPname = "IOANT_";
+            if (config_.client_id.length() > 0) {
+                softAPname = softAPname+config_.client_id;
+            }
+            else {
+                softAPname = softAPname + "DEVICE";
+            }
             WiFi.softAP(softAPname.c_str(), "test1234");
             IPAddress myIP = WiFi.softAPIP();
             ULOG_DEBUG << "Hosting AP: " << "IOANT_DEVICE";
