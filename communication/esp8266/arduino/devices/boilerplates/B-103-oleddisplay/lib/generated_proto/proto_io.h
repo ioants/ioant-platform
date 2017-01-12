@@ -44,7 +44,6 @@ namespace ioant
         };
         virtual ~ProtoIO(){
             if (send_buffer_ != NULL)
-                Serial.println("Heap Freed!");
                 free(send_buffer_);
         };
         static ProtoIO* CreateMessage(int message_type);
@@ -53,7 +52,7 @@ namespace ioant
 
         MessageMeta GetMessageMeta(){return messageMeta_;};
         uint8_t* GetBufferHandle(){return send_buffer_;};
-        enum MessageTypes{CONFIGURATION, BOOTINFO, IMAGE, TRIGGER, TEMPERATURE, HUMIDITY, MASS, ELECTRICPOWER, GPSCOORDINATES, RUNSTEPPERMOTORRAW, RUNSTEPPERMOTOR, RUNDCMOTOR};
+        enum MessageTypes{CONFIGURATION, BOOTINFO, IMAGE, TRIGGER, TEMPERATURE, HUMIDITY, MASS, PHCONCENTRATION, ELECTRICPOWER, GPSCOORDINATES, RUNSTEPPERMOTORRAW, RUNSTEPPERMOTOR, RUNDCMOTOR};
 
     protected:
         bool has_decoded_data_;
@@ -210,6 +209,27 @@ namespace ioant
     };
 
     /// =======================================================================
+    /// Class Definitions PHconcentration
+    /// =======================================================================
+    class PHconcentrationMessage : public ProtoIO
+    {
+
+    public:
+        PHconcentrationMessage();
+        ~PHconcentrationMessage(){
+            if (has_decoded_data_){
+                pb_release(PHconcentration_fields, &data);
+            }
+        };
+        bool Encode();
+        bool Decode(const uint8_t* buffer, unsigned int number_of_bytes);
+
+        static int GetType() {return 7;};
+
+        PHconcentration data;
+    };
+
+    /// =======================================================================
     /// Class Definitions ElectricPower
     /// =======================================================================
     class ElectricPowerMessage : public ProtoIO
@@ -225,7 +245,7 @@ namespace ioant
         bool Encode();
         bool Decode(const uint8_t* buffer, unsigned int number_of_bytes);
 
-        static int GetType() {return 7;};
+        static int GetType() {return 8;};
 
         ElectricPower data;
     };
@@ -246,7 +266,7 @@ namespace ioant
         bool Encode();
         bool Decode(const uint8_t* buffer, unsigned int number_of_bytes);
 
-        static int GetType() {return 8;};
+        static int GetType() {return 9;};
 
         GpsCoordinates data;
     };
@@ -267,7 +287,7 @@ namespace ioant
         bool Encode();
         bool Decode(const uint8_t* buffer, unsigned int number_of_bytes);
 
-        static int GetType() {return 9;};
+        static int GetType() {return 10;};
 
         RunStepperMotorRaw data;
     };
@@ -288,7 +308,7 @@ namespace ioant
         bool Encode();
         bool Decode(const uint8_t* buffer, unsigned int number_of_bytes);
 
-        static int GetType() {return 10;};
+        static int GetType() {return 11;};
 
         RunStepperMotor data;
     };
@@ -309,7 +329,7 @@ namespace ioant
         bool Encode();
         bool Decode(const uint8_t* buffer, unsigned int number_of_bytes);
 
-        static int GetType() {return 11;};
+        static int GetType() {return 12;};
 
         RunDcMotor data;
     };

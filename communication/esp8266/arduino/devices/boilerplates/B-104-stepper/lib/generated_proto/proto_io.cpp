@@ -21,8 +21,6 @@ namespace ioant
 
     bool ConfigurationMessage::Encode(){
         if (send_buffer_ == NULL){
-            Serial.print("Heap taken! ");
-            Serial.println("Configuration");
             send_buffer_ = (uint8_t*)calloc(128, sizeof(uint8_t));
         }
         pb_ostream_t stream = pb_ostream_from_buffer(send_buffer_, 128);
@@ -51,8 +49,6 @@ namespace ioant
 
     bool BootInfoMessage::Encode(){
         if (send_buffer_ == NULL){
-            Serial.print("Heap taken! ");
-            Serial.println("BootInfo");
             send_buffer_ = (uint8_t*)calloc(128, sizeof(uint8_t));
         }
         pb_ostream_t stream = pb_ostream_from_buffer(send_buffer_, 128);
@@ -81,8 +77,6 @@ namespace ioant
 
     bool ImageMessage::Encode(){
         if (send_buffer_ == NULL){
-            Serial.print("Heap taken! ");
-            Serial.println("Image");
             send_buffer_ = (uint8_t*)calloc(128, sizeof(uint8_t));
         }
         pb_ostream_t stream = pb_ostream_from_buffer(send_buffer_, 128);
@@ -111,8 +105,6 @@ namespace ioant
 
     bool TriggerMessage::Encode(){
         if (send_buffer_ == NULL){
-            Serial.print("Heap taken! ");
-            Serial.println("Trigger");
             send_buffer_ = (uint8_t*)calloc(128, sizeof(uint8_t));
         }
         pb_ostream_t stream = pb_ostream_from_buffer(send_buffer_, 128);
@@ -141,8 +133,6 @@ namespace ioant
 
     bool TemperatureMessage::Encode(){
         if (send_buffer_ == NULL){
-            Serial.print("Heap taken! ");
-            Serial.println("Temperature");
             send_buffer_ = (uint8_t*)calloc(128, sizeof(uint8_t));
         }
         pb_ostream_t stream = pb_ostream_from_buffer(send_buffer_, 128);
@@ -171,8 +161,6 @@ namespace ioant
 
     bool HumidityMessage::Encode(){
         if (send_buffer_ == NULL){
-            Serial.print("Heap taken! ");
-            Serial.println("Humidity");
             send_buffer_ = (uint8_t*)calloc(128, sizeof(uint8_t));
         }
         pb_ostream_t stream = pb_ostream_from_buffer(send_buffer_, 128);
@@ -201,8 +189,6 @@ namespace ioant
 
     bool MassMessage::Encode(){
         if (send_buffer_ == NULL){
-            Serial.print("Heap taken! ");
-            Serial.println("Mass");
             send_buffer_ = (uint8_t*)calloc(128, sizeof(uint8_t));
         }
         pb_ostream_t stream = pb_ostream_from_buffer(send_buffer_, 128);
@@ -222,17 +208,43 @@ namespace ioant
     }
 
     /// =======================================================================
+    /// Message methods for class PHconcentration
+    /// =======================================================================
+    PHconcentrationMessage::PHconcentrationMessage(){
+        data = PHconcentration_init_zero;
+        messageMeta_.message_type = 7;
+    }
+
+    bool PHconcentrationMessage::Encode(){
+        if (send_buffer_ == NULL){
+            send_buffer_ = (uint8_t*)calloc(128, sizeof(uint8_t));
+        }
+        pb_ostream_t stream = pb_ostream_from_buffer(send_buffer_, 128);
+        bool status = pb_encode(&stream, PHconcentration_fields, &data);
+        messageMeta_.number_of_bytes = (uint8_t)stream.bytes_written;
+        messageMeta_.valid = status;
+        return status;
+    }
+
+    bool PHconcentrationMessage::Decode(const uint8_t* buffer, unsigned int number_of_bytes){
+        pb_istream_t stream = pb_istream_from_buffer(buffer, number_of_bytes);
+        bool status = pb_decode(&stream, PHconcentration_fields, &data);
+        messageMeta_.valid = status;
+        messageMeta_.number_of_bytes = number_of_bytes;
+        has_decoded_data_ = true;
+        return status;
+    }
+
+    /// =======================================================================
     /// Message methods for class ElectricPower
     /// =======================================================================
     ElectricPowerMessage::ElectricPowerMessage(){
         data = ElectricPower_init_zero;
-        messageMeta_.message_type = 7;
+        messageMeta_.message_type = 8;
     }
 
     bool ElectricPowerMessage::Encode(){
         if (send_buffer_ == NULL){
-            Serial.print("Heap taken! ");
-            Serial.println("ElectricPower");
             send_buffer_ = (uint8_t*)calloc(128, sizeof(uint8_t));
         }
         pb_ostream_t stream = pb_ostream_from_buffer(send_buffer_, 128);
@@ -256,13 +268,11 @@ namespace ioant
     /// =======================================================================
     GpsCoordinatesMessage::GpsCoordinatesMessage(){
         data = GpsCoordinates_init_zero;
-        messageMeta_.message_type = 8;
+        messageMeta_.message_type = 9;
     }
 
     bool GpsCoordinatesMessage::Encode(){
         if (send_buffer_ == NULL){
-            Serial.print("Heap taken! ");
-            Serial.println("GpsCoordinates");
             send_buffer_ = (uint8_t*)calloc(128, sizeof(uint8_t));
         }
         pb_ostream_t stream = pb_ostream_from_buffer(send_buffer_, 128);
@@ -286,13 +296,11 @@ namespace ioant
     /// =======================================================================
     RunStepperMotorRawMessage::RunStepperMotorRawMessage(){
         data = RunStepperMotorRaw_init_zero;
-        messageMeta_.message_type = 9;
+        messageMeta_.message_type = 10;
     }
 
     bool RunStepperMotorRawMessage::Encode(){
         if (send_buffer_ == NULL){
-            Serial.print("Heap taken! ");
-            Serial.println("RunStepperMotorRaw");
             send_buffer_ = (uint8_t*)calloc(128, sizeof(uint8_t));
         }
         pb_ostream_t stream = pb_ostream_from_buffer(send_buffer_, 128);
@@ -316,13 +324,11 @@ namespace ioant
     /// =======================================================================
     RunStepperMotorMessage::RunStepperMotorMessage(){
         data = RunStepperMotor_init_zero;
-        messageMeta_.message_type = 10;
+        messageMeta_.message_type = 11;
     }
 
     bool RunStepperMotorMessage::Encode(){
         if (send_buffer_ == NULL){
-            Serial.print("Heap taken! ");
-            Serial.println("RunStepperMotor");
             send_buffer_ = (uint8_t*)calloc(128, sizeof(uint8_t));
         }
         pb_ostream_t stream = pb_ostream_from_buffer(send_buffer_, 128);
@@ -346,13 +352,11 @@ namespace ioant
     /// =======================================================================
     RunDcMotorMessage::RunDcMotorMessage(){
         data = RunDcMotor_init_zero;
-        messageMeta_.message_type = 11;
+        messageMeta_.message_type = 12;
     }
 
     bool RunDcMotorMessage::Encode(){
         if (send_buffer_ == NULL){
-            Serial.print("Heap taken! ");
-            Serial.println("RunDcMotor");
             send_buffer_ = (uint8_t*)calloc(128, sizeof(uint8_t));
         }
         pb_ostream_t stream = pb_ostream_from_buffer(send_buffer_, 128);
@@ -404,22 +408,26 @@ ProtoIO* ProtoIO::CreateMessage(int message_type){
         }break;
 
         case 7:{
-            return new ElectricPowerMessage;
+            return new PHconcentrationMessage;
         }break;
 
         case 8:{
-            return new GpsCoordinatesMessage;
+            return new ElectricPowerMessage;
         }break;
 
         case 9:{
-            return new RunStepperMotorRawMessage;
+            return new GpsCoordinatesMessage;
         }break;
 
         case 10:{
-            return new RunStepperMotorMessage;
+            return new RunStepperMotorRawMessage;
         }break;
 
         case 11:{
+            return new RunStepperMotorMessage;
+        }break;
+
+        case 12:{
             return new RunDcMotorMessage;
         }break;
 

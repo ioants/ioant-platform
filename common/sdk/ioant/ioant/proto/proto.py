@@ -2,6 +2,7 @@ import re
 import os
 import sys
 import subprocess
+import platform
 
 
 def get_attribute_type_name(attribute_type):
@@ -124,17 +125,35 @@ def find_messages_in_proto(proto_file_contents):
     return matches
 
 
-def run_protoc_gen(filepath_proto, os_system, code, output_path):
-    print 'pwd:' + os.getcwd()
-    print 'os:' + os_system
+def run_protoc_gen(filepath_proto, code, output_path):
     protoc_binary = ""
     out_arg = ""
-    if os_system.lower().strip() == "linux":
-        protoc_binary = os.path.abspath(os.path.join(filepath_proto,
-                                    'generators/bin/linux/protoc'))
+
+    os_system = platform.system().lower()
+    os_arch = platform.machine().lower()
+
+    print 'PWD:' + os.getcwd()
+    print "OS:" + os_system
+    print "ARCH:" + os_arch
+
+    if os_system == "linux":
+        if os_arch == 'x86_64' or os_arch == 'amd64':
+            protoc_binary = 'generators/bin/linux_64/protoc'
+        else:
+            protoc_binary = 'generators/bin/linux_32/protoc'
+    elif os_system == "darwin":
+        if os_arch == 'x86_64' or os_arch == 'amd64':
+            protoc_binary = 'generators/bin/osx_64/protoc'
+        else:
+            protoc_binary = 'generators/bin/osx_32/protoc'
+    elif os_system == "windows":
+        protoc_binary = 'generators/bin/win_32/protoc'
     else:
         print 'Error os selected not supported: ' + os_system
         return False
+
+    protoc_binary = os.path.abspath(os.path.join(filepath_proto,
+                                    protoc_binary))
 
     if code == 'c':
         out_arg += "-omessages.pb"
@@ -174,7 +193,6 @@ def embedded_main(selected_os, proto_file_path, output_dir_path):
     proto_file_path = os.path.abspath(os.path.join(os.getcwd(), proto_file_path))
 
     run_protoc_gen(proto_file_path,
-                   selected_os,
                    'c',
                    output_dir_path)
 
@@ -213,7 +231,6 @@ def python_main(selected_os, proto_file_path, output_dir_path):
     print("output_dir_path:" + output_dir_path)
     print("proto_file_path:" + proto_file_path)
     run_protoc_gen(proto_file_path,
-                   selected_os,
                    'python',
                    output_dir_path)
 
@@ -228,6 +245,5 @@ def js_main(selected_os, proto_file_path, output_dir_path):
     print("output_dir_path:" + output_dir_path)
     print("proto_file_path:" + proto_file_path)
     run_protoc_gen(proto_file_path,
-                   selected_os,
                    'js',
                    output_dir_path)

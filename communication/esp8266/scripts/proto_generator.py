@@ -1,6 +1,6 @@
 import os
 import base64
-import iopy.proto.proto as proto
+import ioant.proto.proto as proto
 Import('env')
 
 
@@ -10,5 +10,5 @@ def decode_option(string_option):
 
 selected_os = decode_option(ARGUMENTS.get('CUSTOM_OPTION'))
 proto.embedded_main(selected_os,
-                       "../../../../../common/proto/",
+                       "../../../../../../common/proto/",
                        "lib/generated_proto/")
