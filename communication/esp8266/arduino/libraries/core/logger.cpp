@@ -29,7 +29,7 @@ namespace ioant
         switch(default_log_type_)
         {
             case Logger::LogType::LOGTYPE_SERIAL:
-                Serial.write('\n');
+                Serial.println(log_message_);
             break;
             case Logger::LogType::LOGTYPE_WIFI:
                 if (!COM_MGR->IsLowPowerMode())
@@ -42,15 +42,7 @@ namespace ioant
     Logger& Logger::operator<<(int msg){
       if (log_possible_)
       {
-          switch(default_log_type_)
-          {
-              case Logger::LogType::LOGTYPE_SERIAL:
-                  Serial.write(String(msg).c_str());
-              break;
-              case Logger::LogType::LOGTYPE_WIFI:
-                  log_message_ = log_message_ + String(msg);
-              break;
-          };
+          log_message_ = log_message_ + String(msg);
       }
       return *this;  // Return a reference to self.
     }
@@ -58,15 +50,7 @@ namespace ioant
     Logger& Logger::operator<<(double msg){
       if (log_possible_)
       {
-          switch(default_log_type_)
-          {
-              case Logger::LogType::LOGTYPE_SERIAL:
-                  //Serial.write(msg);
-              break;
-              case Logger::LogType::LOGTYPE_WIFI:
-                  log_message_ = log_message_ + String(msg,6);
-              break;
-          };
+          log_message_ = log_message_ + String(msg,6);
       }
       return *this;  // Return a reference to self.
     }
@@ -74,47 +58,23 @@ namespace ioant
     Logger& Logger::operator<<(float msg){
       if (log_possible_)
       {
-          switch(default_log_type_)
-          {
-              case Logger::LogType::LOGTYPE_SERIAL:
-                  //Serial.write(msg);
-              break;
-              case Logger::LogType::LOGTYPE_WIFI:
-                  log_message_ = log_message_ + String(msg,6);
-              break;
-          };
+          log_message_ = log_message_ + String(msg,6);
       }
       return *this;  // Return a reference to self.
     }
 
     Logger& Logger::operator<<(const char* msg){
-        if (log_possible_)
-        {
-            switch(default_log_type_)
-            {
-                case Logger::LogType::LOGTYPE_SERIAL:
-                    Serial.write(msg);
-                break;
-                case Logger::LogType::LOGTYPE_WIFI:
-                    log_message_ = log_message_ + String(msg);
-                break;
-            };
-        }
-        return *this;  // Return a reference to self.
+      if (log_possible_)
+      {
+          log_message_ = log_message_ + String(msg);
+      }
+      return *this;  // Return a reference to self.
     }
 
     Logger& Logger::operator<<(String msg){
         if (log_possible_)
         {
-            switch(default_log_type_)
-            {
-                case Logger::LogType::LOGTYPE_SERIAL:
-                    Serial.write(msg.c_str());
-                break;
-                case Logger::LogType::LOGTYPE_WIFI:
-                    log_message_ = log_message_ + msg;
-                break;
-            };
+            log_message_ = log_message_ + msg;
         }
         return *this;  // Return a reference to self.
     }
@@ -128,15 +88,7 @@ namespace ioant
             else
                 res = "False";
 
-            switch(default_log_type_)
-            {
-                case Logger::LogType::LOGTYPE_SERIAL:
-                    Serial.write(res.c_str());
-                break;
-                case Logger::LogType::LOGTYPE_WIFI:
-                    log_message_ = log_message_ + res;
-                break;
-            };
+            log_message_ = log_message_ + res;
         }
         return *this;  // Return a reference to self.
     }
