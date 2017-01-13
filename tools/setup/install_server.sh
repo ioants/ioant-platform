@@ -13,7 +13,8 @@ pip install "MySQL-python>=1.2.5"
 pip install 'mock>=2.0.0'
 
 # install nabton SDK pynab library
-pip install ../sdk/iopy/.
+pip install ioant
+pip install ioant_mysqlhelper
 
 # install nodejs
 curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
