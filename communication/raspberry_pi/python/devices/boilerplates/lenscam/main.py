@@ -1,6 +1,6 @@
 import lenscam.lenscam as lenscam
 import sys
-from iopy.utils import utils
+from ioant.utils import utils
 import os
 
 def init_ascii():

@@ -8,8 +8,8 @@ import urllib
 import uuid
 import os
 
-from iopy.db import db
-from iopy.utils import utils
+from ioant_mysqlhelper.db import db
+from ioant.utils import utils
 from google.protobuf.message import Message
 from google.protobuf.descriptor import FieldDescriptor
 
@@ -26,7 +26,7 @@ def splitext(path):
 def init_ascii():
     message = "\
 =========================================================================\n\
-|                     Nabton Collector Client                           |\n\
+|                   IOAnt Image Collector Entity                        |\n\
 ========================================================================="
     return message
 

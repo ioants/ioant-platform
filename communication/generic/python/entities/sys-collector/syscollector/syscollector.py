@@ -3,8 +3,8 @@ import time
 import datetime
 import sys
 
-from iopy.db import db
-from iopy.utils import utils
+from ioant_mysqlhelper.db import db
+from ioant.utils import utils
 
 
 def mqtt_on_connect(client, userdata, rc):

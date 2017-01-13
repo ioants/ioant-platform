@@ -4,8 +4,8 @@ import datetime
 import sys
 import generated_proto.messages_pb2 as messages_pb2
 import generated_proto.proto_io as ProtoIO
-from iopy.db import db
-from iopy.utils import utils
+from ioant_mysqlhelper.db import db
+from ioant.utils import utils
 from google.protobuf.message import Message
 from google.protobuf.descriptor import FieldDescriptor
 
@@ -13,7 +13,7 @@ from google.protobuf.descriptor import FieldDescriptor
 def init_ascii():
     message = "\
 =========================================================================\n\
-|                     Nabton Collector Client                           |\n\
+|                      IOAnt Collector Client                            |\n\
 ========================================================================="
     return message
 

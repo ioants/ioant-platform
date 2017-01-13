@@ -1,6 +1,6 @@
 import imagecollector.imagecollector as collector
 import sys
-from iopy.utils import utils
+from ioant.utils import utils
 import os
 
 
@@ -11,7 +11,7 @@ def init_ascii():
 ========================================================================="
     return message
 
-relative_path_steps = "../../../../"
+relative_path_steps = "../../../../../"
 
 if __name__ == "__main__":
     print(init_ascii())

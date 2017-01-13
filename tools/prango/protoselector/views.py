@@ -5,8 +5,8 @@ from django.template import loader
 import generated_proto.proto_io as proto_io
 import generated_proto.messages_pb2 as messages_pb2
 import os
-from iopy.proto import proto
-from iopy.utils import utils
+from ioant.proto import proto
+from ioant.utils import utils
 import paho.mqtt.client as mqtt
 
 

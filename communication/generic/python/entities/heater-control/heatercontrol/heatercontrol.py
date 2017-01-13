@@ -5,7 +5,7 @@ import sys
 import os
 import generated_proto.messages_pb2 as messages_pb2
 import generated_proto.proto_nab as ProtoNabPy
-from iopy.utils import utils
+from ioant.utils import utils
 from google.protobuf.message import Message
 from google.protobuf.descriptor import FieldDescriptor
 
