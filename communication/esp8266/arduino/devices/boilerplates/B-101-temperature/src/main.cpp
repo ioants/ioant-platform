@@ -1,7 +1,7 @@
 ///
 /// @file   main.cpp
-/// @Author Adam Saxen
-/// @date   December, 2016
+/// @Author Adam Saxen, Benny Saxen
+/// @date   2017-01-13
 /// @brief  Boiler plate application for onewire temperature sensor(DS18B20)
 ///
 
@@ -76,14 +76,21 @@ void loop(void){
     //Loop through results and publish
     for(int i=0;i<nsensors;i++){
         float temperature = sensor.getTempCByIndex(i);
-        TemperatureMessage msg;
-        msg.data.unit = Temperature_Unit_CELSIUS;
-        msg.data.value = temperature;
+        if (temperature > -100) // filter out bad values , i.e. -127
+        {
+            TemperatureMessage msg;
+            msg.data.unit = Temperature_Unit_CELSIUS;
+            msg.data.value = temperature;
 
-        Core::Topic topic = IOANT->GetConfiguredTopic();
-        topic.stream_index = i;
-        bool result = IOANT->Publish(msg, topic);
-        WLOG_INFO << "Temperature message sent with value:" << msg.data.value << " and result:" << result;
+            Core::Topic topic = IOANT->GetConfiguredTopic();
+            topic.stream_index = i;
+            bool result = IOANT->Publish(msg, topic);
+            //WLOG_INFO << "Temperature message sent with value:" << msg.data.value << " and result:" << result;
+        }
+        else
+            ULOG_INFO << "WARNING: Bad temperature value:" << temperature;
+
+
     }
 }
 
