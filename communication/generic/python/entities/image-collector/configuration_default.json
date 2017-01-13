@@ -1,7 +1,7 @@
 {
     "os": "linux",
     "mqtt" : {
-        "clientId" : "collector",
+        "clientId" : "image-collector",
         "broker" : "thisIsYourBrokerDomainAddressOrIp",
         "user" : "hero",
         "password" : "test",
