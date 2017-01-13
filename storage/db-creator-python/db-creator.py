@@ -1,7 +1,7 @@
 import os
 import sys
 from ioant.utils import utils
-from ioant_mysqlhandler.db import db
+from ioant_mysqlhelper.db import db
 
 def create_tables(db_schema_dict):
     primary_key = "  PRIMARY KEY (`{0}`)"

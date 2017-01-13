@@ -212,22 +212,22 @@ namespace ioant
     bool Core::Subscribe(Topic topic){
         // live/global/local/client_id/message_type/index
         // live/+/+/local/+/#
-        String subscribtion = "live/"+topic.global+"/"+topic.local+"/"+topic.client_id+"/";
+        String subscription = "live/"+topic.global+"/"+topic.local+"/"+topic.client_id+"/";
 
         if (topic.message_type == -1){
-            subscribtion += '+';
+            subscription += '+';
         }
         else{
-            subscribtion += topic.message_type+"/";
+            subscription += String(topic.message_type)+"/";
         }
 
         if (topic.stream_index == -1){
-            subscribtion += '#';
+            subscription += '#';
         }
         else{
-            subscribtion += topic.stream_index;
+            subscription += String(topic.stream_index);
         }
-        COM_MGR->MqttSubscribeToTopic(subscribtion);
+        COM_MGR->MqttSubscribeToTopic(subscription);
     }
 
 
