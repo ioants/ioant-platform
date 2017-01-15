@@ -1,5 +1,0 @@
-#ignore build dir
-build/
-*info/
-dist/
-*.gch

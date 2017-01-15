@@ -1,0 +1,21 @@
+{
+    "os": "linux",
+    "mqtt" : {
+        "clientId" : "image-collector",
+        "broker" : "thisIsYourBrokerDomainAddressOrIp",
+        "user" : "hero",
+        "password" : "test",
+    	"port" : 1883
+    },
+    "mysqlDatabase" : {
+        "host": "localhost",
+        "user" : "dbUser",
+        "password" : "myDBPassword"
+    },
+    "imageStorage" : {
+        "host" : "domainthatthisappisrunningon.com/",
+        "internal_path" : "/var/www/html/",
+        "prefix": "history/"
+    }
+
+}

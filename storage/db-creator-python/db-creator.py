@@ -1,7 +1,7 @@
 import os
 import sys
-import iopy.utils.utils as utils
-import iopy.db.db as db
+from ioant.utils import utils
+from ioant_mysqlhelper.db import db
 
 def create_tables(db_schema_dict):
     primary_key = "  PRIMARY KEY (`{0}`)"
