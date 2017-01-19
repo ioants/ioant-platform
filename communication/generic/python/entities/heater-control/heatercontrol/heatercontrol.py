@@ -16,21 +16,21 @@ def init_ascii():
 ========================================================================="
     return message
 
+def get_connector_client_id(app_param)
+    print "read configuration file"
 
 def mqtt_on_connect(client, userdata, rc):
     print("[info] Connected with result code "+str(rc))
-
-    #topic = "live/kil/kvv32/tempPannrum/#"
-    topic = "live/#"
+    
+    appp = "Z-TEMP-WATER-OUT"
+    cid = get_connector_client_id(appp)
+    topic = "live/+/" + appp + "/" + cid + "/4/#"
     print "[info] Subscribed to topic:" + topic
     client.subscribe(topic)
-
-
-
+  
 def mqtt_on_message(client, userdata, msg):
     print "Processing message"
     process_message(msg.payload, msg.topic)
-
 
 def process_message(payload, topic):
     topic_dict = utils.topic_to_dict(topic)
@@ -45,27 +45,21 @@ def process_message(payload, topic):
         print "Failed to decode message!"
         return
 
-    clientid = topic_dict['client_id'];
-    streamindex = topic_dict['stream_index'];
-    print clientid
-
-    # if clientid == 'tempPannrum':
-    #     if streamindex == 0:
-    #         temperatureWaterOut = message.value
-    #         print "WaterOut="
-    #         print temperatureWaterOut
-    #     if streamindex == 1:
-    #         temperatureBedroom = message.value
-    #         print "Bedroom="
-    #         print temperatureBedroom
-    #     if streamindex == 2:
-    #         temperatureSmoke = message.value
-    #         print "Smoke="
-    #         print temperatureSmoke
-    #     if streamindex == 3:
-    #         temperatureWaterIn = message.value
-    #         print "WaterIn="
-    #         print temperatureWaterIn
+    #clientid = topic_dict['client_id'];
+    #streamindex = topic_dict['stream_index'];
+    temp_water_out = message.value
+    prev_order_time = bs_recall("PREV_ORDER_TIME");
+    temp_target = bs_recall("TEMP_TARGET");
+    
+    if temp_water_out < temp_target): # increase heat
+        steps = round((temp_target - temp_water_out)*4)
+        if(steps < 1 || steps > 50) steps = 1;
+        # Publish Z-HEATER-CONTROL message
+        
+    if temp_water_out > temp_target): # decrease heat
+        steps = round((temp_water_out - target_temp)*4)
+        if(steps < 1 || steps > 50) steps = 1;
+        # Publish Z-HEATER-CONTROL message
 
 def initiate_mqtt_client(broker, port):
     mqtt_client = mqtt.Client()
