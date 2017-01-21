@@ -75,6 +75,13 @@ exports.all = function(cb) {
                     //Calc duration since last message
                     duration = moment.duration(timeStampNow.diff(tempMoment));
                     stream.ts_diff = Math.round( duration.asHours() * 10 ) / 10;
+
+                    if (protoio.enumerate("Image") == stream.message_type){
+                        stream.isimage = true;
+                    }
+                    else {
+                        stream.isimage = false;
+                    }
                 }
                 cb(error, body);
             }

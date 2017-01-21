@@ -45,7 +45,7 @@ block content
                     |#{stream.client_id}
                 .scell(onclick="location.href='/stream?sid="+stream.sid+"&mid="+stream.message_type+"&startdate="+stream.latest_value_date+"';", style="cursor: pointer;")
                     |#{stream.stream_index}
-                if stream.message_type == 10
+                if stream.isimage
                     .scell(onclick="location.href='/stream?sid="+stream.sid+"&mid="+stream.message_type+"&startdate="+stream.latest_value_date+"';", style="cursor: pointer;")
                         img(src="http://"+stream.latest_value, class="imageCam")
                 else
