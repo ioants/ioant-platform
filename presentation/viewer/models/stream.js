@@ -12,23 +12,20 @@ var protoio = require('./../proto/protoio');
 
 var request_stream_options = {
   method: 'GET',
-  uri: rest_api_request+'/getstreamvalues',
-  json: true
-}
-
-var request_stream_info_options = {
-  method: 'GET',
-  uri: rest_api_request+'/getstreaminfo',
+  uri: rest_api_request+'/v0.1/streams',
   json: true
 }
 
 exports.get = function(sid, startdate, enddate, filter, cb) {
-    console.log("Attempt chart")
     request_stream_options.qs = {'streamid': sid,
                           'startdate': startdate,
                           'enddate': enddate,
                           'filter':filter}
-    request(request_stream_options, function(error, response, streamData){
+    var request_options = Object.assign({}, request_stream_options);
+    request_options.uri += '/id/'+sid+'/data';
+    request(request_options, function(error, response, streamData){
+        console.log("data:");
+        console.log(streamData);
         for (var key in streamData){
             delete streamData[key]['id'];
         }
@@ -40,15 +37,17 @@ function underScore(str) {
      return str.substring(0,1)
           + str.substring(1)
                 .replace(/([A-Z])(?=[a-z]|$)/g, function($0, $1) { return "_" + $1.toLowerCase(); });
- }
+}
 
 exports.getInfo = function(streamId, cb) {
-    request_stream_info_options.qs = {'streamid': streamId}
-    request(request_stream_info_options, function(error, response, streamInfo){
-          console.log(streamInfo)
+    var request_options = Object.assign({}, request_stream_options);
+    request_options.uri += '/id/'+streamId;
+    request(request_options, function(error, response, streamInfo){
           var streamInformation = streamInfo[0];
+          winston.log('debug', 'stream information retrieved:' + streamInfo[0]);
           if(!error){
               protoio.getProtoMessage(streamInformation.message_type ,function (message){
+                  //winston.log('info', message);
                   fields = Object.keys(message.fields);
                   for (var i = 0; i < fields.length; i++) {
                       var msg_type = message.fields[fields[i]].type;

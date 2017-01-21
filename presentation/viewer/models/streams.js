@@ -8,7 +8,6 @@ const winston = require('winston');
 
 
 function getImageOfMessageType(message_type) {
-    console.log("Trying!:" + message_type)
      switch(message_type) {
         case protoio.enumerate("Temperature"):
             return "/img/icons/temperature.png"
@@ -52,13 +51,13 @@ rest_api_request = config.restApiServer.url + ":" + config.restApiServer.port;
 
 const request_options = {
     method: 'GET',
-    uri: rest_api_request+'/liststreams',
+    uri: rest_api_request+'/v0.1/streams',
     json: true
 }
 
 
 exports.all = function(cb) {
-    winston.log('info', 'Get stream list called',{restcall: rest_api_request})
+    winston.log('info', 'Get streams list called',{restcall: rest_api_request})
     request(request_options, function(error, response, body){
         if(error) {
             cb(error, body)
@@ -66,6 +65,8 @@ exports.all = function(cb) {
             if (body.length > 0){
                 for (var key in body){
                     var stream = body[key];
+                    winston.log('debug', 'stream', {stream:stream});
+
                     stream.image_type_url = getImageOfMessageType(stream.message_type);
                     tempMoment = moment(stream.update_ts);
                     timeStampNow = moment();
