@@ -32,7 +32,7 @@ Promise.promisifyAll([
 ]);
 
 function loadConfiguration(){
-    Loader.load("./../configuration.json").then(function(configuration) {
+    Loader.load("./configuration.json").then(function(configuration) {
                Logger.log('info', 'Loaded configuration in streams module!');
                loaded_configuration = configuration;
 
