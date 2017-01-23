@@ -8,7 +8,9 @@ Built using a node js application. Supports parallel requests
 - /streams
     - Lists all streams available in the system
     - Example request:
-            domain.com:1881/v0.1/streams
+        ```
+        domain.com:1881/v0.1/streams
+        ```
     - Example output:
 ```
 [
@@ -44,7 +46,9 @@ Built using a node js application. Supports parallel requests
 - /v0.1/streams/id/**[stream id]**
     - lists a particular stream's meta info.
     - Example request:
-            domain.com:1881/v0.1/streams/id/2
+        ```
+        domain.com:1881/v0.1/streams/id/2
+        ```
     - Example output:
 ```
 [
@@ -70,7 +74,9 @@ Built using a node js application. Supports parallel requests
         - filter [integer]
 
     - Example request:
-            domain.com:1881/v0.1/streams/id/2/data?startdate=2017-01-13&filter=1
+        ```
+        domain.com:1881/v0.1/streams/id/2/data?startdate=2017-01-13&filter=1
+        ```
     - Example output:
 ```
 [
