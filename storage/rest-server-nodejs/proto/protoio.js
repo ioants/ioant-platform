@@ -1,15 +1,19 @@
 'use strict';
-var protobuf = require("protobufjs");
+
 var loaded_proto;
 var message_list_proto;
+var Promise = require('bluebird');
+var protobuf = Promise.promisifyAll(require("protobufjs"));
 
-var loadProtoDefinition = function(cb){
-    protobuf.load("./proto/messages.proto", function(err, root) {
-        if (err) throw err;
+
+var loadProtoDefinition = function(){
+    return protobuf.loadAsync("./proto/messages.proto").then((root) =>{
         message_list_proto = Object.keys(root.nested);
         message_list_proto.shift();
         loaded_proto = root;
-        cb(root);
+        return new Promise((resolve, reject) => {
+            resolve(loaded_proto);
+        })
     });
 }
 
@@ -47,13 +51,17 @@ exports.enumerate = function(message_name){
     }
 }
 
-exports.getProtoMessage = function(message_type, cb) {
+exports.getProtoMessage = function(message_type) {
     if (loaded_proto == null){
-        loadProtoDefinition(function (root){
-            cb(loaded_proto.nested[message_list_proto[message_type]]);
-        });
+        return loadProtoDefinition().then((loaded_proto) => {
+            return new Promise(function (resolve, reject){
+                resolve(loaded_proto.nested[message_list_proto[message_type]]);
+            });
+        })
     }
     else {
-        cb(loaded_proto.nested[message_list_proto[message_type]]);
+        return new Promise(function (resolve, reject){
+            resolve(loaded_proto.nested[message_list_proto[message_type]]);
+        });
     }
 };

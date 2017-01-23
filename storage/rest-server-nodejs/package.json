@@ -6,7 +6,8 @@
     "test": "NODE_ENV=test ./node_modules/.bin/mocha --reporter spec",
     "copy-proto": "cp ../../common/proto/messages.proto proto/.",
     "start": "nodejs restserver.js",
-    "build": "npm run copy-proto"
+    "build": "npm run copy-proto",
+    "debug": "NODE_ENV=development && nodejs restserver.js"
   },
   "author": "Adam Saxén",
   "license": "MIT",
@@ -21,6 +22,7 @@
     "protobufjs": "^6.5.2",
     "request": "^2.79.0",
     "sinon": "^1.17.7",
+    "sinon-as-promised": "^4.0.2",
     "winston": "^2.3.0"
   }
 }

@@ -7,12 +7,12 @@
 
 var express = require('express');
 var router = express.Router();
-var streamsModel = require('../../models/streams');
+var modelIndex = require('../../models/index');
 const Logger = require('../../utils/logger');
 
 router.get('/', function(req, res) {
     Logger.log('debug', "Stream list requested");
-    streamsModel.getStreamList(res);
+    modelIndex.getStreamList(res);
 });
 
 
@@ -22,7 +22,7 @@ router.get('/', function(req, res) {
  */
 router.get('/id/:id/data', function(req, res) {
     Logger.log('debug', 'Data for stream id:' + req.params.id + " requested");
-    streamsModel.getStream(res, req, req.params.id);
+    modelIndex.getStreamData(res, req, req.params.id);
 });
 
 /**
@@ -31,7 +31,7 @@ router.get('/id/:id/data', function(req, res) {
  */
 router.get('/id/:id/', function(req, res) {
     Logger.log('debug', 'Info for stream id:' + req.params.id + " requested");
-    streamsModel.getStreamInfo(res, req.params.id);
+    modelIndex.getStreamInfo(res, req.params.id);
 });
 
 
