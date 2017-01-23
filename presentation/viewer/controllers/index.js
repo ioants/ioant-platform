@@ -7,7 +7,6 @@ router.use('/stream', require('./stream'))
 
 
 router.get('/', function(req, res, next) {
-    //res.render('homepage', {title: 'home'})
     res.redirect('/streams');
 })
 

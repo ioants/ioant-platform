@@ -1,0 +1,166 @@
+{
+    "database": {
+        "name": "ioant",
+        "messageTablePrefix": "stream_",
+        "tables": [
+            {
+                "name": "streams",
+                "primaryKey": "sid",
+                "columns": [
+                    {
+                        "name": "sid",
+                        "special": "none",
+                        "type": {
+                            "name": "int",
+                            "size": 6,
+                            "null": false,
+                            "autoIncrement": true
+                        }
+                    },
+                    {
+                        "name": "global",
+                        "special": "global",
+                        "type": {
+                            "name": "varchar",
+                            "size": 120,
+                            "null": false,
+                            "autoIncrement": false
+                        }
+                    },
+                    {
+                        "name": "local",
+                        "special": "local",
+                        "type": {
+                            "name": "varchar",
+                            "size": 120,
+                            "null": false,
+                            "autoIncrement": false
+                        }
+                    },
+                    {
+                        "name": "client_id",
+                        "special": "client_id",
+                        "type": {
+                            "name": "varchar",
+                            "size": 120,
+                            "null": false,
+                            "autoIncrement": false
+                        }
+                    },
+                    {
+                        "name": "stream_index",
+                        "special": "stream_index",
+                        "type": {
+                            "name": "int",
+                            "size": 4,
+                            "null": false,
+                            "autoIncrement": false
+                        }
+                    },
+                    {
+                        "name": "message_type",
+                        "special": "message_type",
+                        "type": {
+                            "name": "int",
+                            "size": 4,
+                            "null": false,
+                            "autoIncrement": false
+                        }
+                    },
+                    {
+                        "name": "message_name",
+                        "special": "message_name",
+                        "type": {
+                            "name": "varchar",
+                            "size": 120,
+                            "null": false,
+                            "autoIncrement": false
+                        }
+                    },
+                    {
+                        "name": "creation_ts",
+                        "special": "none",
+                        "type": {
+                            "name": "timestamp",
+                            "size": 0,
+                            "null": false,
+                            "autoIncrement": false
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "sys",
+                "primaryKey": "id",
+                "columns": [
+                    {
+                        "name": "id",
+                        "special": "none",
+                        "type": {
+                            "name": "int",
+                            "size": 6,
+                            "null": false,
+                            "autoIncrement": true
+                        }
+                    },
+                    {
+                        "name": "fk_topic",
+                        "special": "topic",
+                        "type": {
+                            "name": "int",
+                            "size": 3,
+                            "null": false,
+                            "autoIncrement": false
+                        }
+                    },
+                    {
+                        "name": "value",
+                        "special": "value",
+                        "type": {
+                            "name": "float",
+                            "size": 0,
+                            "null": false,
+                            "autoIncrement": false
+                        }
+                    },
+                    {
+                        "name": "ts",
+                        "special": "none",
+                        "type": {
+                            "name": "timestamp",
+                            "size": 0,
+                            "null": false,
+                            "autoIncrement": false
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "sys_topic",
+                "primaryKey": "id",
+                "columns": [
+                    {
+                        "name": "id",
+                        "special": "none",
+                        "type": {
+                            "name": "int",
+                            "size": 6,
+                            "null": false,
+                            "autoIncrement": true
+                        }
+                    },
+                    {
+                        "name": "topic",
+                        "special": "topic",
+                        "type": {
+                            "name": "varchar",
+                            "size": 150,
+                            "null": false,
+                            "autoIncrement": false
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

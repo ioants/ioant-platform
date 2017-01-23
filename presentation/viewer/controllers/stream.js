@@ -2,7 +2,7 @@ var express = require('express')
   , router = express.Router()
   , Stream = require('../models/stream')
   , StreamSetting = require('../models/stream_setting')
- const winston = require('winston');
+const winston = require('winston');
 
 router.get('/', function(req, res) {
     StreamSetting.get( req.query.sid,
