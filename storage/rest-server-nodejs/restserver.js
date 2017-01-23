@@ -28,7 +28,7 @@ var startApplication = function(){
 
 var main = function(){
     logger.log('info', 'Starting application');
-    Loader.load("./../configuration.json").then(function(configuration) {
+    Loader.load("./configuration.json").then(function(configuration) {
                 logger.log('info', 'Loaded configuration!', {configuration:configuration});
                 loaded_configuration = configuration;
                 startApplication();
