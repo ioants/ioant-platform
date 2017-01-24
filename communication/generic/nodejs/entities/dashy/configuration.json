@@ -1,0 +1,13 @@
+{
+    "dashy" : {
+        "port": 1101,
+        "connectionlimit": 10
+    },
+    "mqtt" : {
+        "clientId" : "collector",
+        "broker" : "brokerdomain.com",
+        "user" : "hero",
+        "password" : "test",
+        "port" : 1883
+    }
+}

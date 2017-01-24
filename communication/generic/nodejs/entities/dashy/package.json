@@ -1,0 +1,31 @@
+{
+  "name": "dashy",
+  "version": "0.0.1",
+  "description": "Real time dashboard for IOAnt IoT Platform",
+  "main": "app.js",
+    "scripts": {
+      "start": "node app.js",
+      "test": "NODE_ENV=test ./node_modules/.bin/mocha --reporter spec",
+      "build": "npm run copy-proto",
+      "copy-proto": "cp ../../../../../common/proto/messages.proto ./proto/"
+  },
+  "keywords": [
+    "realtime",
+    "dashbord",
+    "ioant"
+  ],
+  "author": "Simon Lövgren",
+  "license": "MIT",
+    "dependencies" : {
+        "bluebird": "^3.0",
+        "chai": "^3.5.0",
+        "chai-as-promised": "^6.0.0",
+        "express": "^4.10.6",
+        "mocha": "^3.2.0",
+        "moment": "^2.4.0",
+        "protobufjs": "^6.5.2",
+        "sinon": "^1.17.7",
+        "sinon-as-promised": "^4.0.2",
+        "winston": "^2.3.0"
+    }
+}
