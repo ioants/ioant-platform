@@ -26,6 +26,8 @@
         "protobufjs": "^6.5.2",
         "sinon": "^1.17.7",
         "sinon-as-promised": "^4.0.2",
-        "winston": "^2.3.0"
+        "winston": "^2.3.0",
+        "pug": "^2.0.0-beta8",
+        "mqtt": "^2.3.0"
     }
 }
