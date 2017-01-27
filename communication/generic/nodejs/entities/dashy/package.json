@@ -28,6 +28,7 @@
         "sinon-as-promised": "^4.0.2",
         "winston": "^2.3.0",
         "pug": "^2.0.0-beta8",
-        "mqtt": "^2.3.0"
+        "mqtt": "^2.3.0",
+        "mongodb": "^2.2.10"
     }
 }
