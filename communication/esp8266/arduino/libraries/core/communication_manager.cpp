@@ -62,7 +62,6 @@ namespace ioant{
 
 
     CommunicationManager::CommunicationManager():
-                                            communication_state_(CommunicationState::OFFLINE),
                                             wifi_status_(WL_DISCONNECTED),
                                             wifi_client_(),
                                             mqtt_client_(wifi_client_),
@@ -95,63 +94,58 @@ namespace ioant{
         return form;
     }
 
-    bool CommunicationManager::ChangeCommunicationState(CommunicationState state){
-        communication_state_ = state;
-        if(CommunicationState::OFFLINE == state){
-            return true;
-        }
-        else if(CommunicationState::WEBSERVER == state){
-            web_server_ = new ESP8266WebServer(80);
-            WiFi.mode(WIFI_AP);
-            String softAPname = "IOANT_";
-            if (config_.client_id.length() > 0) {
-                softAPname = softAPname+config_.client_id;
-            }
-            else {
-                softAPname = softAPname + "DEVICE";
-            }
-            WiFi.softAP(softAPname.c_str(), "test1234");
-            IPAddress myIP = WiFi.softAPIP();
-            ULOG_DEBUG << "Hosting AP: " << "IOANT_DEVICE";
-            ULOG_DEBUG << "Ip address if AP: " << AddressToString(myIP);
+    bool CommunicationManager::EnableAPCommunication(){
 
-            web_server_->on("/", [](){
-               COM_MGR->web_server_->send(200, "text/html", BuildConfigurationForm());
-            });
+        web_server_ = new ESP8266WebServer(80);
+        WiFi.mode(WIFI_AP);
+        String softAPname = "IOANT_";
+        if (config_.client_id.length() > 0) {
+            softAPname = softAPname+config_.client_id;
+        }
+        else {
+            softAPname = softAPname + "DEVICE";
+        }
+        WiFi.softAP(softAPname.c_str(), "test1234");
+        IPAddress myIP = WiFi.softAPIP();
+        ULOG_DEBUG << "Hosting AP: " << "IOANT_DEVICE";
+        ULOG_DEBUG << "Ip address if AP: " << AddressToString(myIP);
 
-            web_server_->on("/configuration", [](){
-                ULOG_DEBUG << "Configuration update request!";
-                COM_MGR->HandleFormConfiguration();
-                COM_MGR->web_server_->send(200, "text/html", "<h2>OK!</h2>");
-            });
+        web_server_->on("/", [](){
+           COM_MGR->web_server_->send(200, "text/html", BuildConfigurationForm());
+        });
 
-            web_server_->begin();
+        web_server_->on("/configuration", [](){
+            ULOG_DEBUG << "Configuration update request!";
+            COM_MGR->HandleFormConfiguration();
+            COM_MGR->web_server_->send(200, "text/html", "<h2>OK!</h2>");
+        });
 
-            return true;
-        }
-        else if(CommunicationState::WIFI_ONLINE == state){
-            ULOG_DEBUG << "Change communication State to WIFI_ONLINE.";
-            WiFi.mode(WIFI_STA);
-            wifi_multi_.addAP(config_.wifi_ssid.c_str(), config_.wifi_password.c_str());
-            ULOG_DEBUG << "Add ap ssid:" << config_.wifi_ssid << " and pass:" << config_.wifi_password ;
-            return true;
-        }
-        else if(CommunicationState::BROKER_ONLINE == state){
-            ULOG_DEBUG << "Change communication State to BROKER_ONLINE.";
-            if (!config_.low_power)
-                pinMode(config_.status_led, OUTPUT);
-            mqtt_client_.setServer(config_.broker_url.c_str(), config_.broker_port);
-            mqtt_client_.setCallback(MqttOnMessage);
-            return true;
-        }
-        else{
-            return false;
-        }
+        web_server_->begin();
+
+        return true;
     }
 
-    CommunicationManager::CommunicationState CommunicationManager::GetCommunicationState(){
-        return communication_state_;
+    bool CommunicationManager::EnableWifiCommunication(){
+        ULOG_DEBUG << "CommunicationManager: Enable WIFI";
+        WiFi.mode(WIFI_STA);
+        wifi_multi_.addAP(config_.wifi_ssid.c_str(), config_.wifi_password.c_str());
+        ULOG_DEBUG << "Add ap ssid:" << config_.wifi_ssid << " and pass:" << config_.wifi_password ;
+        return true;
     }
+
+    bool CommunicationManager::EnableMQTTCommunication(){
+        ULOG_DEBUG << "CommunicationManager: Enable MQTT";
+        if (!config_.low_power)
+        {
+            pinMode(config_.status_led, OUTPUT);
+            digitalWrite(config_.status_led, LOW);
+        }
+
+        mqtt_client_.setServer(config_.broker_url.c_str(), config_.broker_port);
+        mqtt_client_.setCallback(MqttOnMessage);
+        return true;
+    }
+
 
     ESP8266WebServer* CommunicationManager::GetWebServerHandle(){
         return web_server_;
@@ -227,7 +221,6 @@ namespace ioant{
             wifi_status_ = wifi_multi_.run();
             if (wifi_status_ == WL_CONNECTED)
             {
-                communication_state_ = CommunicationState::WIFI_ONLINE;
                 result = true;
                 break;
             }
@@ -237,9 +230,11 @@ namespace ioant{
     }
 
     bool CommunicationManager::UpdateBrokerConnection(bool clean_session){
-
         bool result = false;
         for(int i=0; i < 4; i++){
+            if (result)
+                return result;
+
             if(!mqtt_client_.connected()){
                 ULOG_DEBUG << "Connecting to broker:" << config_.broker_url;
                 ULOG_DEBUG << "With client id:" << config_.client_id;
@@ -250,7 +245,6 @@ namespace ioant{
             }
             else{
                 result = true;
-                break;
             }
             delay(1000);
         }

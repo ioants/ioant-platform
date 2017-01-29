@@ -40,7 +40,7 @@ void blinkLed(int led,int delay_between_blink);
 const byte interrupt_pin = 5;
 
 int timeToCheckStatus = 0;
-unsigned long t1,t2,dt;
+unsigned long t1,t2,dt,ttemp;
 float elpow = 0.0;
 int interrupt_counter = 0;
 int electric_meter_pulses = 1000;  //1000 pulses/kWh
@@ -55,7 +55,9 @@ void setup(void){
     //    Now he basics all set up. Send logs to your computer either
     //    over Serial or WifiManager.
     // ########################################################################
-
+    CommunicationManager::Configuration loaded_configuration;
+    IOANT->GetCurrentConfiguration(loaded_configuration);
+    electric_meter_pulses =  loaded_configuration.application_generic;
     // Add additional set up code here
     pinMode(12, OUTPUT);
     pinMode(interrupt_pin, INPUT_PULLUP);
@@ -83,10 +85,17 @@ void on_message(Core::Topic received_topic, ProtoIO* message){
 //Interrupt function for measuring the time between pulses and number of pulses
 // Always stored in RAM
 void ICACHE_RAM_ATTR measure(){
+    ttemp = t2;
     t2 = t1;
     t1 = millis();
     dt = t1 - t2;
-    elpow = 3600./dt*electric_meter_pulses;
+    if (dt < 50)
+    {
+        t2 = ttemp;
+        return;
+    }
+    //elpow = 3600./dt*electric_meter_pulses;
+    elpow = 3600.*1000.*1000./(electric_meter_pulses*dt);
     interrupt_counter++;
 }
 

@@ -48,11 +48,12 @@ namespace ioant
 
         enum State
         {
-            CONFIGURATION_CHECK = 0,
-            WIFI_CHECK = 1,
-            BROKER_CHECK = 2,
-            RECONFIGURATION_ACTIVE = 3,
-            CLIENT_ONLINE = 4
+            STATE_POWER_ON = 0,
+            STATE_CONFIGURATION = 1,
+            STATE_WIFI = 2,
+            STATE_MQTT = 3,
+            STATE_AP_MODE = 4,
+            STATE_OPERATIONAL = 5
         };
 
         static Core* GetInstance(void (*on_message)(Topic topic, ProtoIO* message));
@@ -104,10 +105,10 @@ namespace ioant
         ///
         bool SetPersistenConfiguration(CommunicationManager::Configuration& configuration_message);
 
-        /// @brief StateMachine function
-        /// Function definition for storing configuration in eeprom
+        /// @brief IsOperational function
+        /// Contains state machine for platform readiness
         ///
-        bool StateMachine();
+        bool IsOperational();
 
         /// @brief GetCurrentConfiguration
         /// Function restarting esp
@@ -125,6 +126,9 @@ namespace ioant
     private:
         Core(void (*on_message)(Topic topic, ProtoIO* message));
         ~Core(){};
+        void VisualStateIndicator();
+        void SetState(State new_state);
+        String StateToString(State new_state);
         String client_id_;
         Topic configured_topic_;
         State state_;

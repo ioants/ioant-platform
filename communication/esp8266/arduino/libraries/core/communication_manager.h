@@ -65,20 +65,12 @@ namespace ioant
             };
         };
 
-
-        enum CommunicationState
-        {
-            OFFLINE = 0,
-            WEBSERVER = 1,
-            WIFI_ONLINE = 2,
-            BROKER_ONLINE = 3
-        };
-
         static CommunicationManager* GetInstance();
         static CommunicationManager* instance_;
 
-        bool ChangeCommunicationState(CommunicationState state);
-        CommunicationState GetCommunicationState();
+        bool EnableAPCommunication();
+        bool EnableWifiCommunication();
+        bool EnableMQTTCommunication();
 
         bool HandleWebServerConfigurationUpdate();
         ESP8266WebServer* GetWebServerHandle();
@@ -123,7 +115,6 @@ namespace ioant
         wl_status_t wifi_status_;
         Configuration config_;
         bool silent_;
-        CommunicationState communication_state_;
         bool configuration_updated_;
     };
 

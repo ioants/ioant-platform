@@ -29,14 +29,14 @@ namespace ioant
         }
     }
 
-    Core::Core(void (*on_message)(Topic topic, ProtoIO* message)) : state_(State::CONFIGURATION_CHECK), localConfigurationTicks_(0)
+    Core::Core(void (*on_message)(Topic topic, ProtoIO* message)) : state_(State::STATE_POWER_ON), localConfigurationTicks_(0)
     {
         CommunicationManager::GetInstance();
         delay(500);
         MQTTCallback = on_message;
         EEPROM.begin(EEPROM_STORAGE_SIZE);
         COM_MGR->SetMqttOnMessageCallback(OnMessage);
-        while(!StateMachine()){
+        while(!IsOperational()){
             delay(1000);
         }
     }
@@ -49,65 +49,57 @@ namespace ioant
 
         // Is connected to broker. All good
         if (COM_MGR->UpdateWifiConnection()){
-            if (COM_MGR->UpdateBrokerConnection()){
-                COM_MGR->MqttLoop();
-            }
-            else{
+            if (!COM_MGR->UpdateBrokerConnection()){
                 ULOG_DEBUG << "Broker connection lost handing over to state machine";
-                state_ = State::BROKER_CHECK;
-                while(!StateMachine()){
-                    delay(1000);
-                }
+                SetState(State::STATE_MQTT);
             }
         }
         else{
             ULOG_DEBUG << "WIFI connection lost handing over to state machine";
-            state_ = State::WIFI_CHECK;
-            while(!StateMachine()){
-                delay(1000);
-            }
+            SetState(State::STATE_WIFI);
         }
+
+        // Try to become operational
+        while(!IsOperational()){
+            delay(1000);
+        }
+
+        //Check for new messages
+        COM_MGR->MqttLoop();
     }
 
 
-    bool Core::StateMachine(){
-        ULOG_DEBUG << "Current state: " << state_ << " Ticks: " << localConfigurationTicks_;
-        if (state_ == State::CLIENT_ONLINE){
-            ULOG_DEBUG << "Client is operational!";
+    bool Core::IsOperational(){
+        if (state_ == State::STATE_OPERATIONAL){
             return true;
         }
 
-        if(State::CONFIGURATION_CHECK == state_){
-            ULOG_DEBUG << "Checking for configuration";
+        if(State::STATE_POWER_ON == state_){
+            SetState(State::STATE_CONFIGURATION);
+        }
+        else if(State::STATE_CONFIGURATION == state_){
             CommunicationManager::Configuration persisted_configuration;
             if (GetPersistenConfiguration(persisted_configuration)){
-                state_ = State::WIFI_CHECK;
+                SetState(State::STATE_WIFI);
                 COM_MGR->UpdateConfiguration(persisted_configuration);
-                ULOG_DEBUG << "Configuration updated!";
             }
             else{
-                ULOG_DEBUG << "Configuration not found!";
-                state_ = State::RECONFIGURATION_ACTIVE;
+                SetState(State::STATE_AP_MODE);
             }
         }
-        else if(State::WIFI_CHECK == state_){
-            ULOG_DEBUG << "Attempting WIFI connect";
-            COM_MGR->ChangeCommunicationState(CommunicationManager::CommunicationState::WIFI_ONLINE);
+        else if(State::STATE_WIFI == state_){
+            COM_MGR->EnableWifiCommunication();
             if (COM_MGR->UpdateWifiConnection()){
-                ULOG_DEBUG << "WIFI connection succesful";
-                state_ = State::BROKER_CHECK;
+                SetState(State::STATE_MQTT);
             }
             else{
-                ULOG_DEBUG << "WIFI connection failed";
-                state_ = State::RECONFIGURATION_ACTIVE;
+                SetState(State::STATE_AP_MODE);
             }
         }
-        else if(State::BROKER_CHECK == state_){
-            ULOG_DEBUG << "Attempting Broker connect";
-            COM_MGR->ChangeCommunicationState(CommunicationManager::CommunicationState::BROKER_ONLINE);
+        else if(State::STATE_MQTT == state_){
+            COM_MGR->EnableMQTTCommunication();
             if (COM_MGR->UpdateBrokerConnection(true)){
-                ULOG_DEBUG << "Broker connection successful!";
-                state_ = State::CLIENT_ONLINE;
+                SetState(State::STATE_OPERATIONAL);
                 CommunicationManager::Configuration updated_configuration;
                 COM_MGR->GetCurrentConfiguration(updated_configuration);
                 configured_topic_.client_id = updated_configuration.client_id;
@@ -119,40 +111,24 @@ namespace ioant
                 PublishBootInfoMessage();
             }
             else{
-                ULOG_DEBUG << "Broker connection failed!";
-                state_ = State::RECONFIGURATION_ACTIVE;
+                SetState(State::STATE_AP_MODE);
             }
         }
-        else if(State::RECONFIGURATION_ACTIVE == state_){
-            CommunicationManager::CommunicationState current_state = COM_MGR->GetCommunicationState();
-            if (CommunicationManager::CommunicationState::WEBSERVER == current_state){
-                //ULOG_DEBUG << "Handling server request!";
-                localConfigurationTicks_++;
-                if(localConfigurationTicks_ >= 300){
-                    ULOG_DEBUG << "Rebooting due to tick limit";
-                    delay(1000);
-                    ESP.restart();
-                }
-                if (COM_MGR->HandleWebServerConfigurationUpdate()){
-                    //Configuration received
-                    CommunicationManager::Configuration updated_configuration;
-                    COM_MGR->GetCurrentConfiguration(updated_configuration);
-                    SetPersistenConfiguration(updated_configuration);
-                    ULOG_DEBUG << "Rebooting...";
-                    delay(1000);
-                    ESP.restart();
-                }
+        else if(State::STATE_AP_MODE == state_){
+            localConfigurationTicks_++;
+            if(localConfigurationTicks_ >= 300){
+                ULOG_DEBUG << "Rebooting due to tick limit";
+                delay(1000);
+                ESP.restart();
             }
-            else{
-                //localConfigurationTicks_++;
-                // Reboot every 5 minutes
-                //if(localConfigurationTicks_ >= 300){
-                //    ULOG_DEBUG << "Rebooting due to tick limit";
-                //    delay(1000);
-                //    ESP.restart();
-                //}
-                ULOG_DEBUG << "Attempting reconfiguration using webserver";
-                COM_MGR->ChangeCommunicationState(CommunicationManager::CommunicationState::WEBSERVER);
+            if (COM_MGR->HandleWebServerConfigurationUpdate()){
+                //Configuration received
+                CommunicationManager::Configuration updated_configuration;
+                COM_MGR->GetCurrentConfiguration(updated_configuration);
+                SetPersistenConfiguration(updated_configuration);
+                ULOG_DEBUG << "Rebooting...";
+                delay(1000);
+                ESP.restart();
             }
         }
 
@@ -492,5 +468,93 @@ namespace ioant
         }
         message->~ProtoIO();
         free(message);
+    }
+
+    void Core::VisualStateIndicator(){
+        CommunicationManager::Configuration loaded_configuration;
+        GetCurrentConfiguration(loaded_configuration);
+        switch(state_){
+            case STATE_POWER_ON:{
+                for (int i=0; i<1;i++){
+                    digitalWrite(loaded_configuration.status_led, HIGH);
+                    delay(300);
+                    digitalWrite(loaded_configuration.status_led, LOW);
+                    delay(300);
+                }
+            } break;
+            case STATE_CONFIGURATION:{
+                for (int i=0; i<2;i++){
+                    digitalWrite(loaded_configuration.status_led, HIGH);
+                    delay(300);
+                    digitalWrite(loaded_configuration.status_led, LOW);
+                    delay(300);
+                }
+            } break;
+            case STATE_WIFI:{
+                for (int i=0; i<3;i++){
+                    digitalWrite(loaded_configuration.status_led, HIGH);
+                    delay(300);
+                    digitalWrite(loaded_configuration.status_led, LOW);
+                    delay(300);
+                }
+            } break;
+            case STATE_MQTT:{
+                for (int i=0; i<4;i++){
+                    digitalWrite(loaded_configuration.status_led, HIGH);
+                    delay(300);
+                    digitalWrite(loaded_configuration.status_led, LOW);
+                    delay(300);
+                }
+            } break;
+            case STATE_AP_MODE:{
+                for (int i=0; i<5;i++){
+                    digitalWrite(loaded_configuration.status_led, HIGH);
+                    delay(300);
+                    digitalWrite(loaded_configuration.status_led, LOW);
+                    delay(300);
+                }
+            } break;
+            case STATE_OPERATIONAL:{
+                for (int i=0; i<6;i++){
+                    digitalWrite(loaded_configuration.status_led, HIGH);
+                    delay(300);
+                    digitalWrite(loaded_configuration.status_led, LOW);
+                    delay(300);
+                }
+            } break;
+        }
+    }
+
+    void Core::SetState(State new_state){
+        State prev_state = state_;
+        ULOG_DEBUG  << "State transition:"  << StateToString(prev_state) << "->" << StateToString(new_state);
+        state_ = new_state;
+        VisualStateIndicator();
+    }
+
+    String Core::StateToString(State state){
+        String state_message = "";
+        if (state == STATE_POWER_ON){
+            state_message = "Power on";
+        }
+        else if (state == STATE_CONFIGURATION){
+            state_message = "Configuration";
+        }
+        else if (state == STATE_WIFI){
+            state_message = "Wifi";
+        }
+        else if (state == STATE_MQTT){
+            state_message = "Mqtt";
+        }
+        else if (state == STATE_AP_MODE){
+            state_message = "AP mode";
+        }
+        else if (state == STATE_OPERATIONAL){
+            state_message = "Operational";
+        }
+        else{
+            state_message = "Unknown";
+        }
+        return state_message;
     }
 }
