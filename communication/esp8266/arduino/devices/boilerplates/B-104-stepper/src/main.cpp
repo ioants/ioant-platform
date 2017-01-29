@@ -21,9 +21,11 @@ void on_message(Core::Topic received_topic, ProtoIO* message);
 // ############################################################################
 
 
-int DIR   = 12;  // gpio for direction
-int STEP  = 4;  // gpio for step
-int SLEEP = 5;  // gpio for sleep
+int DIR   = 4;   // D2
+int STEP  = 5;   // D1
+int SLEEP = 12;  // D6
+int MS1   = 13;  // D7
+int MS2   = 14;  // D5
 
 // Stepper Motor Characteristics
 float stepper_resolution = 1.5;
@@ -69,50 +71,76 @@ void stepCCW(int steps,int dd)
 }
 
 void setup(void){
-    //Initialize Nabton
+    //Initialize
     Core::GetInstance(on_message);
+    pinMode(DIR,OUTPUT);
+    pinMode(STEP,OUTPUT);
+    pinMode(SLEEP,OUTPUT);
+    pinMode(MS1,OUTPUT);
+    pinMode(MS2,OUTPUT);
 
-    // ########################################################################
-    //    Now he basics all set up. Send logs to your computer either
-    //    over Serial or WifiManager.
-    // ########################################################################
-    ULOG_DEBUG << "This is a debug message over serial port";
-    //WLOG_DEBUG << "This is a debug message over wifi";
+    digitalWrite(MS1,LOW);
+    digitalWrite(MS2,LOW);
+    digitalWrite(SLEEP,LOW);
+    digitalWrite(DIR,LOW);
+    digitalWrite(STEP,LOW);
+    //Possible settings are (MS1/MS2) : full step (0,0), half step (1,0), 1/4 step (0,1), and 1/8 step (1,1)
 
-
-    //Subscribe to its own global and local topic
-    Core::Topic subscribe_topic;
-    subscribe_topic.global = "sweden";
-    subscribe_topic.local = "wermland";
+    //Subscribe stepper commands
+    Core::Topic subscribe_topic = IOANT->GetConfiguredTopic();
+    subscribe_topic.message_type = ProtoIO::MessageTypes::RUNSTEPPERMOTORRAW;
     IOANT->Subscribe(subscribe_topic);
 }
 
 void loop(void){
     // Monitors Wifi connection and loops MQTT connection. Attempt reconnect if lost
     IOANT->UpdateLoop();
-
-    // Send a Temperature message to itself on topic kConfigTopicGlobal/kConfigTopicLocal
-    TemperatureMessage msg;
-    msg.data.unit = Temperature_Unit_CELSIUS;
-    msg.data.value = 14.5f;
-    IOANT->Publish(msg);
-
-    // Also send the temeprature message to a remote topic
-    Core::Topic remote_topic = IOANT->GetConfiguredTopic();
-    remote_topic.global = "sweden";
-    remote_topic.local = "wermland";
-    IOANT->Publish(msg, remote_topic);
-
-    ULOG_DEBUG << "free heap:" << (int)ESP.getFreeHeap();
 }
 
 // Function for handling received MQTT messages
 void on_message(Core::Topic received_topic, ProtoIO* message){
-    WLOG_DEBUG << "Message received! topic:" << received_topic.global  << " message type:" << received_topic.message_type ;
 
-    if (received_topic.message_type == ProtoIO::MessageTypes::IMAGE)
+    if (received_topic.message_type == ProtoIO::MessageTypes::RUNSTEPPERMOTORRAW)
     {
-        ImageMessage* message = dynamic_cast<ImageMessage*>(message);
-        WLOG_DEBUG << "Image reference link:" << message->data.reference_link;
+        RunStepperMotorRawMessage *msg = static_cast<RunStepperMotorRawMessage*>(message);
+        if(msg->data.number_of_step < 1 || msg->data.number_of_step > 500) return;
+        if(msg->data.delay_between_steps < 1 || msg->data.delay_between_steps > 1000) return;
+
+        if(msg->data.step_size == RunStepperMotorRaw_StepSize_FULL_STEP)
+        {
+            digitalWrite(MS1,LOW);
+            digitalWrite(MS2,LOW);
+        }
+        else if (msg->data.step_size == RunStepperMotorRaw_StepSize_HALF_STEP)
+        {
+            digitalWrite(MS1,HIGH);
+            digitalWrite(MS2,LOW);
+        }
+        else if (msg->data.step_size == RunStepperMotorRaw_StepSize_QUARTER_STEP)
+        {
+            digitalWrite(MS1,LOW);
+            digitalWrite(MS2,HIGH);
+        }
+        else // default fullstep
+        {
+            digitalWrite(MS1,LOW);
+            digitalWrite(MS2,LOW);
+        }
+
+        if(msg->data.direction == RunStepperMotorRaw_Direction_CLOCKWISE)
+        {
+            ULOG_DEBUG << "Stepper motor CW -->";
+            stepCW(msg->data.number_of_step,msg->data.delay_between_steps);
+        }
+        else if(msg->data.direction == RunStepperMotorRaw_Direction_COUNTER_CLOCKWISE)
+        {
+            ULOG_DEBUG << "Stepper motor CCW  <--";
+            stepCCW(msg->data.number_of_step,msg->data.delay_between_steps);
+        }
+        else
+            ULOG_DEBUG << "ERROR: Unknown direction for stepper motor";
+
+        digitalWrite(MS1,LOW);
+        digitalWrite(MS2,LOW);
     }
 }
