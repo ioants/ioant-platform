@@ -422,7 +422,9 @@ namespace ioant
         message->Decode((uint8_t*)payload, length);
 
         if (topic_received.top == "live"){
-            IOANT->MQTTCallback(topic_received, message);
+            if (IOANT->MQTTCallback != NULL){
+                IOANT->MQTTCallback(topic_received, message);
+            }
         }
         else if (topic_received.top == "control"){
             WLOG_DEBUG << "Control message recieved";

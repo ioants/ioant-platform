@@ -118,7 +118,6 @@ namespace ioant
         bool configuration_updated_;
     };
 
-
 }
 
 

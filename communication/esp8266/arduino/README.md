@@ -32,6 +32,7 @@ Available boilerplates:
 
 Available applications:
 - **visualcollector** : Visualization of traffic in the MQTT-network
+- **bodyweightscale** : Body weight scale application
 
 ## Libraries
 > The libraries or SDK for using the IOAnt platform. Divided into core and module
