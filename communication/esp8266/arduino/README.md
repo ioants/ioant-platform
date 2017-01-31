@@ -24,13 +24,14 @@ Available boilerplates:
 - **B-102-DHT22**  : Measuring temperature and humidity with the DTH22 sensor
 - **B-103-oleddisplay**  : Subscribing on different topics and showing various data on an oled display
 - **B-104-stepper**  : Controlling a stepper motor based on values in a received message
+- **B-105-nilm** : A power meter client that reports Wattage
+- **B-106-switch-trigger**  : Simple trigger message on switch open/close
 
 ## Applications
 > Complete projects tailored for a specific task.
 
 Available applications:
-- **A-101-nilm** : A power meter client that reports Wattage
-- **A-102-camtrigger** : A client that sends messages that will trigger other clients connected to cameras
+- **visualcollector** : Visualization of traffic in the MQTT-network
 
 ## Libraries
 > The libraries or SDK for using the IOAnt platform. Divided into core and module
