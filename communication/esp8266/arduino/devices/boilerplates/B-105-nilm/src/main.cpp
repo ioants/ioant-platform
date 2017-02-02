@@ -1,7 +1,7 @@
 ///
 /// @file   main.cpp
 /// @Author Benny Saxen
-/// @date   2016-12-22
+/// @date   2017-02-02
 /// @brief  NILM
 ///
 
@@ -33,7 +33,6 @@ void on_message(Core::Topic received_topic, ProtoIO* message);
 /// @brief measure function
 /// Measures the time between two pulses
 void measure();
-void blinkLed(int led,int delay_between_blink);
 // END OF - Custom function definitions
 
 // CUSTOM variables
@@ -99,9 +98,3 @@ void ICACHE_RAM_ATTR measure(){
     interrupt_counter++;
 }
 
-void blinkLed(int led,int delay_between_blink){
-    digitalWrite(led, HIGH);
-    delay(delay_between_blink);
-    digitalWrite(led, LOW);
-    delay(delay_between_blink);
-}
