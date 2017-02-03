@@ -21,15 +21,6 @@ void on_message(Core::Topic received_topic, ProtoIO* message);
 // Everything above this line is mandatory
 // ############################################################################
 
-
-/// Custom function definitions
-// void TestFunction(int t);
-/// END OF - Custom function definitions
-
-///. CUSTOM variables
-
-// Custom function definitions
-
 /// @brief measure function
 /// Measures the time between two pulses
 void measure();
@@ -37,7 +28,6 @@ void measure();
 
 // CUSTOM variables
 const byte interrupt_pin = 5;
-
 int timeToCheckStatus = 0;
 unsigned long t1,t2,dt,ttemp;
 float elpow = 0.0;
@@ -57,8 +47,8 @@ void setup(void){
     CommunicationManager::Configuration loaded_configuration;
     IOANT->GetCurrentConfiguration(loaded_configuration);
     electric_meter_pulses =  loaded_configuration.application_generic;
+
     // Add additional set up code here
-    pinMode(12, OUTPUT);
     pinMode(interrupt_pin, INPUT_PULLUP);
     attachInterrupt(interrupt_pin, measure, FALLING);
 
@@ -70,9 +60,10 @@ void loop(void){
     msg.data.value = elpow;
     msg.data.unit = ElectricPower_Unit_WATTS;
     msg.data.pulses = interrupt_counter;
+    ULOG_DEBUG << interrupt_counter;
     bool result = IOANT->Publish(msg);
     interrupt_counter  = 0;
-    WLOG_DEBUG << result << " " << msg.data.value;
+    ULOG_DEBUG << result << " " << msg.data.value;
 }
 
 // Function for handling received MQTT messages
@@ -81,7 +72,7 @@ void on_message(Core::Topic received_topic, ProtoIO* message){
 }
 
 
-//Interrupt function for measuring the time between pulses and number of pulses
+// Interrupt function for measuring the time between pulses and number of pulses
 // Always stored in RAM
 void ICACHE_RAM_ATTR measure(){
     ttemp = t2;
@@ -93,8 +84,6 @@ void ICACHE_RAM_ATTR measure(){
         t2 = ttemp;
         return;
     }
-    //elpow = 3600./dt*electric_meter_pulses;
     elpow = 3600.*1000.*1000./(electric_meter_pulses*dt);
     interrupt_counter++;
 }
-

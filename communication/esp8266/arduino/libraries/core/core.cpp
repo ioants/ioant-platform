@@ -116,6 +116,7 @@ namespace ioant
         }
         else if(State::STATE_AP_MODE == state_){
             localConfigurationTicks_++;
+            ULOG_DEBUG << localConfigurationTicks_;
             if(localConfigurationTicks_ >= 300){
                 ULOG_DEBUG << "Rebooting due to tick limit";
                 delay(1000);

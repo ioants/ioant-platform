@@ -95,7 +95,7 @@ namespace ioant{
     }
 
     bool CommunicationManager::EnableAPCommunication(){
-
+        ULOG_DEBUG << "CommunicationManager: Enable WIFI AP";
         web_server_ = new ESP8266WebServer(80);
         WiFi.mode(WIFI_AP);
         String softAPname = "IOANT_";
@@ -158,6 +158,8 @@ namespace ioant{
         if (web_server_){
             web_server_->handleClient();
         }
+        else
+            EnableAPCommunication();
         return false;
     }
 
