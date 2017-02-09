@@ -22,21 +22,52 @@ from datetime import datetime
 import sys
 import generated_proto.messages_pb2 as messages_pb2
 import generated_proto.proto_io as ProtoIO
-from ioant.db import db
 from ioant.utils import utils
 from google.protobuf.message import Message
 from google.protobuf.descriptor import FieldDescriptor
 import math
 
-g_me = "benny"
+def bs_now():
+    today = date.today()
+    t1 = time.time()
+    ts = datetime.fromtimestamp(t1).strftime('%H:%M:%S')
+    timestamp = str(today) + " " + ts + " "
+    #print today
+    #print ts
+    return timestamp
 
-def bs_remember(me,tag,value):
-    print "bs_remember: " + tag + " value: " + str(value)
+def bs_remember(tag,value):
+    bs_file = tag + ".memory"
+    stemp = "bs_remember: " + tag + " value: " + str(value)
+    bs_log(stemp)
+    f = open(bs_file,'w')
+    f.write(str(value))
+    f.close()
     return
 
-def bs_recall(me,tag):
-    print "bs_recall: " + tag
-    return 99
+def bs_memory(tag):
+    bs_file = tag + ".memory"
+    try:
+        f = open(bs_file,'r')
+    except:
+        stemp = "Error bs_memory: " + tag
+        bs_log(stemp)
+        return("void")
+    row = f.readline()
+    f.close()
+    stemp = "bs_memory: " + tag + " " + str(row)
+    bs_log(stemp)
+    return row
+
+def bs_log(info):
+    ts = bs_now()
+    print "bs_log: " + ts + info
+    f = open("log.ioant",'a')
+    f.write(ts)
+    f.write(info)
+    f.write('\n')
+    f.close()
+    return
 
 def init_ascii():
     message = "\
@@ -45,83 +76,95 @@ def init_ascii():
     ========================================================================="
     return message
 
-def get_connector_client_id(app_param):
-    print "read configuration file: " + app_param
-    return "esp10"
-
 def mqtt_on_connect(client, userdata, rc):
     print("[info] Connected with result code "+str(rc))
 
-    appp = "Z-TEMP-WATER-OUT"
-    cid = get_connector_client_id(appp)
-    topic = "live/+/" + appp + "/" + cid + "/" + str(ProtoIO.message_type_index_dict["Temperature"]) + "/#"
-    print "[info] Subscribed to topic:" + topic
+    topic = "live/kil/kvv32/esp4/" + str(ProtoIO.message_type_index_dict["Temperature"]) + "/3" # water out
+    stemp = "[info] Subscribed to topic:" + topic
+    bs_log(stemp)
     client.subscribe(topic)
 
-    appp = "Z-TEMP-SMOKEGAS"
-    cid = get_connector_client_id(appp)
-    topic = "live/+/" + appp + "/" + cid + "/4/#"
-    print "[info] Subscribed to topic:" + topic
+    topic = "live/kil/kvv32/esp4/" + str(ProtoIO.message_type_index_dict["Temperature"]) + "/0" # smoke temp
+    stemp =  "[info] Subscribed to topic:" + topic
+    bs_log(stemp)
     client.subscribe(topic)
 
 def mqtt_on_message(client, userdata, msg):
-    print "Processing message"
-    process_message(msg.payload, msg.topic)
+    stemp = "Processing message " + msg.topic
+    bs_log(stemp)
+    process_message(client, msg.payload, msg.topic)
 
-def process_message(payload, topic):
+def process_message(client, payload, topic):
     topic_dict = utils.topic_to_dict(topic)
     if topic_dict is None:
-        print "Topic invalid"
+        bs_log("Topic invalid")
         return
-
     try:
         in_msg = ProtoIO.create_proto_message(topic_dict['message_type'])
         in_msg.ParseFromString(payload)
     except:
-        print "Failed to decode message!"
+        bs_log("Failed to decode message")
         return
 
     #clientid = topic_dict['client_id'];
-    app_type = topic_dict['local'];
-
-    if app_type == "Z-TEMP-SMOKEGAS":
-        print app_type + "temp: " + in_msg.value
+    #app_type = topic_dict['local'];
+    topic_index = topic_dict['stream_index'];
+    if topic_index == 0: # Smoke temp
+        stemp =  "Smoke temp: " + str(in_msg.value)
+        bs_log(stemp)
         if in_msg.value < 26:
             return
 
-    if app_type == 	"Z-TEMP-WATER-OUT":
-        temp_water_out = in_msg.value
-        prev_order_time = bs_recall(g_me,"PREV_ORDER_TIME");
-        temp_target = bs_recall(g_me,"TEMP_TARGET");
+    if topic_index == 3: # water out
+        stemp =  "water out: " + str(in_msg.value)
+        bs_log(stemp)
+        temp_water_out = float(in_msg.value)
 
-        steps = round((temp_target - temp_water_out)*4)
-        steps = 10
-        if(steps < 1 or steps > 50):
+        current = int(time.time())
+        prev_order_time = bs_memory("PREV_ORDER_TIME")
+        # If no value in memory - no action
+        if prev_order_time == "void":
+            prev_order_time = current
+
+        diff = current - int(prev_order_time)
+        stemp = "diff " + str(diff)
+        bs_log(stemp)
+
+
+        temp_target = float(bs_memory("TEMP_TARGET"))
+        # If no value in memory - no action
+        if temp_target == "void":
+            temp_target = temp_water_out
+
+        steps = int(round((temp_target - temp_water_out)*4))
+        stemp =  "steps " + str(steps)
+        bs_log(stemp)
+        #steps = 10
+        if(steps < -50 or steps > 50):
+            stemp = "steps out of range " + str(steps)
+            bs_log(stemp)
             return
-            # adjustment needed
+
+        # Everythin ok for sending an order to stepper motor
         out_msg = ProtoIO.create_proto_message(ProtoIO.message_type_index_dict["RunStepperMotorRaw"])
-        appp = "Z-HEATER-CONTROL"
-        cid = get_connector_client_id(appp)
-        topic = "live/" + g_me + "/" + appp + "/" + cid + "/" + str(ProtoIO.message_type_index_dict["RunStepperMotorRaw"]) + "/#"
-        if steps > 0:
+        topic = "live/kil/kvv32/D1/" +  str(ProtoIO.message_type_index_dict["RunStepperMotorRaw"]) + "/0"
+        if steps < 0:
             out_msg.direction = messages_pb2.RunStepperMotorRaw.CLOCKWISE
+            bs_log("CLOCKWISE")
         else:
             out_msg.direction = messages_pb2.RunStepperMotorRaw.COUNTER_CLOCKWISE
+            bs_log("COUNTER_CLOCKWISE")
 
-        out_msg.delay_between_steps = 10
+        out_msg.delay_between_steps = 5
         out_msg.number_of_step = abs(steps)
         out_msg.step_size = messages_pb2.RunStepperMotorRaw.FULL_STEP
-        print "[Publish] " + topic + "  " + appp + " steps: " + str(steps)
-        #client.publish(topic)
+        stemp = "[Publish] " + topic + " steps: " + str(steps)
+        bs_log(stemp)
+        payload = out_msg.SerializeToString()
+        #client.publish(topic,bytearray(payload))
+        current = time.time()
+        bs_remember("PREV_ORDER_TIME",current)
 
-        today = date.today()
-        t1 = time.time()
-        ts = datetime.fromtimestamp(t1).strftime('%H:%M:%S')
-        timestamp = str(today) + " " + ts
-        print today
-        print ts
-        print timestamp
-        bs_remember(g_me,"PREV_ORDER_TIME",timestamp)
 
 
 def initiate_mqtt_client(broker, port):

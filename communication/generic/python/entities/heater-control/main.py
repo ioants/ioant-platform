@@ -29,8 +29,7 @@ if __name__ == "__main__":
 
     client = control.initiate_client(mqtt_broker,
                                        mqtt_port,
-                                       configuration_dict,
-                                       db_schema_dict)
+                                       configuration_dict)
     if client:
         control.loop_mqtt_client(client)
 
