@@ -156,7 +156,7 @@ void loop(void){
         msg.data.unit = Mass_Unit_KILOGRAMS;
         Core::Topic remote_topic = IOANT->GetConfiguredTopic();
         remote_topic.stream_index = who;
-        IOANT->Publish(msg);
+        IOANT->Publish(msg, remote_topic);
 
         //Wait 5 seconds before reattaching the interrupt. (Enough time for the
         //person to get off the scale)
