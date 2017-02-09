@@ -1,0 +1,10 @@
+{
+    "os":"linux",
+    "mqtt" : {
+        "clientId" : "agent",
+        "broker" : "brokerdomain.com",
+        "user" : "hero",
+        "password" : "test",
+    	"port" : 1883
+    },
+}
