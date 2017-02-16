@@ -174,5 +174,5 @@ message Alarm {
 }
 
 message Switch {
-    bool state;
+    bool state = 1;
 }
