@@ -10,7 +10,7 @@ BootInfo.ip_address    type:FT_POINTER
 # Image message
 Image.reference_link   type:FT_POINTER
 
-# Client messages
+# Configuration messages
 Configuration.wifi_ssid type:FT_POINTER
 Configuration.wifi_password type:FT_POINTER
 Configuration.broker_url type:FT_POINTER
@@ -20,3 +20,6 @@ Configuration.udp_url type:FT_POINTER
 Configuration.topic_global type:FT_POINTER
 Configuration.topic_local type:FT_POINTER
 Configuration.client_id type:FT_POINTER
+
+# Alarm message
+Alarm.info type:FT_POINTER
