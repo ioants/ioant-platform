@@ -169,7 +169,7 @@ message Alarm {
         LEVEL5 = 4;
     }
 
-    String info = 1;
+    string info = 1;
     Severity severity = 2;
 }
 
