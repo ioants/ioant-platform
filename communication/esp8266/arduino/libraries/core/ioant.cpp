@@ -1,35 +1,35 @@
 ///
-/// @file   core.cpp
+/// @file   ioant.cpp
 /// @Author Adam Saxen
 /// @date   Oktober, 2016
-/// @brief  Core class source
+/// @brief  IOAnt core class source
 ///
 /// This class handles the encoding and decoding of messages when communicating
-/// with a ioant server solution
+/// with a ioant platform solution
 ///
-#include "core.h"
+#include "ioant.h"
 
 namespace ioant
 {
     static const unsigned int EEPROM_STORAGE_SIZE = 512;
-    Core* Core::instance_ = NULL;
+    Ioant* Ioant::instance_ = NULL;
 
-    Core* Core::GetInstance(void (*on_message)(Topic topic, ProtoIO* message)){
+    Ioant* Ioant::GetInstance(void (*on_message)(Topic topic, ProtoIO* message)){
         if (instance_ == NULL)
         {
-            instance_ = new Core(on_message);
+            instance_ = new Ioant(on_message);
         }
         return instance_;
     }
 
-    Core* Core::GetInstance(){
+    Ioant* Ioant::GetInstance(){
         if (instance_)
         {
             return instance_;
         }
     }
 
-    Core::Core(void (*on_message)(Topic topic, ProtoIO* message)) : state_(State::STATE_POWER_ON), localConfigurationTicks_(0)
+    Ioant::Ioant(void (*on_message)(Topic topic, ProtoIO* message)) : state_(State::STATE_POWER_ON), localConfigurationTicks_(0)
     {
         CommunicationManager::GetInstance();
         delay(500);
@@ -41,7 +41,7 @@ namespace ioant
         }
     }
 
-    bool Core::UpdateLoop()
+    bool Ioant::UpdateLoop()
     {
         CommunicationManager::Configuration configuration;
         COM_MGR->GetCurrentConfiguration(configuration);
@@ -69,7 +69,7 @@ namespace ioant
     }
 
 
-    bool Core::IsOperational(){
+    bool Ioant::IsOperational(){
         if (state_ == State::STATE_OPERATIONAL){
             return true;
         }
@@ -137,13 +137,13 @@ namespace ioant
     }
 
 
-    bool Core::Publish(ProtoIO& msg)
+    bool Ioant::Publish(ProtoIO& msg)
     {
-        return Core::Publish(msg, configured_topic_);
+        return Ioant::Publish(msg, configured_topic_);
     }
 
 
-    bool Core::Publish(ProtoIO& msg, Topic topic)
+    bool Ioant::Publish(ProtoIO& msg, Topic topic)
     {
         msg.Encode();
         ProtoIO::MessageMeta meta = msg.GetMessageMeta();
@@ -153,11 +153,11 @@ namespace ioant
                 topic.stream_index = 0;
             }
 
-            String Core_topic =  "live/" + topic.global + "/" + topic.local + "/"
+            String finished_topic =  "live/" + topic.global + "/" + topic.local + "/"
                                     + topic.client_id + "/"
                                     + String(meta.message_type)
                                     + "/" + String(topic.stream_index);
-            bool result = COM_MGR->MqttPublish(Core_topic, msg.GetBufferHandle(), meta.number_of_bytes);
+            bool result = COM_MGR->MqttPublish(finished_topic, msg.GetBufferHandle(), meta.number_of_bytes);
             return result;
         }
         else{
@@ -167,7 +167,7 @@ namespace ioant
 
 
     // Function for creating and publishing a boot info message
-    bool Core::PublishBootInfoMessage(){
+    bool Ioant::PublishBootInfoMessage(){
         String reset_reason = ESP.getResetReason();
         String ipadddrr = COM_MGR->GetOwnIPAddress();
         BootInfoMessage boot_message;
@@ -186,7 +186,7 @@ namespace ioant
     }
 
 
-    bool Core::Subscribe(Topic topic){
+    bool Ioant::Subscribe(Topic topic){
         // live/global/local/client_id/message_type/index
         // live/+/+/local/+/#
         String subscription = "live/"+topic.global+"/"+topic.local+"/"+topic.client_id+"/";
@@ -208,12 +208,12 @@ namespace ioant
     }
 
 
-    Core::Topic Core::GetConfiguredTopic(){
+    Ioant::Topic Ioant::GetConfiguredTopic(){
         return configured_topic_;
     }
 
 
-    bool Core::GetPersistenConfiguration(CommunicationManager::Configuration& configuration){
+    bool Ioant::GetPersistenConfiguration(CommunicationManager::Configuration& configuration){
         //Check if configuration is present in EEPROM (magic number is present)
         uint8_t lower_byte = EEPROM.read(0);
         uint8_t upper_byte = EEPROM.read(1);
@@ -281,7 +281,7 @@ namespace ioant
     }
 
 
-    bool Core::SetPersistenConfiguration(ConfigurationMessage* configuration_message){
+    bool Ioant::SetPersistenConfiguration(ConfigurationMessage* configuration_message){
 
         uint8_t lower_byte = 0xCD;
         uint8_t upper_byte = 0xAB;
@@ -310,7 +310,7 @@ namespace ioant
         return true;
     }
 
-    bool Core::SetPersistenConfiguration(CommunicationManager::Configuration& configuration){
+    bool Ioant::SetPersistenConfiguration(CommunicationManager::Configuration& configuration){
 
         ULOG_DEBUG << "Persisting configuration";
         ConfigurationMessage msg;
@@ -340,13 +340,13 @@ namespace ioant
         return true;
     }
 
-    void Core::GetCurrentConfiguration(CommunicationManager::Configuration& configuration){
+    void Ioant::GetCurrentConfiguration(CommunicationManager::Configuration& configuration){
         COM_MGR->GetCurrentConfiguration(configuration);
     }
 
 
-    Core::Topic ParseTopicString(char* topic){
-        Core::Topic parsed_topic;
+    Ioant::Topic ParseTopicString(char* topic){
+        Ioant::Topic parsed_topic;
         String topic_s = String(topic);
         char * pch;
         pch = strtok (topic,"/");
@@ -377,9 +377,9 @@ namespace ioant
         return parsed_topic;
     }
 
-    bool Core::PopulateEmptyConfigurationFieldsWithOldConfiguration(ConfigurationMessage* msg){
+    bool Ioant::PopulateEmptyConfigurationFieldsWithOldConfiguration(ConfigurationMessage* msg){
         CommunicationManager::Configuration loaded_configuration;
-        Core::GetCurrentConfiguration(loaded_configuration);
+        Ioant::GetCurrentConfiguration(loaded_configuration);
 
         ULOG_DEBUG << "client_id:" << loaded_configuration.client_id;
         ULOG_DEBUG << "wifi ssid:" << loaded_configuration.wifi_ssid;
@@ -417,7 +417,7 @@ namespace ioant
 
     void OnMessage(char* topic, byte* payload, unsigned int length){
         //ULOG_DEBUG << "message recieved";
-        Core::Topic topic_received = ParseTopicString(topic);
+        Ioant::Topic topic_received = ParseTopicString(topic);
 
         ProtoIO* message = ProtoIO::CreateMessage(topic_received.message_type);
         message->Decode((uint8_t*)payload, length);
@@ -473,7 +473,7 @@ namespace ioant
         free(message);
     }
 
-    void Core::VisualStateIndicator(){
+    void Ioant::VisualStateIndicator(){
         CommunicationManager::Configuration loaded_configuration;
         GetCurrentConfiguration(loaded_configuration);
         switch(state_){
@@ -528,14 +528,14 @@ namespace ioant
         }
     }
 
-    void Core::SetState(State new_state){
+    void Ioant::SetState(State new_state){
         State prev_state = state_;
         ULOG_DEBUG  << "State transition:"  << StateToString(prev_state) << "->" << StateToString(new_state);
         state_ = new_state;
         VisualStateIndicator();
     }
 
-    String Core::StateToString(State state){
+    String Ioant::StateToString(State state){
         String state_message = "";
         if (state == STATE_POWER_ON){
             state_message = "Power on";

@@ -1,11 +1,11 @@
 ///
 /// @file   main.cpp
-/// @Author Benny Saxen
+/// @Author Adam Saxen
 /// @date   2017-02-02
 /// @brief  NILM
 ///
 
-#include <core.h>
+#include <ioant.h>
 #include <SparkFunTSL2561.h>
 #include <Wire.h>
 using namespace ioant;
@@ -17,7 +17,7 @@ using namespace ioant;
 ///
 /// Proto message is casted to appropriate message
 ///
-void on_message(Core::Topic received_topic, ProtoIO* message);
+void on_message(Ioant::Topic received_topic, ProtoIO* message);
 
 // ############################################################################
 // Everything above this line is mandatory
@@ -35,7 +35,7 @@ unsigned int ms;  // Integration ("shutter") time in milliseconds
 /// END OF - CUSTOM variables
 
 void setup(void){
-    Core::GetInstance(on_message);
+    Ioant::GetInstance(on_message);
 
     // ########################################################################
     //    Now he basics all set up. Send logs to your computer either
@@ -116,7 +116,7 @@ void loop(void){
 }
 
 // Function for handling received MQTT messages
-void on_message(Core::Topic received_topic, ProtoIO* message){
+void on_message(Ioant::Topic received_topic, ProtoIO* message){
     WLOG_DEBUG << "Message received! topic:" << received_topic.global  << " message type:" << received_topic.message_type ;
 }
 

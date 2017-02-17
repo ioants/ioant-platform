@@ -10,7 +10,6 @@
 #include "logger.h"
 #include <HardwareSerial.h>
 
-
 namespace ioant
 {
     Logger::Logger(int log_type): log_possible_(true), default_log_type_(Logger::LogType::LOGTYPE_SERIAL){

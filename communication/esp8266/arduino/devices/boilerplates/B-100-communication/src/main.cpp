@@ -5,7 +5,7 @@
 /// @brief  Boiler plate application for MQTT communication
 ///
 
-#include <core.h>
+#include <ioant.h>
 using namespace ioant;
 /// @brief on_message() function
 /// Function definition for handling received MQTT messages
@@ -14,7 +14,7 @@ using namespace ioant;
 /// @param payload contains the contents of the message received
 /// @param length the number of bytes received
 ///
-void on_message(Core::Topic received_topic, ProtoIO* message);
+void on_message(Ioant::Topic received_topic, ProtoIO* message);
 
 // ############################################################################
 // Everything above this line is mandatory
@@ -31,7 +31,7 @@ void on_message(Core::Topic received_topic, ProtoIO* message);
 
 void setup(void){
     //Initialize IOAnt core
-    Core::GetInstance(on_message);
+    Ioant::GetInstance(on_message);
 
     // ########################################################################
     //    Now he basics all set up. Send logs to your computer either
@@ -53,7 +53,7 @@ void loop(void){
     IOANT->Publish(msg);
 
     // Also send the temeprature message to a remote topic
-    Core::Topic remote_topic = IOANT->GetConfiguredTopic();
+    Ioant::Topic remote_topic = IOANT->GetConfiguredTopic();
     remote_topic.global = "sweden";
     remote_topic.local = "wermland";
     IOANT->Publish(msg, remote_topic);
@@ -62,7 +62,7 @@ void loop(void){
 }
 
 // Function for handling received MQTT messages
-void on_message(Core::Topic received_topic, ProtoIO* message){
+void on_message(Ioant::Topic received_topic, ProtoIO* message){
     WLOG_DEBUG << "Message received! topic:" << received_topic.global  << " message type:" << received_topic.message_type ;
 
     if (received_topic.message_type == ProtoIO::MessageTypes::IMAGE)

@@ -1,5 +1,5 @@
 ///
-/// @file   core.h
+/// @file   ioant.h
 /// @Author Adam Saxen
 /// @date   Oktober, 2016
 /// @brief  Core class definition (SINGLETON)
@@ -8,8 +8,8 @@
 /// with a IOAnt IoT Platform
 ///
 
-#ifndef CORE_H
-#define CORE_H
+#ifndef IOANT_H
+#define IOANT_H
 
 #include "logger.h"
 #include "communication_manager.h"
@@ -17,14 +17,14 @@
 #include <proto_io.h>
 #include <EEPROM.h>
 
-#define IOANT Core::GetInstance()
+#define IOANT Ioant::GetInstance()
 
 namespace ioant
 {
 
     void OnMessage(char* topic, byte* payload, unsigned int length);
 
-    class Core
+    class Ioant
     {
     public:
         struct Topic
@@ -56,9 +56,9 @@ namespace ioant
             STATE_OPERATIONAL = 5
         };
 
-        static Core* GetInstance(void (*on_message)(Topic topic, ProtoIO* message));
-        static Core* GetInstance();
-        static Core* instance_;
+        static Ioant* GetInstance(void (*on_message)(Topic topic, ProtoIO* message));
+        static Ioant* GetInstance();
+        static Ioant* instance_;
 
         /// @brief UpdateLoop() function
         /// Function definition for managing wifi connection and MQTT connection
@@ -124,8 +124,8 @@ namespace ioant
         void (*MQTTCallback)(Topic topic, ProtoIO* message);
 
     private:
-        Core(void (*on_message)(Topic topic, ProtoIO* message));
-        ~Core(){};
+        Ioant(void (*on_message)(Topic topic, ProtoIO* message));
+        ~Ioant(){};
         void VisualStateIndicator();
         void SetState(State new_state);
         String StateToString(State new_state);
@@ -135,7 +135,7 @@ namespace ioant
         int localConfigurationTicks_;
     };
 
-    Core::Topic ParseTopicString(char* topic);
+    Ioant::Topic ParseTopicString(char* topic);
 
 }
 
