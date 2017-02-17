@@ -89,7 +89,7 @@ exports.getStreamList = function(res) {
         streamsModel.getStreamList().then(function(result) {
                    res.json(result);
                }).catch(function(error){
-                logger.log('error', 'Failed to get stream list.');
+                Logger.log('error', 'Failed to get stream list.');
                 res.status(500).send('Query failed');
             });
     });
@@ -151,7 +151,7 @@ exports.getStreamData = function(res, req, streamid) {
         streamsModel.getStreamData(param_stream_id, param_start_date, param_end_date, param_filter).then(function(result) {
                    res.json(result);
                }).catch(function(error){
-                logger.log('error', 'Failed to get stream data.');
+                Logger.log('error', 'Failed to get stream data.');
                 res.status(500).send('Internal error, Request failed');
             });
     });

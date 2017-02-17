@@ -138,3 +138,41 @@ message RunDcMotor {
     Direction direction = 1;
     float rpm = 2;
 }
+
+message AtmosphericPressure {
+    enum Unit {
+        PA = 0;
+        BAR = 1;
+        PSI = 2;
+        TORR = 3;
+    }
+
+    float value = 1;
+    Unit unit = 2;
+}
+
+message Illuminance {
+    enum Unit {
+        LUX = 0;
+    }
+
+    float value = 1;
+    Unit unit = 2;
+}
+
+message Alarm {
+    enum Severity {
+        LEVEL1 = 0;
+        LEVEL2 = 1;
+        LEVEL3 = 2;
+        LEVEL4 = 3;
+        LEVEL5 = 4;
+    }
+
+    string info = 1;
+    Severity severity = 2;
+}
+
+message Switch {
+    bool state = 1;
+}
