@@ -6,17 +6,18 @@
 /// @brief  Visual Indicators for MQTT traffic
 ///
 
-#include <core.h>
+#include <ioant.h>
 using namespace ioant;
 
 /// @brief on_message() function
 /// Function definition for handling received MQTT messages
 ///
 /// @param received_topic contains the complete topic structure
-/// @param payload contains the contents of the message received
-/// @param length the number of bytes received
+/// @param message is the proto message recieved
 ///
-void on_message(Core::Topic received_topic, ProtoIO* message);
+/// Proto message is casted to appropriate message
+///
+void on_message(Ioant::Topic received_topic, ProtoIO* message);
 
 // ############################################################################
 // Everything above this line is mandatory
@@ -38,13 +39,13 @@ int g_redLed5  = 13; // D7
 /// END OF - CUSTOM variables
 
 void setup(void){
-    Core::GetInstance(on_message);
+    Ioant::GetInstance(on_message);
     pinMode(g_redLed1, OUTPUT);
     pinMode(g_redLed2, OUTPUT);
     pinMode(g_redLed3, OUTPUT);
     pinMode(g_redLed4, OUTPUT);
     pinMode(g_redLed5, OUTPUT);
-    Core::Topic t;
+    Ioant::Topic t;
     t.global = "global";
     t.local = "local";
     IOANT->Subscribe(t);
@@ -54,7 +55,7 @@ void loop(void){
     IOANT->UpdateLoop();
 }
 
-void on_message(Core::Topic received_topic, ProtoIO* message){
+void on_message(Ioant::Topic received_topic, ProtoIO* message){
     ULOG_DEBUG << received_topic.client_id;
 
     if(received_topic.client_id == "c1")

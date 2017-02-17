@@ -6,16 +6,17 @@
 /// For information about the scale and the electronics check the codeterrific article: http://codeterrific.com/arduino/wifi-body-weight-scale-esp8266/
 ///
 
-#include <core.h>
+#include <ioant.h>
 using namespace ioant;
 /// @brief on_message() function
 /// Function definition for handling received MQTT messages
 ///
 /// @param received_topic contains the complete topic structure
-/// @param payload contains the contents of the message received
-/// @param length the number of bytes received
+/// @param message is the proto message recieved
 ///
-void on_message(Core::Topic received_topic, ProtoIO* message);
+/// Proto message is casted to appropriate message
+///
+void on_message(Ioant::Topic received_topic, ProtoIO* message);
 
 // ############################################################################
 // Everything above this line is mandatory
@@ -88,7 +89,7 @@ float findWeight()
 
 void setup(void){
     //Initialize IOAnt core
-    Core::GetInstance(on_message);
+    Ioant::GetInstance(on_message);
 
     // ########################################################################
     //    Now he basics all set up. Send logs to your computer either
@@ -154,7 +155,7 @@ void loop(void){
         MassMessage msg;
         msg.data.value = weight;
         msg.data.unit = Mass_Unit_KILOGRAMS;
-        Core::Topic remote_topic = IOANT->GetConfiguredTopic();
+        Ioant::Topic remote_topic = IOANT->GetConfiguredTopic();
         remote_topic.stream_index = who;
         IOANT->Publish(msg, remote_topic);
 
@@ -168,6 +169,6 @@ void loop(void){
 }
 
 // Function for handling received MQTT messages
-void on_message(Core::Topic received_topic, ProtoIO* message){
+void on_message(Ioant::Topic received_topic, ProtoIO* message){
     WLOG_DEBUG << "Message received! topic:" << received_topic.global  << " message type:" << received_topic.message_type ;
 }
