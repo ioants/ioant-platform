@@ -1,11 +1,13 @@
 {
-    "os":"linux",
-    "mqtt" : {
-        "clientId" : "collector",
-        "broker" : "brokerdomain.com",
-        "user" : "hero",
-        "password" : "test",
-    	"port" : 1883
+    "ioant" : {
+        "mqtt" : {
+            "clientId" : "collector",
+            "broker" : "brokerdomain.com",
+            "user" : "hero",
+            "password" : "test",
+        	"port" : 1883
+        },
+        "communicationDelay" : 1000
     },
     "mysqlDatabase" : {
         "host": "localhost",

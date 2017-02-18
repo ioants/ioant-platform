@@ -9,13 +9,12 @@ logger = logging.getLogger(__name__)
 
 
 def setup(configuration):
+    """ setup function """
     ioant.setup(configuration)
-    topic = ioant.get_topic('live', 'torsgatan9', 'livingroom', 'howler')
-    ioant.subscribe(topic)
 
 
 def loop():
-    """ Loop function takes care of regular logic"""
+    """ Loop function """
     while True:
         ioant.update_loop()
 
@@ -25,4 +24,22 @@ def on_message(topic, message):
     print message.extra
 
 
-ioant = ioant_core.Ioant(on_message)
+def on_connect(rc):
+    """ On connect function. Called when attempting to connect to broker
+        param rc is the result code (0=success) """
+    if rc == 0:
+        # There is now a connection
+        topic = ioant.get_topic()
+        topic['top'] = 'live'
+        topic['global'] = 'torsgatan9'
+        topic['local'] = 'livingroom'
+        topic['client_id'] = 'howler'
+        ioant.subscribe(topic)
+
+# =============================================================================
+# Above this line are mandatory functions
+# =============================================================================
+
+
+# Mandatory line
+ioant = ioant_core.Ioant(on_connect, on_message)

@@ -5,7 +5,7 @@ import os
 import logging
 
 logging.basicConfig(filename='logs/output.log',
-                    level=logging.DEBUG,
+                    level=logging.INFO,
                     format='%(asctime)s %(name)-5s %(levelname)-8s %(message)s',
                     datefmt='%m-%d %H:%M')
 console = logging.StreamHandler()
@@ -29,5 +29,6 @@ if __name__ == "__main__":
                                                    'configuration.json')
     configuration = utils.fetch_json_file_as_dict(configuration_path)
     lenscam.setup(configuration)
+    logging.info('Application running')
     lenscam.loop()
     sys.exit()

@@ -13,11 +13,6 @@ logger = logging.getLogger(__name__)
 
 def setup(configuration):
     ioant.setup(configuration)
-    topic = ioant.get_topic()
-    topic['top'] = "image"
-    topic['global'] = configuration['mqtt']['topic']['global']
-    topic['local'] = configuration['mqtt']['topic']['local']
-    ioant.subscribe(topic)
 
 
 def loop():
@@ -32,7 +27,7 @@ def on_message(topic, message):
         logger.error("not a trigger message. Skipping..")
 
     take_picture("")
-    logger.debug("Picture taken!")
+    logger.info("Picture taken!")
     configuration = ioant.get_configuration()
     ncis_image_name = construct_filename()
     ncis_url = configuration['ncis']['ncis_url']
@@ -51,6 +46,22 @@ def on_message(topic, message):
     ioant.publish(topic, msg)
 
 
+def on_connect(rc):
+    """ On connect function. Called when attempting to connect to broker
+        param rc is the result code (0=success) """
+    if rc == 0:
+        # There is now a connection
+        topic = ioant.get_topic()
+        topic['top'] = "image"
+        topic['global'] = configuration['mqtt']['topic']['global']
+        topic['local'] = configuration['mqtt']['topic']['local']
+        ioant.subscribe(topic)
+
+# =============================================================================
+# Above this line are mandatory functions
+# =============================================================================
+
+
 def construct_filename():
     configuration = ioant.get_configuration()
     filename_image = configuration['mqtt']['topic']['global'] \
@@ -66,5 +77,5 @@ def take_picture(path):
     camera.capture(path+construct_filename())
     camera.close()
 
-
-ioant = ioant_core.Ioant(on_message)
+# Mandatory line
+ioant = ioant_core.Ioant(on_connect, on_message)

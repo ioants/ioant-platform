@@ -1,9 +1,12 @@
 {
-    "mqtt" : {
-        "clientId" : "heatercontrol",
-        "broker" : "thisIsYourBrokerDomainAddressOrIp",
-        "user" : "hero",
-        "password" : "test",
-    	"port" : 1883
+    "ioant" : {
+        "mqtt" : {
+            "clientId" : "heaterapp",
+            "broker" : "thisIsYourBrokerDomainAddressOrIp",
+            "user" : "hero",
+            "password" : "test",
+            "port" : 1883
+        },
+        "communicationDelay" : 1000,
     }
 }
