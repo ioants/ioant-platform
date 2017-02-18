@@ -43,7 +43,7 @@ def on_message(topic, message):
 
     msg = ioant.create_message('Image')
     msg.reference_link = ncis_url + ncis_prefix + ncis_image_name
-    ioant.publish(topic, msg)
+    ioant.publish(msg, topic)
 
 
 def on_connect(rc):
