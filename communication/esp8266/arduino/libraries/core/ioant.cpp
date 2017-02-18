@@ -192,7 +192,7 @@ namespace ioant
         String subscription = "live/"+topic.global+"/"+topic.local+"/"+topic.client_id+"/";
 
         if (topic.message_type == -1){
-            subscription += '+/';
+            subscription += "+/";
         }
         else{
             subscription += String(topic.message_type)+"/";
