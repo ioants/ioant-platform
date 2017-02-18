@@ -54,8 +54,8 @@ def on_connect(rc):
         # There is now a connection
         topic = ioant.get_topic()
         topic['top'] = "image"
-        topic['global'] = configuration['mqtt']['topic']['global']
-        topic['local'] = configuration['mqtt']['topic']['local']
+        topic['global'] = configuration['topic']['global']
+        topic['local'] = configuration['topic']['local']
         ioant.subscribe(topic)
 
 # =============================================================================
