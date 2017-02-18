@@ -1,5 +1,4 @@
 {
-    "os": "raspbian",
     "mqtt" : {
         "clientId" : "picamera",
         "broker" : "thisIsYourBrokerDomainAddressOrIp",
@@ -16,5 +15,7 @@
         "ncis_url" : "test.com",
         "ncis_internal_path" : ":/var/www/html",
         "ncis_prefix" : "/images/"
-    }
+    },
+    "delay" : 1000
+
 }

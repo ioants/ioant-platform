@@ -1,5 +1,4 @@
 {
-    "os": "linux",
     "mqtt" : {
         "clientId" : "image-collector",
         "broker" : "thisIsYourBrokerDomainAddressOrIp",

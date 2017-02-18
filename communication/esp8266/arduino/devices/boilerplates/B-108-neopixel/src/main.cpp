@@ -6,6 +6,7 @@
 ///
 
 #include <ioant.h>
+#include <Adafruit_NeoPixel.h>
 
 using namespace ioant;
 /// @brief on_message() function
@@ -26,23 +27,38 @@ void on_message(Ioant::Topic received_topic, ProtoIO* message);
 /// Measures the time between two pulses
 
 // END OF - CUSTOM variables
+#define PIXEL_PIN    14    // GPIO pin connected to the NeoPixels.
+#define PIXEL_COUNT  1
 
-
+Adafruit_NeoPixel pixel = Adafruit_NeoPixel(PIXEL_COUNT, PIXEL_PIN, NEO_RGB + NEO_KHZ800);
 /// END OF - CUSTOM variables
 
 void setup(void){
     Ioant::GetInstance(on_message);
-
     // ########################################################################
     //    Now he basics all set up. Send logs to your computer either
     //    over Serial or WifiManager.
     // ########################################################################
-
-
+    pixel.begin();
+    pixel.show();
 }
 
 void loop(void){
     IOANT->UpdateLoop();
+
+    delay(4000);
+    pixel.setPixelColor(0, pixel.Color(128, 0, 0));
+    pixel.show();
+    delay(4000);
+    pixel.setPixelColor(0, pixel.Color(0, 128, 0));
+    pixel.show();
+    delay(4000);
+    pixel.setPixelColor(0, pixel.Color(0, 0, 128));
+    pixel.show();
+    delay(4000);
+    pixel.setPixelColor(0, pixel.Color(128, 128, 128));
+    pixel.show();
+    delay(4000);
 
 }
 

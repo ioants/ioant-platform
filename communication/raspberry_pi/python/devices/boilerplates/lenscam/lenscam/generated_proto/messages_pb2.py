@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='messages.proto',
   package='',
   syntax='proto3',
-  serialized_pb=_b('\n\x0emessages.proto\"\xd2\x02\n\rConfiguration\x12\x11\n\tclient_id\x18\x01 \x01(\t\x12\x11\n\twifi_ssid\x18\x02 \x01(\t\x12\x15\n\rwifi_password\x18\x03 \x01(\t\x12\x12\n\nbroker_url\x18\x04 \x01(\t\x12\x13\n\x0b\x62roker_port\x18\x05 \x01(\r\x12\x13\n\x0b\x62roker_user\x18\x06 \x01(\t\x12\x17\n\x0f\x62roker_password\x18\x07 \x01(\t\x12\x0f\n\x07udp_url\x18\x08 \x01(\t\x12\x10\n\x08udp_port\x18\t \x01(\r\x12\x11\n\tlow_power\x18\n \x01(\x08\x12\x12\n\nstatus_led\x18\x0b \x01(\r\x12\x14\n\x0ctopic_global\x18\x0c \x01(\t\x12\x13\n\x0btopic_local\x18\r \x01(\t\x12\x1b\n\x13\x63ommunication_delay\x18\x0e \x01(\r\x12\x1b\n\x13\x61pplication_generic\x18\x0f \x01(\r\"q\n\x08\x42ootInfo\x12\x15\n\rreboot_reason\x18\x01 \x01(\t\x12\x14\n\x0cprogram_size\x18\x02 \x01(\r\x12\x12\n\nip_address\x18\x03 \x01(\t\x12$\n\rproto_version\x18\x04 \x01(\x0e\x32\r.ProtoVersion\"\x1f\n\x05Image\x12\x16\n\x0ereference_link\x18\x01 \x01(\t\"\x18\n\x07Trigger\x12\r\n\x05\x65xtra\x18\x01 \x01(\r\"b\n\x0bTemperature\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x1f\n\x04unit\x18\x02 \x01(\x0e\x32\x11.Temperature.Unit\"#\n\x04Unit\x12\x0b\n\x07\x43\x45LSIUS\x10\x00\x12\x0e\n\nFAHRENHEIT\x10\x01\"c\n\x08Humidity\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x1c\n\x04unit\x18\x02 \x01(\x0e\x32\x0e.Humidity.Unit\"*\n\x04Unit\x12\x14\n\x10RELATIVE_PROCENT\x10\x00\x12\x0c\n\x08\x41\x42SOLUTE\x10\x01\"\x85\x01\n\x04Mass\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x18\n\x04unit\x18\x02 \x01(\x0e\x32\n.Mass.Unit\"T\n\x04Unit\x12\r\n\tKILOGRAMS\x10\x00\x12\r\n\tHECTOGRAM\x10\x01\x12\t\n\x05GRAMS\x10\x02\x12\r\n\tMILLIGRAM\x10\x03\x12\t\n\x05POUND\x10\x04\x12\t\n\x05OUNCE\x10\x05\" \n\x0fPHconcentration\x12\r\n\x05value\x18\x01 \x01(\x02\"s\n\rElectricPower\x12\r\n\x05value\x18\x01 \x01(\x02\x12!\n\x04unit\x18\x02 \x01(\x0e\x32\x13.ElectricPower.Unit\x12\x0e\n\x06pulses\x18\x03 \x01(\x05\" \n\x04Unit\x12\t\n\x05WATTS\x10\x00\x12\r\n\tKILOWATTS\x10\x01\"\xf3\x01\n\x0eGpsCoordinates\x12\x11\n\tlongitude\x18\x01 \x01(\x02\x12,\n\x0elongitude_unit\x18\x02 \x01(\x0e\x32\x14.GpsCoordinates.Unit\x12\x10\n\x08latitude\x18\x03 \x01(\x02\x12+\n\rlatitude_unit\x18\x04 \x01(\x0e\x32\x14.GpsCoordinates.Unit\x12\x0f\n\x07height_\x18\x05 \x01(\x02\x12)\n\x0bheight_unit\x18\x06 \x01(\x0e\x32\x14.GpsCoordinates.Unit\"%\n\x04Unit\x12\x12\n\x0e\x44\x45\x43IMAL_DEGREE\x10\x00\x12\t\n\x05METER\x10\x01\"\x9b\x02\n\x12RunStepperMotorRaw\x12\x30\n\tdirection\x18\x01 \x01(\x0e\x32\x1d.RunStepperMotorRaw.Direction\x12\x1b\n\x13\x64\x65lay_between_steps\x18\x02 \x01(\x05\x12\x16\n\x0enumber_of_step\x18\x03 \x01(\x05\x12/\n\tstep_size\x18\x04 \x01(\x0e\x32\x1c.RunStepperMotorRaw.StepSize\"1\n\tDirection\x12\r\n\tCLOCKWISE\x10\x00\x12\x15\n\x11\x43OUNTER_CLOCKWISE\x10\x01\":\n\x08StepSize\x12\r\n\tFULL_STEP\x10\x00\x12\r\n\tHALF_STEP\x10\x01\x12\x10\n\x0cQUARTER_STEP\x10\x02\"\x8f\x01\n\x0fRunStepperMotor\x12-\n\tdirection\x18\x01 \x01(\x0e\x32\x1a.RunStepperMotor.Direction\x12\x0b\n\x03rpm\x18\x02 \x01(\x02\x12\r\n\x05\x61ngle\x18\x03 \x01(\x02\"1\n\tDirection\x12\r\n\tCLOCKWISE\x10\x00\x12\x15\n\x11\x43OUNTER_CLOCKWISE\x10\x01\"v\n\nRunDcMotor\x12(\n\tdirection\x18\x01 \x01(\x0e\x32\x15.RunDcMotor.Direction\x12\x0b\n\x03rpm\x18\x02 \x01(\x02\"1\n\tDirection\x12\r\n\tCLOCKWISE\x10\x00\x12\x15\n\x11\x43OUNTER_CLOCKWISE\x10\x01*1\n\x0cProtoVersion\x12\x13\n\x0fVERSION_NOT_SET\x10\x00\x12\x0c\n\x07VERSION\x10\xfc\x07\x62\x06proto3')
+  serialized_pb=_b('\n\x0emessages.proto\"\xd2\x02\n\rConfiguration\x12\x11\n\tclient_id\x18\x01 \x01(\t\x12\x11\n\twifi_ssid\x18\x02 \x01(\t\x12\x15\n\rwifi_password\x18\x03 \x01(\t\x12\x12\n\nbroker_url\x18\x04 \x01(\t\x12\x13\n\x0b\x62roker_port\x18\x05 \x01(\r\x12\x13\n\x0b\x62roker_user\x18\x06 \x01(\t\x12\x17\n\x0f\x62roker_password\x18\x07 \x01(\t\x12\x0f\n\x07udp_url\x18\x08 \x01(\t\x12\x10\n\x08udp_port\x18\t \x01(\r\x12\x11\n\tlow_power\x18\n \x01(\x08\x12\x12\n\nstatus_led\x18\x0b \x01(\r\x12\x14\n\x0ctopic_global\x18\x0c \x01(\t\x12\x13\n\x0btopic_local\x18\r \x01(\t\x12\x1b\n\x13\x63ommunication_delay\x18\x0e \x01(\r\x12\x1b\n\x13\x61pplication_generic\x18\x0f \x01(\r\"q\n\x08\x42ootInfo\x12\x15\n\rreboot_reason\x18\x01 \x01(\t\x12\x14\n\x0cprogram_size\x18\x02 \x01(\r\x12\x12\n\nip_address\x18\x03 \x01(\t\x12$\n\rproto_version\x18\x04 \x01(\x0e\x32\r.ProtoVersion\"\x1f\n\x05Image\x12\x16\n\x0ereference_link\x18\x01 \x01(\t\"\x18\n\x07Trigger\x12\r\n\x05\x65xtra\x18\x01 \x01(\r\"b\n\x0bTemperature\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x1f\n\x04unit\x18\x02 \x01(\x0e\x32\x11.Temperature.Unit\"#\n\x04Unit\x12\x0b\n\x07\x43\x45LSIUS\x10\x00\x12\x0e\n\nFAHRENHEIT\x10\x01\"c\n\x08Humidity\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x1c\n\x04unit\x18\x02 \x01(\x0e\x32\x0e.Humidity.Unit\"*\n\x04Unit\x12\x14\n\x10RELATIVE_PROCENT\x10\x00\x12\x0c\n\x08\x41\x42SOLUTE\x10\x01\"\x85\x01\n\x04Mass\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x18\n\x04unit\x18\x02 \x01(\x0e\x32\n.Mass.Unit\"T\n\x04Unit\x12\r\n\tKILOGRAMS\x10\x00\x12\r\n\tHECTOGRAM\x10\x01\x12\t\n\x05GRAMS\x10\x02\x12\r\n\tMILLIGRAM\x10\x03\x12\t\n\x05POUND\x10\x04\x12\t\n\x05OUNCE\x10\x05\" \n\x0fPHconcentration\x12\r\n\x05value\x18\x01 \x01(\x02\"s\n\rElectricPower\x12\r\n\x05value\x18\x01 \x01(\x02\x12!\n\x04unit\x18\x02 \x01(\x0e\x32\x13.ElectricPower.Unit\x12\x0e\n\x06pulses\x18\x03 \x01(\x05\" \n\x04Unit\x12\t\n\x05WATTS\x10\x00\x12\r\n\tKILOWATTS\x10\x01\"\xf3\x01\n\x0eGpsCoordinates\x12\x11\n\tlongitude\x18\x01 \x01(\x02\x12,\n\x0elongitude_unit\x18\x02 \x01(\x0e\x32\x14.GpsCoordinates.Unit\x12\x10\n\x08latitude\x18\x03 \x01(\x02\x12+\n\rlatitude_unit\x18\x04 \x01(\x0e\x32\x14.GpsCoordinates.Unit\x12\x0f\n\x07height_\x18\x05 \x01(\x02\x12)\n\x0bheight_unit\x18\x06 \x01(\x0e\x32\x14.GpsCoordinates.Unit\"%\n\x04Unit\x12\x12\n\x0e\x44\x45\x43IMAL_DEGREE\x10\x00\x12\t\n\x05METER\x10\x01\"\x9b\x02\n\x12RunStepperMotorRaw\x12\x30\n\tdirection\x18\x01 \x01(\x0e\x32\x1d.RunStepperMotorRaw.Direction\x12\x1b\n\x13\x64\x65lay_between_steps\x18\x02 \x01(\x05\x12\x16\n\x0enumber_of_step\x18\x03 \x01(\x05\x12/\n\tstep_size\x18\x04 \x01(\x0e\x32\x1c.RunStepperMotorRaw.StepSize\"1\n\tDirection\x12\r\n\tCLOCKWISE\x10\x00\x12\x15\n\x11\x43OUNTER_CLOCKWISE\x10\x01\":\n\x08StepSize\x12\r\n\tFULL_STEP\x10\x00\x12\r\n\tHALF_STEP\x10\x01\x12\x10\n\x0cQUARTER_STEP\x10\x02\"\x8f\x01\n\x0fRunStepperMotor\x12-\n\tdirection\x18\x01 \x01(\x0e\x32\x1a.RunStepperMotor.Direction\x12\x0b\n\x03rpm\x18\x02 \x01(\x02\x12\r\n\x05\x61ngle\x18\x03 \x01(\x02\"1\n\tDirection\x12\r\n\tCLOCKWISE\x10\x00\x12\x15\n\x11\x43OUNTER_CLOCKWISE\x10\x01\"v\n\nRunDcMotor\x12(\n\tdirection\x18\x01 \x01(\x0e\x32\x15.RunDcMotor.Direction\x12\x0b\n\x03rpm\x18\x02 \x01(\x02\"1\n\tDirection\x12\r\n\tCLOCKWISE\x10\x00\x12\x15\n\x11\x43OUNTER_CLOCKWISE\x10\x01\"y\n\x13\x41tmosphericPressure\x12\r\n\x05value\x18\x01 \x01(\x02\x12\'\n\x04unit\x18\x02 \x01(\x0e\x32\x19.AtmosphericPressure.Unit\"*\n\x04Unit\x12\x06\n\x02PA\x10\x00\x12\x07\n\x03\x42\x41R\x10\x01\x12\x07\n\x03PSI\x10\x02\x12\x08\n\x04TORR\x10\x03\"N\n\x0bIlluminance\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x1f\n\x04unit\x18\x02 \x01(\x0e\x32\x11.Illuminance.Unit\"\x0f\n\x04Unit\x12\x07\n\x03LUX\x10\x00\"\x80\x01\n\x05\x41larm\x12\x0c\n\x04info\x18\x01 \x01(\t\x12!\n\x08severity\x18\x02 \x01(\x0e\x32\x0f.Alarm.Severity\"F\n\x08Severity\x12\n\n\x06LEVEL1\x10\x00\x12\n\n\x06LEVEL2\x10\x01\x12\n\n\x06LEVEL3\x10\x02\x12\n\n\x06LEVEL4\x10\x03\x12\n\n\x06LEVEL5\x10\x04\"\x17\n\x06Switch\x12\r\n\x05state\x18\x01 \x01(\x08*1\n\x0cProtoVersion\x12\x13\n\x0fVERSION_NOT_SET\x10\x00\x12\x0c\n\x07VERSION\x10\xfc\x07\x62\x06proto3')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -41,8 +41,8 @@ _PROTOVERSION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1819,
-  serialized_end=1868,
+  serialized_start=2178,
+  serialized_end=2227,
 )
 _sym_db.RegisterEnumDescriptor(_PROTOVERSION)
 
@@ -268,6 +268,88 @@ _RUNDCMOTOR_DIRECTION = _descriptor.EnumDescriptor(
   serialized_end=1491,
 )
 _sym_db.RegisterEnumDescriptor(_RUNDCMOTOR_DIRECTION)
+
+_ATMOSPHERICPRESSURE_UNIT = _descriptor.EnumDescriptor(
+  name='Unit',
+  full_name='AtmosphericPressure.Unit',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='PA', index=0, number=0,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='BAR', index=1, number=1,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='PSI', index=2, number=2,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='TORR', index=3, number=3,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=1898,
+  serialized_end=1940,
+)
+_sym_db.RegisterEnumDescriptor(_ATMOSPHERICPRESSURE_UNIT)
+
+_ILLUMINANCE_UNIT = _descriptor.EnumDescriptor(
+  name='Unit',
+  full_name='Illuminance.Unit',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='LUX', index=0, number=0,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=2005,
+  serialized_end=2020,
+)
+_sym_db.RegisterEnumDescriptor(_ILLUMINANCE_UNIT)
+
+_ALARM_SEVERITY = _descriptor.EnumDescriptor(
+  name='Severity',
+  full_name='Alarm.Severity',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='LEVEL1', index=0, number=0,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='LEVEL2', index=1, number=1,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='LEVEL3', index=2, number=2,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='LEVEL4', index=3, number=3,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='LEVEL5', index=4, number=4,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=2081,
+  serialized_end=2151,
+)
+_sym_db.RegisterEnumDescriptor(_ALARM_SEVERITY)
 
 
 _CONFIGURATION = _descriptor.Descriptor(
@@ -912,6 +994,154 @@ _RUNDCMOTOR = _descriptor.Descriptor(
   serialized_end=1817,
 )
 
+
+_ATMOSPHERICPRESSURE = _descriptor.Descriptor(
+  name='AtmosphericPressure',
+  full_name='AtmosphericPressure',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='value', full_name='AtmosphericPressure.value', index=0,
+      number=1, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='unit', full_name='AtmosphericPressure.unit', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+    _ATMOSPHERICPRESSURE_UNIT,
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1819,
+  serialized_end=1940,
+)
+
+
+_ILLUMINANCE = _descriptor.Descriptor(
+  name='Illuminance',
+  full_name='Illuminance',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='value', full_name='Illuminance.value', index=0,
+      number=1, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='unit', full_name='Illuminance.unit', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+    _ILLUMINANCE_UNIT,
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1942,
+  serialized_end=2020,
+)
+
+
+_ALARM = _descriptor.Descriptor(
+  name='Alarm',
+  full_name='Alarm',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='info', full_name='Alarm.info', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='severity', full_name='Alarm.severity', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+    _ALARM_SEVERITY,
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2023,
+  serialized_end=2151,
+)
+
+
+_SWITCH = _descriptor.Descriptor(
+  name='Switch',
+  full_name='Switch',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='state', full_name='Switch.state', index=0,
+      number=1, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2153,
+  serialized_end=2176,
+)
+
 _BOOTINFO.fields_by_name['proto_version'].enum_type = _PROTOVERSION
 _TEMPERATURE.fields_by_name['unit'].enum_type = _TEMPERATURE_UNIT
 _TEMPERATURE_UNIT.containing_type = _TEMPERATURE
@@ -933,6 +1163,12 @@ _RUNSTEPPERMOTOR.fields_by_name['direction'].enum_type = _RUNSTEPPERMOTOR_DIRECT
 _RUNSTEPPERMOTOR_DIRECTION.containing_type = _RUNSTEPPERMOTOR
 _RUNDCMOTOR.fields_by_name['direction'].enum_type = _RUNDCMOTOR_DIRECTION
 _RUNDCMOTOR_DIRECTION.containing_type = _RUNDCMOTOR
+_ATMOSPHERICPRESSURE.fields_by_name['unit'].enum_type = _ATMOSPHERICPRESSURE_UNIT
+_ATMOSPHERICPRESSURE_UNIT.containing_type = _ATMOSPHERICPRESSURE
+_ILLUMINANCE.fields_by_name['unit'].enum_type = _ILLUMINANCE_UNIT
+_ILLUMINANCE_UNIT.containing_type = _ILLUMINANCE
+_ALARM.fields_by_name['severity'].enum_type = _ALARM_SEVERITY
+_ALARM_SEVERITY.containing_type = _ALARM
 DESCRIPTOR.message_types_by_name['Configuration'] = _CONFIGURATION
 DESCRIPTOR.message_types_by_name['BootInfo'] = _BOOTINFO
 DESCRIPTOR.message_types_by_name['Image'] = _IMAGE
@@ -946,6 +1182,10 @@ DESCRIPTOR.message_types_by_name['GpsCoordinates'] = _GPSCOORDINATES
 DESCRIPTOR.message_types_by_name['RunStepperMotorRaw'] = _RUNSTEPPERMOTORRAW
 DESCRIPTOR.message_types_by_name['RunStepperMotor'] = _RUNSTEPPERMOTOR
 DESCRIPTOR.message_types_by_name['RunDcMotor'] = _RUNDCMOTOR
+DESCRIPTOR.message_types_by_name['AtmosphericPressure'] = _ATMOSPHERICPRESSURE
+DESCRIPTOR.message_types_by_name['Illuminance'] = _ILLUMINANCE
+DESCRIPTOR.message_types_by_name['Alarm'] = _ALARM
+DESCRIPTOR.message_types_by_name['Switch'] = _SWITCH
 DESCRIPTOR.enum_types_by_name['ProtoVersion'] = _PROTOVERSION
 
 Configuration = _reflection.GeneratedProtocolMessageType('Configuration', (_message.Message,), dict(
@@ -1038,6 +1278,34 @@ RunDcMotor = _reflection.GeneratedProtocolMessageType('RunDcMotor', (_message.Me
   # @@protoc_insertion_point(class_scope:RunDcMotor)
   ))
 _sym_db.RegisterMessage(RunDcMotor)
+
+AtmosphericPressure = _reflection.GeneratedProtocolMessageType('AtmosphericPressure', (_message.Message,), dict(
+  DESCRIPTOR = _ATMOSPHERICPRESSURE,
+  __module__ = 'messages_pb2'
+  # @@protoc_insertion_point(class_scope:AtmosphericPressure)
+  ))
+_sym_db.RegisterMessage(AtmosphericPressure)
+
+Illuminance = _reflection.GeneratedProtocolMessageType('Illuminance', (_message.Message,), dict(
+  DESCRIPTOR = _ILLUMINANCE,
+  __module__ = 'messages_pb2'
+  # @@protoc_insertion_point(class_scope:Illuminance)
+  ))
+_sym_db.RegisterMessage(Illuminance)
+
+Alarm = _reflection.GeneratedProtocolMessageType('Alarm', (_message.Message,), dict(
+  DESCRIPTOR = _ALARM,
+  __module__ = 'messages_pb2'
+  # @@protoc_insertion_point(class_scope:Alarm)
+  ))
+_sym_db.RegisterMessage(Alarm)
+
+Switch = _reflection.GeneratedProtocolMessageType('Switch', (_message.Message,), dict(
+  DESCRIPTOR = _SWITCH,
+  __module__ = 'messages_pb2'
+  # @@protoc_insertion_point(class_scope:Switch)
+  ))
+_sym_db.RegisterMessage(Switch)
 
 
 # @@protoc_insertion_point(module_scope)
