@@ -53,7 +53,7 @@ def on_connect(rc):
         configuration = ioant.get_configuration()
         # There is now a connection
         topic = ioant.get_topic()
-        topic['top'] = "image"
+        topic['top'] = "live"
         topic['global'] = configuration['topic']['global']
         topic['local'] = configuration['topic']['local']
         ioant.subscribe(topic)
