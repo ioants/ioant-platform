@@ -50,6 +50,7 @@ def on_connect(rc):
     """ On connect function. Called when attempting to connect to broker
         param rc is the result code (0=success) """
     if rc == 0:
+        configuration = ioant.get_configuration()
         # There is now a connection
         topic = ioant.get_topic()
         topic['top'] = "image"

@@ -7,7 +7,7 @@
             "password" : "test",
         	"port" : 1883
         },
-        "communicationDelay" : 1000,
+        "communicationDelay" : 1000
     },
     "topic" : {
             "global" : "kil",
