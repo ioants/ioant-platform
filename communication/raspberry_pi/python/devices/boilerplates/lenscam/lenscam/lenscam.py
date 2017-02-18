@@ -64,9 +64,9 @@ def on_connect(rc):
 
 def construct_filename():
     configuration = ioant.get_configuration()
-    filename_image = configuration['mqtt']['topic']['global'] \
-                     + "_" + configuration['mqtt']['topic']['local'] \
-                     + "_" + configuration['mqtt']['clientId'] \
+    filename_image = configuration['topic']['global'] \
+                     + "_" + configuration['topic']['local'] \
+                     + "_" + configuration[ioant]['mqtt']['clientId'] \
                      + ".jpg"
     return filename_image
 

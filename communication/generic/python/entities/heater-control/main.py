@@ -11,6 +11,7 @@ logging.basicConfig(filename='logs/output.log',
 console = logging.StreamHandler()
 logging.getLogger('').addHandler(console)
 
+
 def init_ascii():
     message = "\
 =========================================================================\n\
