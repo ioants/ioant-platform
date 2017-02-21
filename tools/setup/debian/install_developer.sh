@@ -3,6 +3,15 @@
 sudo apt-get install python-dev
 sudo apt-get install libmysqlclient-dev
 sudo apt-get install python-pip
+sudo pip install --upgrade pip
+
+# Virtual environment set up
+sudo pip install virtualenv
+sudo pip install virtualenvwrapper
+echo 'export WORKON_HOME=~/Envs' >> ~/.bashrc
+echo 'source /usr/local/bin/virtualenvwrapper.sh' >> ~/.bashrc
+source  ~/.bashrc
+mkvirtualenv ioant
 
 #Python dependencies used by clients
 pip install 'protobuf>=3.1.0'

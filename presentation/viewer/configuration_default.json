@@ -1,5 +1,4 @@
 {
-    "os": "linux",
     "port": 8080,
     "restApiServer": {
         "url" : "http://domain.com",

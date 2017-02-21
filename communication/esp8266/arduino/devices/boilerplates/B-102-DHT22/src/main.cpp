@@ -29,7 +29,7 @@ void on_message(Ioant::Topic received_topic, ProtoIO* message);
 /// END OF - Custom function definitions
 
 ///. CUSTOM variables
-DHT dht(2, DHT22);
+DHT dht(5, DHT22);
 
 /// END OF - CUSTOM variables
 
