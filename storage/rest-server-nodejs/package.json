@@ -23,6 +23,9 @@
     "request": "^2.79.0",
     "sinon": "^1.17.7",
     "sinon-as-promised": "^4.0.2",
-    "winston": "^2.3.0"
+    "winston": "^2.3.0",
+    "ioant-proto" : ">=0.1.1",
+    "ioant-loader": ">=0.1.1",
+    "ioant-logger": ">=0.1.0"
   }
 }
