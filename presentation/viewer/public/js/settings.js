@@ -24,7 +24,6 @@ $('#addChart').click(function() {
 $('body').on('click', '.removeChart', function() {
     // do something
     chartIndexSelected = $(this).data('index');
-    console.log(chartIndexSelected);
     $('#div_chart_'+chartIndexSelected).remove();
 });
 
@@ -116,8 +115,7 @@ function parseObject(formHandle, settingFound, objectFields, index){
 
     for(var key in objectFields){
         //console.log(key + " " + typeof objectFields[key] +" "+ Array.isArray(objectFields[key]))
-        if (typeof settingFound !== 'undefined'){
-            console.log(settingFound[key])
+        if (typeof settingFound[key] !== 'undefined'){
             fieldValue = settingFound[key];
             if (typeof fieldValue === 'boolean'){
                 if (fieldValue){
@@ -129,7 +127,7 @@ function parseObject(formHandle, settingFound, objectFields, index){
             }
         }
         else {
-            fieldValue = "";
+            fieldValue = objectFields[key];
         }
 
         formHandle.append("<label for='"+key+index+"' name='label_"+key+index+"'>"+key+"</label>");
@@ -146,7 +144,6 @@ function parseObject(formHandle, settingFound, objectFields, index){
                 }
             }
             else{
-                console.log("special handling")
                 // Handle nested object
             }
         }

@@ -24,8 +24,6 @@ exports.get = function(sid, startdate, enddate, filter, cb) {
     var request_options = Object.assign({}, request_stream_options);
     request_options.uri += '/id/'+sid+'/data';
     request(request_options, function(error, response, streamData){
-        console.log("data:");
-        console.log(streamData);
         for (var key in streamData){
             delete streamData[key]['id'];
         }

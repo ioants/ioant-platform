@@ -108,14 +108,14 @@ exports.get = function(streamId, messageType, cb) {
                   cb(err, {settingFound: config, streamSetting: streamSetting, chartSetting: chartSetting});
               }
               else{
-                  cb(err, {settingFound: false, streamSetting: streamSetting, chartSetting: chartSetting});
+                  cb(err, {settingFound: streamSetting, streamSetting: streamSetting, chartSetting: chartSetting});
               }
         });
     });
 }
 
 exports.save = function(req, cb) {
-    console.log(req.query);
+    winston.log('debug', 'Insert success! For stream id',{query : req.query})
     var documentToStore = populateDocument(req.query);
 
     var collection = db.get().collection(config.mongoDbServer.streamConfigurationCollectionName)
