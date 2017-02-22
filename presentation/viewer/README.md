@@ -1,9 +1,16 @@
 # Versions
 
+## 0.5.0
+- A lot of refactoring
+    - Now depends on the ioant npm packages
+- Fixed bug where null or undefined values would show instead of default values
+- Added more symbols for message types:
+    - Mass  
+
 ## 0.4.0
 - App now accommodates all message types
 - Configuration feature for streams
--- Unconfigured streams will show a table
+    - Unconfigured streams will show a table
 - DC chart improvements. Now supports bar and line type
 
 ## 0.3.0

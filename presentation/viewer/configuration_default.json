@@ -5,7 +5,8 @@
         "port": 1881
     },
     "mongoDbServer": {
-        "port": 11510,
+        "port": 27017,
+        "database": "viewer",
         "streamConfigurationCollectionName" : "StreamConfiguration"
     }
 }

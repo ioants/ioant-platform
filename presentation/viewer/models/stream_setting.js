@@ -1,8 +1,24 @@
+'use strict';
+/**
+ * @file stream_setting.js
+ * @author Adam Saxén
+ *
+ *  Module for settings associated with a stream
+ */
+
 var db = require('../db');
-var config = require('../configuration.json');
 var streamOptions = require('./stream_options');
-var protoio = require('./../proto/protoio');
-const winston = require('winston');
+var Proto = require('ioant-proto');
+const Logger = require('ioant-logger');
+var Loader = require('ioant-loader');
+
+let configuration;
+Loader.load('./configuration.json', 'configuration').then((config) => {
+    configuration = config;
+}).catch(function(error){
+      Logger.log('error', 'Failed to load asset: configuration');
+});
+
 
 var streamSetting = {
                      name : "Stream name",
@@ -59,7 +75,7 @@ function convertValue(key, value){
         value = {};
     }
     else {
-        winston.log('error', 'Failed to indentify field type',{field: key, type : typeof fieldTypes[key]})
+        Logger.log('error', 'Failed to indentify field type',{field: key, type : typeof fieldTypes[key]})
     }
     return value;
 }
@@ -91,7 +107,7 @@ function populateDocument(queryResults){
                 i++;
                 documentToStore['charts'].push({})
             }
-            value = convertValue(res[0], queryResults[key]);
+            let value = convertValue(res[0], queryResults[key]);
             documentToStore['charts'][i][res[0]] = value;
         }
     }
@@ -100,25 +116,27 @@ function populateDocument(queryResults){
 }
 
 exports.get = function(streamId, messageType, cb) {
-    protoio.getProtoMessage(messageType ,function (message){
+    Proto.getProtoMessage(messageType).then((message) => {
         chartSetting.fieldName = Object.keys(message.fields);
-        var collection = db.get().collection(config.mongoDbServer.streamConfigurationCollectionName)
+        var collection = db.get().collection(configuration.mongoDbServer.streamConfigurationCollectionName)
         collection.findOne({streamId: parseInt(streamId)}, function (err, config) {
               if (config !== null){
                   cb(err, {settingFound: config, streamSetting: streamSetting, chartSetting: chartSetting});
               }
               else{
-                  cb(err, {settingFound: streamSetting, streamSetting: streamSetting, chartSetting: chartSetting});
+                  cb(err, {settingFound: false, streamSetting: streamSetting, chartSetting: chartSetting});
               }
         });
+    }).catch(function(error){
+         Logger.log('error', 'Failed to get proto message', {messageType:messageType});
     });
-}
+};
 
 exports.save = function(req, cb) {
-    winston.log('debug', 'Insert success! For stream id',{query : req.query})
+    Logger.log('debug', 'Insert success! For stream id',{query : req.query})
     var documentToStore = populateDocument(req.query);
 
-    var collection = db.get().collection(config.mongoDbServer.streamConfigurationCollectionName)
+    var collection = db.get().collection(configuration.mongoDbServer.streamConfigurationCollectionName)
     // Does it exists?
     collection.findOne({streamId: parseInt(req.query.streamId)}, function (err, config) {
           if (config !== null){
@@ -129,17 +147,17 @@ exports.save = function(req, cb) {
                         // Now insert
                         collection.insertOne( documentToStore, function(err, result) {
                             if (result !== null){
-                                winston.log('info', 'Insert success! For stream id',{streamId : req.query.streamId})
+                                Logger.log('info', 'Insert success! For stream id',{streamId : req.query.streamId})
                             }
                             else{
-                                winston.log('error', 'Failed to add settings for stream',{streamId : req.query.streamId})
+                                Logger.log('error', 'Failed to add settings for stream',{streamId : req.query.streamId})
                             }
                             cb(err, result);
                           });
                     }
                     else{
                         // Failed to insert
-                        winston.log('error', 'Failed to remove settings for stream',{streamId : req.query.streamId})
+                        Logger.log('error', 'Failed to remove settings for stream',{streamId : req.query.streamId})
                         cb(err, result);
                     }
               });
@@ -148,10 +166,10 @@ exports.save = function(req, cb) {
               // Nothing in collection. Add
               collection.insertOne( documentToStore, function(err, result) {
                   if (result !== null){
-                      winston.log('info', 'Insert success! For stream id',{streamId : req.query.streamId})
+                      Logger.log('info', 'Insert success! For stream id',{streamId : req.query.streamId})
                   }
                   else{
-                      winston.log('error', 'Failed to add settings for stream',{streamId : req.query.streamId})
+                      Logger.log('error', 'Failed to add settings for stream',{streamId : req.query.streamId})
                   }
                   cb(err, result);
                 });

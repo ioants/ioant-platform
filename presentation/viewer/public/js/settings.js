@@ -91,7 +91,13 @@ function createFormFields(formHandle, streamSettingBlob){
 
     //Generate data table object fields
     $('[name="label_dataTable"]').after("<div id=dataTableArea>");
-    parseObject($('#dataTableArea'), settingFound.dataTable, streamFields.dataTable, -1);
+    if (!settingFound){
+        parseObject($('#dataTableArea'), streamFields.dataTable, streamFields.dataTable, -1);
+    }
+    else {
+        parseObject($('#dataTableArea'), settingFound.dataTable, streamFields.dataTable, -1);
+    }
+
 
     $('[name="label_charts"]').after("<div id=chartsArea>");
     if (settingFound){

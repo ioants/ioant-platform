@@ -2,7 +2,7 @@ var express = require('express')
   , router = express.Router()
   , Stream = require('../models/streams')
   , StreamSetting = require('../models/stream_setting')
-
+const Logger = require('ioant-logger');
 
 router.get('/', function(req, res) {
   Stream.all(function(err, streams) {
@@ -23,7 +23,7 @@ router.get('/settings', function(req, res) {
                               res.json(settings);
                           }
                           else {
-                              winston.log('error','Failed to retrieve stream settings.');
+                              Logger.log('error','Failed to retrieve stream settings.');
                               res.json(false);
                           }
                       });
@@ -36,7 +36,7 @@ router.get('/settingssave', function(req, res) {
                               res.json(true);
                           }
                           else {
-                              winston.log('error','Failed to save stream settings');
+                              Logger.log('error','Failed to save stream settings');
                               res.json(false);
                           }
                       });
