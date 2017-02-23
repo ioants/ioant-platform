@@ -10,17 +10,17 @@ var streamConfig
 var chartsArray = [];
 var currentRange = [];
 var streamTableId = "#streamTable";
+var toAutoFit;
 
 //=============================================================================
 //  On load of template
 //=============================================================================
 $(function() {
-    var latestValueDate = $_GET('startdate')
-    $('#aggregate').hide();
-    $('#aggregatelabel').hide();
-    start = moment(latestValueDate);
-    deriveRange(start, start);
-    loadData(start, start);
+    toAutoFit = $('#autofit').is(":checked");
+    var start = moment($_GET('startdate')).subtract($('#viewnumberofdays').val(), "days");
+    var end = moment($_GET('startdate'));
+    deriveRange(start, end);
+    loadData(start, end);
 });
 
 function deriveRange(start, end){
@@ -40,16 +40,18 @@ function deriveRange(start, end){
 
 // Trigger on value changed
 $('#filter').change(function(){
+    toAutoFit = $('#autofit').is(":checked");
     start =  moment(currentRange[0]);
     end = moment(currentRange[1]);
     loadData(start, end);
 });
 
 // Trigger on checkbox changed
-$('#aggregate').change(function(){
-    //toAggregate = $('#aggregate').is(":checked");
-    //renderCharts();
-    $('#aggregate').hide();
+$('#autofit').change(function(){
+    toAutoFit = $('#autofit').is(":checked");
+    start =  moment(currentRange[0]);
+    end = moment(currentRange[1]);
+    loadData(start, end);
 });
 
 // Trigger on daterange changed
@@ -58,11 +60,12 @@ $('input[name="daterange"]').daterangepicker(
     locale: {
       format: 'YYYY-MM-DD'
     },
-    startDate: $_GET('startdate'),
-    endDate: $_GET('startdate')
+    startDate: moment($_GET('startdate')).subtract($('#viewnumberofdays').val(), "days").format('YYYY-MM-DD'),
+    endDate: moment($_GET('startdate')).format('YYYY-MM-DD')
 },
 
 function(start, end, label) {
+    toAutoFit = $('#autofit').is(":checked");
     deriveRange(start, end);
     loadData(start, end);
 });

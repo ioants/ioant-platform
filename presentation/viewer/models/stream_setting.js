@@ -24,6 +24,7 @@ var streamSetting = {
                      name : "Stream name",
                      template : streamOptions.getStreamTemplates(),
                      filter: 10,
+                     viewNumberOfDays: 1,
                      dataTable : {
                         tableTitle: "Table title",
                         show : streamOptions.getStreamBooleans(),
@@ -38,6 +39,8 @@ var chartSetting = {
                     yLabel: "Y label",
                     type : streamOptions.getChartTypes(),
                     fieldName : "",
+                    yMax  : 0,
+                    yMin  : 0
                     }
 
 var fieldTypes = {
@@ -54,7 +57,10 @@ var fieldTypes = {
                   xLabel: "string",
                   yLabel: "string",
                   filter: 0,
-                  name : "string"
+                  name : "string",
+                  yMax  : 0,
+                  yMin  : 0,
+                  viewNumberOfDays : 0
               };
 
 

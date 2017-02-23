@@ -1,3 +1,8 @@
+// Global variables
+var numberOfPoints;
+//
+
+
 
 //=============================================================================
 //  handleData function
@@ -28,6 +33,8 @@ function handleData(error, streamData) {
     if (streamConfig){
         renderCharts();
     }
+
+    // Set range
 };
 
 //=============================================================================
@@ -45,7 +52,6 @@ function clearTable() {
 function populateTable() {
     var maxNumberOfRows = 100;
     var tableTitle = "Table";
-    console.log(streamConfig)
     if (streamConfig != null && typeof streamConfig !== 'undefined' && streamConfig != false){
         maxNumberOfRows = streamConfig.dataTable.maxNumberOfRows;
         tableTitle = streamConfig.dataTable.tableTitle;
@@ -111,6 +117,23 @@ function renderCharts() {
 }
 
 //=============================================================================
+//  findMaxMin function
+//  Desc: Finds the max and min of a data set
+//  returns: array containing min, max and diff of these
+//=============================================================================
+function findMaxMin(values){
+    var minValue = Number.POSITIVE_INFINITY;
+    var maxValue = Number.NEGATIVE_INFINITY;
+    var tmp;
+    for (var i=values.length-1; i>=0; i--) {
+        tmp = values[i].value;
+        if (tmp < minValue) minValue = tmp;
+        if (tmp > maxValue) maxValue = tmp;
+    }
+    return [minValue, maxValue];
+}
+
+//=============================================================================
 //  createCharts function
 //  Desc: Initialize dc charts depending on configuration
 //=============================================================================
@@ -143,7 +166,7 @@ function createCharts(){
                 chartsArray[key] = dc.barChart("#bar-chart"+key);
             }
         }
-        chartsArray[key].width(x*0.8)
+        chartsArray[key].width(x*0.7)
                          .height(y*0.6)
                          .zoomOutRestrict(false)
                          .x(d3.time.scale().domain(currentRange))
@@ -151,6 +174,8 @@ function createCharts(){
                          .transitionDuration(100)
                          .brushOn(false)
                          .mouseZoomable(true)
+                         .elasticY(false)
+                         .elasticX(false)
                          .yAxisLabel(streamConfig.charts[key].yLabel);
 
         if (key == 0)
@@ -175,42 +200,51 @@ function createCharts(){
 //  Desc: Define and assign data to chart
 //=============================================================================
 function generateData(chart, chartConfig){
+    console.log(chartConfig);
     var fieldOfInterest = chartConfig.fieldName;
-    var ndx = crossfilter(streamValues);
-    var dim = ndx.dimension(function (d) { return d.second });
+    var crossfilter_origin = crossfilter(streamValues);
+    var dimension_origin = crossfilter_origin.dimension(function (d) { return d.second });
     var lengths;
-    var maxValue;
-    var minValue;
     var xLabel;
 
-    lengths = dim.group().reduceSum(function(d) {
-        return d[fieldOfInterest];
+    lengths = dimension_origin.group().reduceSum(function(d) {
+       return d[fieldOfInterest];
     });
 
-    valueTable = lengths.top(lengths.size());
-    minValue = Number.POSITIVE_INFINITY;
-    maxValue = Number.NEGATIVE_INFINITY;
-    var tmp;
-    for (var i=valueTable.length-1; i>=0; i--) {
-        tmp = valueTable[i].value;
-        if (tmp < minValue) minValue = tmp;
-        if (tmp > maxValue) maxValue = tmp;
+    var maxY;
+    var minY;
+    var yDomain;
+    console.log("autoFit:" + toAutoFit)
+    if (toAutoFit || (chartConfig.yMax == chartConfig.yMin)){
+        valueTable = lengths.top(lengths.size());
+        var maxMinY = findMaxMin(valueTable);
+        minY = maxMinY[0];
+        maxY = maxMinY[1];
+        var diff = maxY - minY;
+        yDomain = [minY-diff*0.1, maxY+diff*0.1];
     }
-    xLabel = fieldOfInterest + " per second"
+    else {
+        minY = chartConfig.yMin;
+        maxY = chartConfig.yMax;
+        yDomain = [minY, maxY];
+    }
+
+    xLabel = fieldOfInterest + " per second";
 
     //Update number visible data points
-    $("#datapts").text(lengths.size());
+    numberOfPoints = lengths.size();
+    $("#datapts").text(numberOfPoints);
 
     var numberFormat = d3.format('.2f');
     var dateFormat = d3.time.format('%Y-%m-%d %H:%M:%S')
     var hourFormat = d3.time.format('%H:%M:%S')
-    var diffValues = maxValue-minValue;
+
 
     chart
-        .dimension(dim)
+        .dimension(dimension_origin)
         .group(lengths)
         .xAxisLabel(chartConfig.xLabel)
-        .y(d3.scale.linear().domain([minValue-diffValues*0.1, maxValue+diffValues*0.1]))
+        .y(d3.scale.linear().domain(yDomain))
         .valueAccessor(function (d) {
             return d.value;
          })

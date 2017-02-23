@@ -26,7 +26,6 @@ app.use(require('./controllers'))
 var Promise = require('bluebird');
 
 
-
 var setup = function() {
     var p1 = Loader.load('configuration.json', 'configuration');
 

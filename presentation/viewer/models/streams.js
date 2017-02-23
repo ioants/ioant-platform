@@ -33,7 +33,7 @@ function getImageOfMessageType(message_type) {
             return "/img/icons/umbrella-and-raindrops.png"
             break;
         case Proto.enumerate("Mass"):
-            return "/img/icons/jar-almost-full-outline.png"
+            return "/img/icons/noun_16817.svg"
             break;
         case Proto.enumerate("ElectricPower"):
             return "/img/icons/lighting-button.png"
@@ -48,7 +48,7 @@ function getImageOfMessageType(message_type) {
             return "/img/icons/nut-icon.png"
             break;
         case Proto.enumerate("RunDcMotor"):
-            return "/img/icons/nut-icon.png"
+            return "/img/icons/noun_526896_cc.png"
             break;
         case Proto.enumerate("BootInfo"):
             return "/img/icons/power-button-outline.png"
