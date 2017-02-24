@@ -39,6 +39,20 @@ router.get('/getstreamdata', function(req, res) {
             })
 })
 
+router.get('/getstreamdates', function(req, res) {
+    Logger.log('info', 'Retreive stream dates - controller')
+    Stream.getDates(req.query.streamid,
+            function(err, response, streamdates) {
+                if (!err && response.statusCode == 200) {
+                    res.json(streamdates);
+                }
+                else {
+                    Logger.log('error','Failed to retrieve stream dates.', {streamid: req.query.streamid});
+                    res.json(false);
+                }
+            });
+});
+
 router.get('/getstreaminfo', function(req, res) {
     Logger.log('info', 'Retrieve stream info - controller')
     Stream.getInfo(req.query.streamid,

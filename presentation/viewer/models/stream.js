@@ -9,6 +9,7 @@ var request = require('request');
 var Logger = require('ioant-logger');
 var Proto = require('ioant-proto');
 var Loader = require('ioant-loader');
+var moment = require('moment');
 
 let rest_api_request;
 let request_stream_options;
@@ -72,5 +73,18 @@ exports.getInfo = function(streamId, cb) {
           else {
               cb(false);
           }
+     });
+}
+
+
+exports.getDates = function(sid, cb) {
+    request_stream_options.qs = {'streamid': sid}
+    var request_options = Object.assign({}, request_stream_options);
+    request_options.uri += '/id/'+sid+'/dates';
+    request(request_options, function(error, response, streamDates){
+        for (var key in streamDates){
+            streamDates[key] = moment(streamDates[key].date).format("YYYY-MM-DD")
+        }
+        cb(error, response, streamDates);
      });
 }

@@ -4,7 +4,10 @@ block content
     link(rel="stylesheet", type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css")
 
     // Toolbar
-    input(type="hidden", name="viewnumberofdays", value=settings.viewNumberOfDays, id="viewnumberofdays")
+    if settings
+        input(type="hidden", name="viewnumberofdays", value=settings.viewNumberOfDays, id="viewnumberofdays")
+    else
+        input(type="hidden", name="viewnumberofdays", value=1, id="viewnumberofdays")
     label.
         Select time frame:
     input(type="text", name="daterange", value="" class="datepicker")

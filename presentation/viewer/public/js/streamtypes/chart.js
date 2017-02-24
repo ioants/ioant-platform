@@ -1,6 +1,5 @@
 // Global variables
 var numberOfPoints;
-//
 
 
 
@@ -33,8 +32,6 @@ function handleData(error, streamData) {
     if (streamConfig){
         renderCharts();
     }
-
-    // Set range
 };
 
 //=============================================================================
@@ -214,7 +211,7 @@ function generateData(chart, chartConfig){
     var maxY;
     var minY;
     var yDomain;
-    console.log("autoFit:" + toAutoFit)
+
     if (toAutoFit || (chartConfig.yMax == chartConfig.yMin)){
         valueTable = lengths.top(lengths.size());
         var maxMinY = findMaxMin(valueTable);
