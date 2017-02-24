@@ -30,11 +30,20 @@ router.get('/id/:id/data', function(req, res) {
 
 /**
  *  @desc Get information of specific stream id
- * 
+ *
  */
 router.get('/id/:id/', function(req, res) {
     Logger.log('debug', 'Info for stream id:' + req.params.id + " requested");
     modelIndex.getStreamInfo(res, req.params.id);
+});
+
+/**
+ *  @desc Get unique dates of specific stream
+ *
+ */
+router.get('/id/:id/dates', function(req, res) {
+    Logger.log('debug', 'Dates for stream id:' + req.params.id + " requested");
+    modelIndex.getStreamDates(res, req.params.id);
 });
 
 

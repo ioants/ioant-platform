@@ -157,5 +157,31 @@ class StreamsModel {
     };
 
 
+    /**
+    * @desc getStreamDates method, for retrieving unique dates of a stream
+    *
+    * @param {Integer} streamid - the stream id
+    * @return {Promise} - resolves rows array
+    */
+    getStreamDates(streamid) {
+        Logger.log('debug', 'Get unique dates from a stream', {streamid:streamid});
+        var stream_table = this.schema.database.tables[0].name;
+        var primary_key_field = this.schema.database.tables[0].primaryKey;
+
+        var query = `SELECT * from ${stream_table} WHERE ${primary_key_field}=${streamid}`;
+        Logger.log('debug', 'query_dates', {query:query});
+        return this.db.queryAsync(query).then((rows) => {
+                    let message_name = rows[0].message_name;
+                    let stream_table_prefix = this.schema.database.messageTablePrefix;
+                    let query_distinct = `SELECT DISTINCT(DATE(ts)) AS date FROM ${stream_table_prefix}${streamid}_${message_name}`;
+                    Logger.log('debug', 'query_distinct', {query_distinct:query_distinct});
+                    return this.db.queryAsync(query_distinct);
+                }).catch(function(error){
+                    Logger.log('error', 'Failed to get unique dates from stream.', {streamid:streamid});
+                    throw error;
+                });
+    };
+
+
 }
 module.exports = StreamsModel;

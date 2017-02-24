@@ -1,9 +1,9 @@
 // messages.proto
 syntax = "proto3";
 
-enum ProtoVersion{
+enum ProtoVersion {
     VERSION_NOT_SET = 0;
-    VERSION = 1020;
+    VERSION = 1100;
 }
 
 // Message types below - Please note! Order is important
@@ -169,10 +169,23 @@ message Alarm {
         LEVEL5 = 4;
     }
 
-    string info = 1;
+    string meta = 1;
     Severity severity = 2;
 }
 
 message Switch {
     bool state = 1;
+}
+
+message RGBW {
+    uint32 red = 1;
+    uint32 green = 2;
+    uint32 blue = 3;
+    uint32 white = 4;
+}
+
+message Raw {
+    uint32 sequence_number = 1;
+    uint32 total_size = 2;
+    bytes data = 3;
 }

@@ -182,3 +182,30 @@ exports.getStreamInfo = function(res, streamid) {
         });
     });
 }
+
+
+/**
+* @desc Fetch unique dates of stream
+*/
+exports.getStreamDates = function(res, streamid) {
+    if (streamid === undefined){
+        res.status(400).send('Bad request - streamid missing');
+        return;
+    }
+    var param_stream_id = streamid;
+
+    if (isNaN(param_stream_id)) {
+        res.status(400).send('Bad request - streamid not a number');
+        return;
+    }
+
+    retrieve_database_connection().then(function (connection){
+    let streamsModel = new StreamsModel(connection, loaded_schema);
+    streamsModel.getStreamDates(param_stream_id).then(function(dates) {
+               res.json(dates);
+           }).catch(function(error){
+            Logger.log('error', 'Failed to get unique dates stream.');
+            res.status(500).send('Internal error, Request failed');
+        });
+    });
+}

@@ -61,7 +61,14 @@ $('input[name="daterange"]').daterangepicker(
       format: 'YYYY-MM-DD'
     },
     startDate: moment($_GET('startdate')).subtract($('#viewnumberofdays').val(), "days").format('YYYY-MM-DD'),
-    endDate: moment($_GET('startdate')).format('YYYY-MM-DD')
+    endDate: moment($_GET('startdate')).format('YYYY-MM-DD'),
+    isInvalidDate: function(date) {
+        if (date.format('YYYY-MM-DD') == '2017-01-12') {
+            return true;
+        } else {
+            return false;
+        }
+    }
 },
 
 function(start, end, label) {

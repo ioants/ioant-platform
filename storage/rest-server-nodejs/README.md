@@ -12,7 +12,7 @@ Built using a node js application. Supports parallel requests
         domain.com:1881/v0.1/streams
         ```
     - Example output:
-```
+```json
 [
     {
         "sid": 1,
@@ -50,7 +50,7 @@ Built using a node js application. Supports parallel requests
         domain.com:1881/v0.1/streams/id/2
         ```
     - Example output:
-```
+```json
 [
     {
         "sid": 2,
@@ -78,7 +78,7 @@ Built using a node js application. Supports parallel requests
         domain.com:1881/v0.1/streams/id/2/data?startdate=2017-01-13&filter=1
         ```
     - Example output:
-```
+```json
 [
     {
         "id": 7,
@@ -109,6 +109,26 @@ Built using a node js application. Supports parallel requests
         "ts": "2017-01-13T17:20:06.000Z"
     },
     ...
+]
+```
+
+### /streams/id/dates
+- /v0.1/streams/id/**[stream id]**/dates
+    - lists all unique dates(ISO STRING) of a stream
+    - Example request:
+        ```
+        domain.com:1881/v0.1/streams/id/2/dates
+        ```
+    - Example output:
+```json
+[
+    {
+        "date": "2017-01-12T23:00:00.000Z"
+    },
+    {
+        "date": "2017-02-17T23:00:00.000Z"
+    }
+]
 ```
 
 

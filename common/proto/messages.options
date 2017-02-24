@@ -22,4 +22,7 @@ Configuration.topic_local type:FT_POINTER
 Configuration.client_id type:FT_POINTER
 
 # Alarm message
-Alarm.info type:FT_POINTER
+Alarm.meta type:FT_POINTER
+
+# RAW message
+Raw.data type:FT_POINTER

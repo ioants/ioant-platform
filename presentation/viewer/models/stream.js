@@ -6,7 +6,6 @@
  *  Model of stream - retrieves stream information and actual stream data
  */
 var request = require('request');
-var moment = require('moment');
 var Logger = require('ioant-logger');
 var Proto = require('ioant-proto');
 var Loader = require('ioant-loader');
