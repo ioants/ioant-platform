@@ -1,3 +1,4 @@
+"use strict"
 var express = require('express')
   , router = express.Router()
   , Stream = require('../models/streams')
@@ -7,7 +8,18 @@ const Logger = require('ioant-logger');
 router.get('/', function(req, res) {
   Stream.all(function(err, streams) {
       if (typeof streams !== 'undefined' ){
-          res.render('streams', {streamlist: streams});
+          console.log(streams)
+          var message_type_list = [];
+          var message_type_list_objects = [];
+          streams.forEach(function(element) {
+                if (message_type_list.indexOf(element.message_type) == -1){
+                    message_type_list.push(element.message_type);
+                    message_type_list_objects.push({message_type: element.message_type,
+                                                    message_name: element.message_name,
+                                                    image_type_url: element.image_type_url});
+                }
+            })
+          res.render('streams', {streamlist: streams, message_type_list: message_type_list_objects});
       }
       else{
           res.render('notimplemented', {});

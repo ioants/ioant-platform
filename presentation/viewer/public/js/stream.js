@@ -61,10 +61,7 @@ $('#autofit').change(function(){
 //  Desc: Will request unique dates of a certain data stream
 //=============================================================================
 function loadDates(){
-    console.log("datesreq")
-
     var rest_request_dates = "/stream/getstreamdates?streamid="+streamId;
-
     queue()
         .defer(d3.json, rest_request_dates)
         .awaitAll(loadDateRangePicker);
@@ -103,7 +100,6 @@ function loadDateRangePicker(error, streamDates){
 //  Desc: Will request data from stream given a specific timeframe (start, end)
 //=============================================================================
 function loadData(start, end){
-    console.log("datareq")
     var filter = $('#filter').val();
     if ($.isNumeric(filter) == false){
         filter = 1;
