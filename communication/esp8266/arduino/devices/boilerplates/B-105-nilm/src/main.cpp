@@ -28,6 +28,7 @@ void measure();
 
 // CUSTOM variables
 const byte interrupt_pin = 5;
+const byte led_pin = 4;
 int timeToCheckStatus = 0;
 unsigned long t1,t2,dt,ttemp;
 float elpow = 0.0;
@@ -50,6 +51,8 @@ void setup(void){
 
     // Add additional set up code here
     pinMode(interrupt_pin, INPUT_PULLUP);
+    pinMode(led_pin, OUTPUT);
+    digitalWrite(led_pin,LOW);
     attachInterrupt(interrupt_pin, measure, FALLING);
 
 }
@@ -61,6 +64,7 @@ void loop(void){
     msg.data.unit = ElectricPower_Unit_WATTS;
     msg.data.pulses = interrupt_counter;
     ULOG_DEBUG << interrupt_counter;
+    //digitalWrite(led_pin,LOW);
     bool result = IOANT->Publish(msg);
     interrupt_counter  = 0;
     ULOG_DEBUG << result << " " << msg.data.value;
@@ -75,6 +79,7 @@ void on_message(Ioant::Topic received_topic, ProtoIO* message){
 // Interrupt function for measuring the time between pulses and number of pulses
 // Always stored in RAM
 void ICACHE_RAM_ATTR measure(){
+    digitalWrite(led_pin,HIGH);
     ttemp = t2;
     t2 = t1;
     t1 = millis();
@@ -86,4 +91,5 @@ void ICACHE_RAM_ATTR measure(){
     }
     elpow = 3600.*1000.*1000./(electric_meter_pulses*dt);
     interrupt_counter++;
+    digitalWrite(led_pin,LOW);
 }
