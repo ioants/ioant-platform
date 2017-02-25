@@ -1,7 +1,7 @@
 ///
 /// @file   main.cpp
 /// @Author Benny Saxen
-/// @date   2017-02-02
+/// @date   2017-02-24
 /// @brief  NILM
 ///
 
@@ -34,6 +34,8 @@ unsigned long t1,t2,dt,ttemp;
 float elpow = 0.0;
 int interrupt_counter = 0;
 int electric_meter_pulses = 1000;  //1000 pulses/kWh
+int bounce_value = 50; // minimum time between interrupts
+
 // END OF - CUSTOM variables
 
 /// END OF - CUSTOM variables
@@ -48,6 +50,7 @@ void setup(void){
     CommunicationManager::Configuration loaded_configuration;
     IOANT->GetCurrentConfiguration(loaded_configuration);
     electric_meter_pulses =  loaded_configuration.application_generic;
+    bounce_value = 36000./electric_meter_pulses; // based on max power = 100 000 Watt
 
     // Add additional set up code here
     pinMode(interrupt_pin, INPUT_PULLUP);
@@ -84,7 +87,7 @@ void ICACHE_RAM_ATTR measure(){
     t2 = t1;
     t1 = millis();
     dt = t1 - t2;
-    if (dt < 50)
+    if (dt < bounce_value)
     {
         t2 = ttemp;
         return;

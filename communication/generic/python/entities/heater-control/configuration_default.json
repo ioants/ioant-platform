@@ -1,12 +1,46 @@
 {
     "ioant" : {
         "mqtt" : {
-            "clientId" : "heaterapp",
+            "global" : "entityglobal",
+            "local" : "entitylocal",
+            "clientId" : "heaterid",
             "broker" : "thisIsYourBrokerDomainAddressOrIp",
             "user" : "hero",
             "password" : "test",
             "port" : 1883
         },
         "communicationDelay" : 1000,
+    },
+    "subscribe_topic" : {
+        "indoor" : {
+            "global" : "tbd",
+            "local" : "tbd",
+            "client_id" : "tbd",
+            "stream_index" : 0
+        },
+        "outdoor" : {
+            "global" : "tbd",
+            "local" : "tbd",
+            "client_id" : "tbd",
+            "stream_index" : 0
+        },
+        "water_in" : {
+            "global" : "tbd",
+            "local" : "tbd",
+            "client_id" : "tbd",
+            "stream_index" : 0
+        },
+        "water_out" : {
+            "global" : "tbd",
+            "local" : "tbd",
+            "client_id" : "tbd",
+            "stream_index" : 0
+        },
+        "smoke" : {
+            "global" : "tbd",
+            "local" : "tbd",
+            "client_id" : "tbd",
+            "stream_index" : 0
+        }
     }
 }
