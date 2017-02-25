@@ -16,6 +16,7 @@ var toAutoFit;
 //  On load of template
 //=============================================================================
 $(function() {
+    loadDates();
     toAutoFit = $('#autofit').is(":checked");
     var start = moment($_GET('startdate')).subtract($('#viewnumberofdays').val(), "days");
     var end = moment($_GET('startdate'));
@@ -54,28 +55,44 @@ $('#autofit').change(function(){
     loadData(start, end);
 });
 
-// Trigger on daterange changed
-$('input[name="daterange"]').daterangepicker(
-{
-    locale: {
-      format: 'YYYY-MM-DD'
-    },
-    startDate: moment($_GET('startdate')).subtract($('#viewnumberofdays').val(), "days").format('YYYY-MM-DD'),
-    endDate: moment($_GET('startdate')).format('YYYY-MM-DD'),
-    isInvalidDate: function(date) {
-        if (date.format('YYYY-MM-DD') == '2017-01-12') {
-            return true;
-        } else {
-            return false;
-        }
-    }
-},
 
-function(start, end, label) {
-    toAutoFit = $('#autofit').is(":checked");
-    deriveRange(start, end);
-    loadData(start, end);
-});
+//=============================================================================
+//  loadDates function
+//  Desc: Will request unique dates of a certain data stream
+//=============================================================================
+function loadDates(){
+    var rest_request_dates = "/stream/getstreamdates?streamid="+streamId;
+    queue()
+        .defer(d3.json, rest_request_dates)
+        .awaitAll(loadDateRangePicker);
+}
+
+
+function loadDateRangePicker(error, streamDates){
+    var valid_dates =  streamDates[0];
+    $('input[name="daterange"]').daterangepicker(
+    {
+        locale: {
+          format: 'YYYY-MM-DD'
+        },
+        startDate: moment($_GET('startdate')).subtract($('#viewnumberofdays').val(), "days").format('YYYY-MM-DD'),
+        endDate: moment($_GET('startdate')).format('YYYY-MM-DD'),
+        isInvalidDate: function(date) {
+            if ( valid_dates.indexOf(date.format('YYYY-MM-DD')) == -1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    },
+
+    function(start, end, label) {
+        toAutoFit = $('#autofit').is(":checked");
+        deriveRange(start, end);
+        loadData(start, end);
+    });
+
+}
 
 
 //=============================================================================
@@ -83,7 +100,6 @@ function(start, end, label) {
 //  Desc: Will request data from stream given a specific timeframe (start, end)
 //=============================================================================
 function loadData(start, end){
-    console.log("datareq")
     var filter = $('#filter').val();
     if ($.isNumeric(filter) == false){
         filter = 1;
