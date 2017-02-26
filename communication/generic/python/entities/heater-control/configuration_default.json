@@ -9,9 +9,15 @@
             "password" : "test",
             "port" : 1883
         },
-        "communicationDelay" : 1000,
+        "communicationDelay" : 5000,
     },
     "subscribe_topic" : {
+        "target" : {
+            "global" : "tbd",
+            "local" : "tbd",
+            "client_id" : "tbd",
+            "stream_index" : 0
+        },
         "indoor" : {
             "global" : "tbd",
             "local" : "tbd",
@@ -37,6 +43,14 @@
             "stream_index" : 0
         },
         "smoke" : {
+            "global" : "tbd",
+            "local" : "tbd",
+            "client_id" : "tbd",
+            "stream_index" : 0
+        }
+    },
+    "publish_topic" : {
+        "stepper" : {
             "global" : "tbd",
             "local" : "tbd",
             "client_id" : "tbd",
