@@ -11,7 +11,7 @@ $('.filterIcons').click(function() {
         //Deactivate
         $(this).attr('data-isactive', 0);
         $(this).css('opacity', 0.5);
-        if ($(this).data('msgtype')){
+        if ($(this).attr('data-msgtype')){
             var selectedMessageType = $(this).data('msgtype');
             filterMessageType(selectedMessageType, true);
         }
@@ -24,8 +24,8 @@ $('.filterIcons').click(function() {
         //Active
         $(this).attr('data-isactive', 1);
         $(this).css('opacity', 1.0);
-        if ($(this).data('msgtype')){
-            var selectedMessageType = $(this).data('msgtype');
+        if ($(this).attr('data-msgtype')){
+            var selectedMessageType = $(this).attr('data-msgtype');
             filterMessageType(selectedMessageType, false);
         }
         else{
@@ -44,7 +44,7 @@ function filterMessageType(message_type, hide){
     else{
         if($('.oldStreamsIcon').attr('data-isactive') == 0){
             var newStreams = $('.srow').filter(function() {
-                            if ($(this).data('isold') !== undefined && $(this).data('isold') == 0){
+                            if ($(this).attr('data-isold') !== undefined && $(this).attr('data-isold') == 0){
                                 return $(this);
                             }
                         });
@@ -59,7 +59,7 @@ function filterMessageType(message_type, hide){
 function filterOldStreams(hide){
     var allStreamRows = $(".srow");
     var oldStreams = $('.srow').filter(function() {
-                    if ($(this).data('isold') !== undefined && $(this).data('isold') == 1){
+                    if ($(this).attr('data-isold') !== undefined && $(this).attr('data-isold') == 1){
                         return $(this);
                     }
                 });

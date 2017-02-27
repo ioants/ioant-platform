@@ -40,7 +40,7 @@ var setup = function() {
 var startApplication = function(config){
     db.connect('mongodb://localhost:'+config.mongoDbServer.port+'/'+config.mongoDbServer.database, function(err) {
         if (err) {
-            Logger.log('error', 'Unable to connect to MongoDB.', {configuration:configuration});
+            Logger.log('error', 'Unable to connect to MongoDB.', {config:config});
             process.exit(1)
         } else {
             app.listen(config.port, function() {
