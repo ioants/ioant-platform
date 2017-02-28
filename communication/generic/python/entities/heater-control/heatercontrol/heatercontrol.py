@@ -39,16 +39,16 @@ def heater_model():
     global temperature_smoke
     global temperature_target
 
-    if temperature_indoor == 999:
-        return
+    #if temperature_indoor == 999:
+    #    return
     if temperature_outdoor == 999:
         return
-    if temperature_water_in == 999:
-        return
+    #if temperature_water_in == 999:
+    #    return
     if temperature_water_out == 999:
         return
-    if temperature_smoke == 999:
-        return
+    #if temperature_smoke == 999:
+    #    return
     #if temperature_target == 999:
     #    return
 
@@ -191,13 +191,13 @@ def on_connect(rc):
 
     if rc == 0:
         # There is now a connection
-        hash_indoor    = subscribe_to_topic("indoor","Temperature")
+        #hash_indoor    = subscribe_to_topic("indoor","Temperature")
         hash_outdoor   = subscribe_to_topic("outdoor","Temperature")
-        hash_water_in  = subscribe_to_topic("water_in","Temperature")
+        #hash_water_in  = subscribe_to_topic("water_in","Temperature")
         hash_water_out = subscribe_to_topic("water_out","Temperature")
-        hash_smoke     = subscribe_to_topic("smoke","Temperature")
+        #hash_smoke     = subscribe_to_topic("smoke","Temperature")
 
-        hash_target   = subscribe_to_topic("target","Trigger")
+        #hash_target   = subscribe_to_topic("target","Trigger")
 
 # =============================================================================
 # Above this line are mandatory functions
