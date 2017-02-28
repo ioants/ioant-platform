@@ -63,7 +63,7 @@ def heater_model():
 
     steps = int(abs(adjust*4))
 
-    print "Target: " + target + " Steps: " + steps + " Dir: " + direction
+    print "Target: " + str(target) + " Steps: " + str(steps) + " Dir: " + str(direction)
     if etc == 0:
         publishStepperMsg(steps,direction)
         etc = 60 # 5 min if delay = 5 sec
