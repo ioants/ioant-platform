@@ -60,18 +60,18 @@ def heater_model():
     else:
         direction = COUNTERCLOCKWISE # increase temperature
 
-    steps = int(abs(adjust*4))
+    steps = int(abs(adjust*3))
 
     if etc == 0:
         publishStepperMsg(steps,direction)
-        etc = 30 # 5 min
+        etc = 60 # 5 min if delay = 5 sec
 
 
-    print "steps " + str(steps)+ "dir " + str(direction)
-    print "etc " + str(etc)
-    print "target " + str(temperature_target)
-    print "model " + str(diff) + "indoor " + str(temperature_indoor) + "outdoor " + str(temperature_outdoor)
-    print "water out " + str(temperature_water_out)
+    #print "steps " + str(steps)+ "dir " + str(direction)
+    #print "etc " + str(etc)
+    #print "target " + str(temperature_target)
+    #print "model " + str(diff) + "indoor " + str(temperature_indoor) + "outdoor " + str(temperature_outdoor)
+    #print "water out " + str(temperature_water_out)
 
     out_msg = ioant.create_message("Temperature")
     out_msg.value = diff
@@ -85,7 +85,7 @@ def heater_model():
 
 def getTopicHash(topic):
     res = topic['top'] + topic['global'] + topic['local'] + topic['client_id'] + str(topic['message_type']) + str(topic['stream_index'])
-    print "subscribe to " + res
+    #print "subscribe to " + res
     tres = hash(res)
     tres = tres% 10**8
     return tres
