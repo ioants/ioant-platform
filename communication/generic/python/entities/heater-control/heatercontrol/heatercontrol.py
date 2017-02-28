@@ -1,6 +1,6 @@
 # =============================================
-# Adam Saxen
-# Date: 2017-02-26
+# Benny Saxen
+# Date: 2017-02-28
 #
 # =============================================
 from ioant.ioant import ioant as ioant_core
@@ -9,6 +9,8 @@ import hashlib
 logger = logging.getLogger(__name__)
 
 def publishStepperMsg(steps,direction):
+    if steps > 100:
+        return
     configuration = ioant.get_configuration()
     out_msg = ioant.create_message("RunStepperMotorRaw")
     out_msg.direction = direction
@@ -49,11 +51,12 @@ def heater_model():
         return
 
     diff = temperature_water_out - temperature_water_in
-    adjust = temperature_water_out - temperature_target
-    if adjust > 0:
-        direction = CLOCKWISE
+    #adjust = temperature_water_out - temperature_target
+    adjust = 33.0 - 0.7*temperature_outdoor - temperature_water_out
+    if adjust < 0:
+        direction = CLOCKWISE # decrease temperature
     else:
-        direction = COUNTERCLOCKWISE
+        direction = COUNTERCLOCKWISE # increase temperature
 
     steps = int(abs(adjust*4))
 
