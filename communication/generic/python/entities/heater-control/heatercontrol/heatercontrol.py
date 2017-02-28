@@ -1,6 +1,6 @@
 # =============================================
-# Adam Saxen
-# Date: 2017-02-26
+# Benny Saxen
+# Date: 2017-02-28
 #
 # =============================================
 from ioant.ioant import ioant as ioant_core
@@ -9,6 +9,10 @@ import hashlib
 logger = logging.getLogger(__name__)
 
 def publishStepperMsg(steps,direction):
+    print "ORDER steps to move: "+str(steps) + " dir:" + str(direction)
+    #return
+    if steps > 100:
+        return
     configuration = ioant.get_configuration()
     out_msg = ioant.create_message("RunStepperMotorRaw")
     out_msg.direction = direction
@@ -35,52 +39,55 @@ def heater_model():
     global temperature_smoke
     global temperature_target
 
-    if temperature_indoor == 999:
-        return
+    #if temperature_indoor == 999:
+    #    return
     if temperature_outdoor == 999:
         return
-    if temperature_water_in == 999:
-        return
+    #if temperature_water_in == 999:
+    #    return
     if temperature_water_out == 999:
         return
-    if temperature_smoke == 999:
-        return
-    if temperature_target == 999:
-        return
+    #if temperature_smoke == 999:
+    #    return
+    #if temperature_target == 999:
+    #    return
 
     diff = temperature_water_out - temperature_water_in
-    adjust = temperature_water_out - temperature_target
-    if adjust > 0:
-        direction = CLOCKWISE
+    #adjust = temperature_water_out - temperature_target
+    target = 33.0 - 0.7*temperature_outdoor
+    adjust = target - temperature_water_out
+    if adjust < 0:
+        direction = CLOCKWISE # decrease temperature
     else:
-        direction = COUNTERCLOCKWISE
+        direction = COUNTERCLOCKWISE # increase temperature
 
-    steps = int(abs(adjust*4))
+    steps = int(abs(adjust*6))
 
-    if etc == 0:
+    print "Target: " + str(target) + " Steps: " + str(steps) + " Dir: " + str(direction)
+    if etc == 0 and steps > 7:
         publishStepperMsg(steps,direction)
-        etc = 30 # 5 min
+        etc = 60 # 5 min if delay = 5 sec
 
 
-    print "steps " + str(steps)+ "dir " + str(direction)
+    #print "steps " + str(steps)+ "dir " + str(direction)
     print "etc " + str(etc)
-    print "target " + str(temperature_target)
-    print "model " + str(diff) + "indoor " + str(temperature_indoor) + "outdoor " + str(temperature_outdoor)
-    print "water out " + str(temperature_water_out)
+    #print "target " + str(temperature_target)
+    #print "model " + str(diff) + "indoor " + str(temperature_indoor) + "outdoor " + str(temperature_outdoor)
+    #print "water out " + str(temperature_water_out)
 
-    out_msg = ioant.create_message("Temperature")
-    out_msg.value = diff
-    topic = ioant.get_topic()
-    topic['top'] = 'live'
-    topic['global'] = configuration["ioant"]["mqtt"]["global"]
-    topic['local'] = configuration["ioant"]["mqtt"]["local"]
-    topic['client_id'] = configuration["ioant"]["mqtt"]["clientId"]
-    topic['stream_index'] = 1
-    ioant.publish(out_msg, topic)
+    #out_msg = ioant.create_message("Temperature")
+    #out_msg.value = diff
+    #topic = ioant.get_topic()
+    #topic['top'] = 'live'
+    #topic['global'] = configuration["ioant"]["mqtt"]["global"]
+    #topic['local'] = configuration["ioant"]["mqtt"]["local"]
+    #topic['client_id'] = configuration["ioant"]["mqtt"]["clientId"]
+    #topic['stream_index'] = 1
+    #ioant.publish(out_msg, topic)
 
 def getTopicHash(topic):
     res = topic['top'] + topic['global'] + topic['local'] + topic['client_id'] + str(topic['message_type']) + str(topic['stream_index'])
-    print "subscribe to " + res
+    #print "subscribe to " + res
     tres = hash(res)
     tres = tres% 10**8
     return tres
@@ -94,6 +101,7 @@ def subscribe_to_topic(par,msgt):
     topic['client_id'] = configuration["subscribe_topic"][par]["client_id"]
     topic['message_type'] = ioant.get_message_type(msgt)
     topic['stream_index'] = configuration["subscribe_topic"][par]["stream_index"]
+    print "Subscribe to: " + str(topic)
     ioant.subscribe(topic)
     shash = getTopicHash(topic)
     return shash
@@ -146,7 +154,7 @@ def on_message(topic, message):
     global temperature_target
 
     """ Message function. Handles recieved message from broker """
-    print "message received"
+    #print "message received"
     if topic["message_type"] == ioant.get_message_type("Trigger"):
         shash = getTopicHash(topic)
         if shash == hash_target:
@@ -186,13 +194,13 @@ def on_connect(rc):
 
     if rc == 0:
         # There is now a connection
-        hash_indoor    = subscribe_to_topic("indoor","Temperature")
+        hash_indoor    = 0 #subscribe_to_topic("indoor","Temperature")
         hash_outdoor   = subscribe_to_topic("outdoor","Temperature")
-        hash_water_in  = subscribe_to_topic("water_in","Temperature")
+        hash_water_in  = 0 #subscribe_to_topic("water_in","Temperature")
         hash_water_out = subscribe_to_topic("water_out","Temperature")
-        hash_smoke     = subscribe_to_topic("smoke","Temperature")
+        hash_smoke     = 0 #subscribe_to_topic("smoke","Temperature")
 
-        hash_target   = subscribe_to_topic("target","Trigger")
+        hash_target   = 0 #subscribe_to_topic("target","Trigger")
 
 # =============================================================================
 # Above this line are mandatory functions
