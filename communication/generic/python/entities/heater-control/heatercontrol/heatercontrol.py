@@ -61,10 +61,10 @@ def heater_model():
     else:
         direction = COUNTERCLOCKWISE # increase temperature
 
-    steps = int(abs(adjust*4))
+    steps = int(abs(adjust*6))
 
     print "Target: " + str(target) + " Steps: " + str(steps) + " Dir: " + str(direction)
-    if etc == 0:
+    if etc == 0 and steps > 10:
         publishStepperMsg(steps,direction)
         etc = 60 # 5 min if delay = 5 sec
 
