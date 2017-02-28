@@ -9,8 +9,8 @@ import hashlib
 logger = logging.getLogger(__name__)
 
 def publishStepperMsg(steps,direction):
-    print "steps to move: "+str(steps) + " dir:" + str(direction)
-    return
+    print "ORDER steps to move: "+str(steps) + " dir:" + str(direction)
+    #return
     if steps > 100:
         return
     configuration = ioant.get_configuration()
@@ -68,7 +68,7 @@ def heater_model():
 
 
     #print "steps " + str(steps)+ "dir " + str(direction)
-    #print "etc " + str(etc)
+    print "etc " + str(etc)
     #print "target " + str(temperature_target)
     #print "model " + str(diff) + "indoor " + str(temperature_indoor) + "outdoor " + str(temperature_outdoor)
     #print "water out " + str(temperature_water_out)
@@ -151,7 +151,7 @@ def on_message(topic, message):
     global temperature_target
 
     """ Message function. Handles recieved message from broker """
-    print "message received"
+    #print "message received"
     if topic["message_type"] == ioant.get_message_type("Trigger"):
         shash = getTopicHash(topic)
         if shash == hash_target:
