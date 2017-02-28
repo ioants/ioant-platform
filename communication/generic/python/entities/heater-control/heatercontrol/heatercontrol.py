@@ -73,15 +73,15 @@ def heater_model():
     #print "model " + str(diff) + "indoor " + str(temperature_indoor) + "outdoor " + str(temperature_outdoor)
     #print "water out " + str(temperature_water_out)
 
-    out_msg = ioant.create_message("Temperature")
-    out_msg.value = diff
-    topic = ioant.get_topic()
-    topic['top'] = 'live'
-    topic['global'] = configuration["ioant"]["mqtt"]["global"]
-    topic['local'] = configuration["ioant"]["mqtt"]["local"]
-    topic['client_id'] = configuration["ioant"]["mqtt"]["clientId"]
-    topic['stream_index'] = 1
-    ioant.publish(out_msg, topic)
+    #out_msg = ioant.create_message("Temperature")
+    #out_msg.value = diff
+    #topic = ioant.get_topic()
+    #topic['top'] = 'live'
+    #topic['global'] = configuration["ioant"]["mqtt"]["global"]
+    #topic['local'] = configuration["ioant"]["mqtt"]["local"]
+    #topic['client_id'] = configuration["ioant"]["mqtt"]["clientId"]
+    #topic['stream_index'] = 1
+    #ioant.publish(out_msg, topic)
 
 def getTopicHash(topic):
     res = topic['top'] + topic['global'] + topic['local'] + topic['client_id'] + str(topic['message_type']) + str(topic['stream_index'])
