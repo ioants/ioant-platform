@@ -54,14 +54,16 @@ def heater_model():
 
     diff = temperature_water_out - temperature_water_in
     #adjust = temperature_water_out - temperature_target
-    adjust = 33.0 - 0.7*temperature_outdoor - temperature_water_out
+    target = 33.0 - 0.7*temperature_outdoor
+    adjust = target - temperature_water_out
     if adjust < 0:
         direction = CLOCKWISE # decrease temperature
     else:
         direction = COUNTERCLOCKWISE # increase temperature
 
-    steps = int(abs(adjust*3))
+    steps = int(abs(adjust*4))
 
+    print "Target: " + target + " Steps: " + steps + " Dir: " + direction
     if etc == 0:
         publishStepperMsg(steps,direction)
         etc = 60 # 5 min if delay = 5 sec
