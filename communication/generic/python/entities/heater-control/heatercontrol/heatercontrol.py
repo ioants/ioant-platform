@@ -9,6 +9,8 @@ import hashlib
 logger = logging.getLogger(__name__)
 
 def publishStepperMsg(steps,direction):
+    print "steps to move: "+str(steps) + " dir:" + str(direction)
+    return
     if steps > 100:
         return
     configuration = ioant.get_configuration()
