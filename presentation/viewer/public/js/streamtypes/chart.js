@@ -30,6 +30,7 @@ function handleData(error, streamData) {
 
     // Produce chart if configuration exists
     if (streamConfig){
+        console.log("found settings lets load")
         renderCharts();
     }
 };
@@ -108,7 +109,7 @@ function renderCharts() {
 
     for (var key in chartsArray){
         chart = chartsArray[key];
-        generateData(chart, streamConfig.charts[key]);
+        generateData(chart, streamConfig.subcharts[key]);
         chart.render();
     }
 }
@@ -135,7 +136,6 @@ function findMaxMin(values){
 //  Desc: Initialize dc charts depending on configuration
 //=============================================================================
 function createCharts(){
-
     var w = window,
         d = document,
         e = d.documentElement,
@@ -144,8 +144,8 @@ function createCharts(){
         y = w.innerHeight|| e.clientHeight|| g.clientHeight;
 
     // Go through stream configurations
-    for (var key in streamConfig.charts){
-        chartConfig = streamConfig.charts[key]
+    for (var key in streamConfig.subcharts){
+        chartConfig = streamConfig.subcharts[key]
 
         if (chartConfig.type === "line"){
             if($("#line-chart"+key).length === 0){
@@ -173,7 +173,7 @@ function createCharts(){
                          .mouseZoomable(true)
                          .elasticY(false)
                          .elasticX(false)
-                         .yAxisLabel(streamConfig.charts[key].yLabel);
+                         .yAxisLabel(streamConfig.subcharts[key].yLabel);
 
         if (key == 0)
         {
@@ -197,7 +197,6 @@ function createCharts(){
 //  Desc: Define and assign data to chart
 //=============================================================================
 function generateData(chart, chartConfig){
-    console.log(chartConfig);
     var fieldOfInterest = chartConfig.fieldName;
     var crossfilter_origin = crossfilter(streamValues);
     var dimension_origin = crossfilter_origin.dimension(function (d) { return d.second });

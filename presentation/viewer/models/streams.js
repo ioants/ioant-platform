@@ -26,6 +26,9 @@ Loader.load('./configuration.json', 'configuration').then((config) => {
 
 function getImageOfMessageType(message_type) {
      switch(message_type) {
+        case Proto.enumerate("Configuration"):
+            return "/img/icons/nut-icon.png"
+            break;
         case Proto.enumerate("Temperature"):
             return "/img/icons/temperature.png"
             break;
@@ -42,10 +45,10 @@ function getImageOfMessageType(message_type) {
             return "/img/icons/map-pin-marked.png"
             break;
         case Proto.enumerate("RunStepperMotorRaw"):
-            return "/img/icons/nut-icon.png"
+            return "/img/icons/noun_526896_cc.png"
             break;
         case Proto.enumerate("RunStepperMotor"):
-            return "/img/icons/nut-icon.png"
+            return "/img/icons/noun_526896_cc.png"
             break;
         case Proto.enumerate("RunDcMotor"):
             return "/img/icons/noun_526896_cc.png"
@@ -58,6 +61,9 @@ function getImageOfMessageType(message_type) {
             break;
         case Proto.enumerate("Trigger"):
             return "/img/icons/bell-ringing.png"
+            break;
+        case Proto.enumerate("Illuminance"):
+            return "/img/icons/noun_172630_cc.png"
             break;
         default:
             return "/img/icons/layers-icon.png"

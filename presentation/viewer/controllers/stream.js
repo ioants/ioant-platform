@@ -14,7 +14,7 @@ router.get('/', function(req, res) {
                             }
                             else{
                                 Logger.log('info','Get stream configuration success!', {streamSettings: streamSettings});
-                                res.render('streamtypes/'+streamSettings.settingFound.template, {settings: streamSettings.settingFound});
+                                res.render('streamtypes/'+streamSettings.settingFound.presentationTemplate, {settings: streamSettings.settingFound});
                             }
                         });
 })
