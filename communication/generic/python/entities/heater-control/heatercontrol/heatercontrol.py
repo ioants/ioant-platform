@@ -99,6 +99,7 @@ def subscribe_to_topic(par,msgt):
     topic['client_id'] = configuration["subscribe_topic"][par]["client_id"]
     topic['message_type'] = ioant.get_message_type(msgt)
     topic['stream_index'] = configuration["subscribe_topic"][par]["stream_index"]
+    print "Subscribe to: " + str(topic)
     ioant.subscribe(topic)
     shash = getTopicHash(topic)
     return shash
@@ -191,13 +192,13 @@ def on_connect(rc):
 
     if rc == 0:
         # There is now a connection
-        #hash_indoor    = subscribe_to_topic("indoor","Temperature")
+        hash_indoor    = 0 #subscribe_to_topic("indoor","Temperature")
         hash_outdoor   = subscribe_to_topic("outdoor","Temperature")
-        #hash_water_in  = subscribe_to_topic("water_in","Temperature")
+        hash_water_in  = 0 #subscribe_to_topic("water_in","Temperature")
         hash_water_out = subscribe_to_topic("water_out","Temperature")
-        #hash_smoke     = subscribe_to_topic("smoke","Temperature")
+        hash_smoke     = 0 #subscribe_to_topic("smoke","Temperature")
 
-        #hash_target   = subscribe_to_topic("target","Trigger")
+        hash_target   = 0 #subscribe_to_topic("target","Trigger")
 
 # =============================================================================
 # Above this line are mandatory functions
