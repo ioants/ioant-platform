@@ -49,8 +49,8 @@ def heater_model():
         return
     if temperature_smoke == 999:
         return
-    if temperature_target == 999:
-        return
+    #if temperature_target == 999:
+    #    return
 
     diff = temperature_water_out - temperature_water_in
     #adjust = temperature_water_out - temperature_target
