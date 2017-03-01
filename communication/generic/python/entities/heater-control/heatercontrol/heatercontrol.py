@@ -51,10 +51,12 @@ def heater_model():
     #    return
     #if temperature_target == 999:
     #    return
-
-    diff = temperature_water_out - temperature_water_in
+    level = float(configuration["algorithm"]["level"])
+    coeff = float(configuration["algorithm"]["coeff"])
+    print "Algorithm: " + str(level) + " " + str(coeff)
+    #diff = temperature_water_out - temperature_water_in
     #adjust = temperature_water_out - temperature_target
-    target = 33.0 - 0.7*temperature_outdoor
+    target = level - coeff*temperature_outdoor
     adjust = target - temperature_water_out
     if adjust < 0:
         direction = CLOCKWISE # decrease temperature
