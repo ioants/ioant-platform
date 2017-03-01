@@ -67,7 +67,7 @@ def heater_model():
 
     print "Target: " + str(target) + " Steps: " + str(steps) + " Dir: " + str(direction)
     if etc == 0 and steps > 7:
-        publishStepperMsg(steps,direction)
+        #publishStepperMsg(steps,direction)
         etc = 60 # 5 min if delay = 5 sec
 
 
