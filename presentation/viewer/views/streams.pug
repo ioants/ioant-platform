@@ -16,7 +16,8 @@ block content
         #streamsTitle
             h1.
                 Streams
-        img(src="img/icons/performance-clock-speed.svg", class="filterIcons oldStreamsIcon" title="Hide old streams", data-isactive=1)
+        img(src="img/icons/performance-clock-speed.svg", class="filterIcons oldStreamsIcon" title="Show old streams", data-isactive=0, style="opacity:0.5")
+        img(src="img/icons/layers-icon.png", class="filterAllIcons" title="Filter all")
         each msg_type in message_type_list
             img(src=msg_type.image_type_url, class="filterIcons" title=msg_type.message_name, data-msgtype=msg_type.message_type, data-isactive=1)
     .stable
@@ -39,9 +40,11 @@ block content
 
         each stream in streamlist
             - var isOld = 1
-            if stream.ts_diff < 1
+            - var styleHidden = "display:none;"
+            if stream.ts_diff < 24
                 - isOld=0
-            .srow(class="type_"+stream.message_type, data-isOld=isOld)
+                - styleHidden = "display:table-row;"
+            .srow(data-msgtype=stream.message_type, data-isOld=isOld, style=styleHidden)
                 .scell(onclick="location.href='/stream?sid="+stream.sid+"&mid="+stream.message_type+"&startdate="+stream.latest_value_date+"';", style="cursor: pointer;")
                     img(src=stream.image_type_url, class="imageIcons" title=stream.message_name)
                 .scell(onclick="location.href='/stream?sid="+stream.sid+"&mid="+stream.message_type+"&startdate="+stream.latest_value_date+"';", style="cursor: pointer;")
@@ -58,7 +61,7 @@ block content
                 else
                     .scell(onclick="location.href='/stream?sid="+stream.sid+"&mid="+stream.message_type+"&startdate="+stream.latest_value_date+"';", style="cursor: pointer;")
                         | #{stream.latest_value}
-                if stream.ts_diff < 1
+                if stream.ts_diff < 24
                     .scell(onclick="location.href='/stream?sid="+stream.sid+"&mid="+stream.message_type+"&startdate="+stream.latest_value_date+"';", style="cursor: pointer;")
                         | #{stream.update_ts}
                 else

@@ -19,7 +19,8 @@ $(function() {
     loadDates();
     toAutoFit = $('#autofit').is(":checked");
     var start = moment($_GET('startdate')).subtract($('#viewnumberofdays').val(), "days");
-    var end = moment($_GET('startdate'));
+    var end = moment($_GET('startdate')).add(1,'days');
+
     deriveRange(start, end);
     loadData(start, end);
 });
@@ -110,6 +111,9 @@ function loadData(start, end){
                     +"&startdate="+start.format('YYYY-MM-DD')
                     +"&enddate="+end.format('YYYY-MM-DD')
                     +"&filter=" + filter;
+
+    console.log(start.format('YYYY-MM-DD'))
+    console.log(end.format('YYYY-MM-DD'))
 
     var rest_request_info = "/stream/getstreaminfo?streamid="+streamId;
     var rest_request_setting = "/streams/settings?streamid="+streamId+"&msgtype="+messageType;

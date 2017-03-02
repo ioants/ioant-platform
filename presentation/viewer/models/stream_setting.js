@@ -144,7 +144,6 @@ exports.get = function(streamId, messageType, cb) {
 };
 
 exports.save = function(req, cb) {
-    Logger.log('debug', 'Insert success! For stream id',{query : req.query})
     var documentToStore = populateDocument(req.query);
 
     var collection = db.get().collection(configuration.mongoDbServer.streamConfigurationCollectionName)

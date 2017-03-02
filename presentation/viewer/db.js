@@ -27,3 +27,7 @@ exports.close = function(done) {
     })
   }
 }
+
+exports.convertID = function(id) {
+  return new MongoClient.ObjectID(id);
+}

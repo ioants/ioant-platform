@@ -16,7 +16,7 @@ $('.filterIcons').click(function() {
             filterMessageType(selectedMessageType, true);
         }
         else{
-            $(this).attr('title', "Hide old streams");
+            $(this).attr('title', "Show old streams");
             filterOldStreams(true);
         }
     }
@@ -29,48 +29,78 @@ $('.filterIcons').click(function() {
             filterMessageType(selectedMessageType, false);
         }
         else{
-            $(this).attr('title', "Show old streams");
+            $(this).attr('title', "Hide old streams");
             filterOldStreams(false);
         }
     }
 });
 
+$('.filterAllIcons').click(function() {
+    var newStreams = $('.srow').filter(function() {
+                    if ($(this).attr('data-isold') !== undefined){
+                        return $(this);
+                    }
+                });
+    newStreams.css('display', 'none');
+
+    var filterIcons = $('.filterIcons').filter(function() {
+                    if ($(this).attr('data-msgtype') !== undefined){
+                        $(this).attr('data-isactive', 0);
+                        return $(this);
+                    }
+                });
+    filterIcons.css('opacity', '0.5');
+});
+
 
 function filterMessageType(message_type, hide){
 
+    var streamsOfCertainType = $('.srow').filter(function() {
+                    if ($(this).attr('data-msgtype') !== undefined && $(this).attr('data-msgtype') == message_type){
+                        if($('.oldStreamsIcon').attr('data-isactive') == 0 && $(this).attr('data-isold') == 1){
+
+                        }
+                        else{
+                            return $(this);
+                        }
+
+                    }
+                });
+
     if (hide){
-        $('.type_'+message_type).css('display', 'none');
+        streamsOfCertainType.css('display', 'none');
     }
-    else{
-        if($('.oldStreamsIcon').attr('data-isactive') == 0){
-            var newStreams = $('.srow').filter(function() {
-                            if ($(this).attr('data-isold') !== undefined && $(this).attr('data-isold') == 0){
-                                return $(this);
-                            }
-                        });
-            newStreams.css('display', 'table-row');
-        }
-        else{
-            $('.type_'+message_type).css('display', 'table-row');
-        }
+    else {
+        streamsOfCertainType.css('display', 'table-row')
     }
 }
 
 function filterOldStreams(hide){
-    var allStreamRows = $(".srow");
-    var oldStreams = $('.srow').filter(function() {
-                    if ($(this).attr('data-isold') !== undefined && $(this).attr('data-isold') == 1){
+
+
+    var filteredMessageTypesArray = [];
+    var filteredMessageTypes = $('.filterIcons').filter(function() {
+                    if ($(this).attr('data-msgtype') !== undefined && $(this).attr('data-isactive') == 0){
+                        filteredMessageTypesArray.push($(this).attr('data-msgtype'));
                         return $(this);
                     }
                 });
-    oldStreams.each(function( index ) {
-        if (hide){
-            $(this).css('display', 'none');
-        }
-        else{
-            $(this).css('display', 'table-row')
-        }
-    });
+
+    var oldStreams = $('.srow').filter(function() {
+                    if ($(this).attr('data-isold') !== undefined && $(this).attr('data-isold') == 1){
+                        if (hide){
+                            $(this).css('display', 'none');
+                        }
+                        else{
+                            // Only turn on streams of messag type that has not been filtered
+                            if (filteredMessageTypesArray.indexOf($(this).attr('data-msgtype')) == -1){
+                                $(this).css('display', 'table-row');
+                            }
+                        }
+
+                        return $(this);
+                    }
+                });
 
 }
 

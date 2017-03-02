@@ -8,6 +8,7 @@ var numberOfPoints;
 //  Desc: Will request data from stream given a specific timeframe (start, end)
 //=============================================================================
 function handleData(error, streamData) {
+
     streamValues = streamData[0];
     streamInfo = streamData[1];
     streamConfig = streamData[2].settingFound;
