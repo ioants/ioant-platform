@@ -64,7 +64,9 @@ class StreamsModel {
                                 })
                             }).catch(function(error){
                                 Logger.log('error', 'Failed to get stream list latest values.', {query:query});
-                                throw error;
+                                row.latest_value = 42;
+                                row.update_ts = moment().format("YYYY-MM-DD");
+                                resolve(row);
                             });
                 });
     };
