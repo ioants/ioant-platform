@@ -68,8 +68,8 @@ namespace ioant
                 longitude = 18.6435;
                 latitude = 60.1282;
                 app_generic_a = 0;
-                app_generic_b = -1;
-                app_generic_c = -1;
+                app_generic_b = 0;
+                app_generic_c = 0;
             };
         };
 
