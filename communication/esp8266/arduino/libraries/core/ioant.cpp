@@ -175,6 +175,7 @@ namespace ioant
         COM_MGR->GetCurrentConfiguration(current_configuration);
 
         BootInfoMessage boot_message;
+        boot_message.data.platform = BootInfo_Platforms_ESP8266 ;
         boot_message.data.information = (char*)reset_reason.c_str();
         boot_message.data.ip_address = (char*)ipadddrr.c_str();
         boot_message.data.proto_version = ProtoVersion_VERSION;

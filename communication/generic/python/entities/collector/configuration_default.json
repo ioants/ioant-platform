@@ -10,7 +10,11 @@
         	"port" : 1883
         },
         "communication_delay" : 1000,
-        "software_version" : "v0.1"
+        "latitude" : 0.0,
+        "longitude" : 0.0,
+        "app_generic_a" : 0,
+        "app_generic_b" : 0,
+        "app_generic_c" : 0
     },
     "mysqlDatabase" : {
         "host": "localhost",
