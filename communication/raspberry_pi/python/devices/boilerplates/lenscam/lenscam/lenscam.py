@@ -46,17 +46,15 @@ def on_message(topic, message):
     ioant.publish(msg, topic)
 
 
-def on_connect(rc):
-    """ On connect function. Called when attempting to connect to broker
-        param rc is the result code (0=success) """
-    if rc == 0:
-        configuration = ioant.get_configuration()
-        # There is now a connection
-        topic = ioant.get_topic()
-        topic['top'] = "live"
-        topic['global'] = configuration['topic']['global']
-        topic['local'] = configuration['topic']['local']
-        ioant.subscribe(topic)
+def on_connect():
+    """ On connect function. Called when connected to broker """
+    configuration = ioant.get_configuration()
+    # There is now a connection
+    topic = ioant.get_topic()
+    topic['top'] = "live"
+    topic['global'] = configuration['topic']['global']
+    topic['local'] = configuration['topic']['local']
+    ioant.subscribe(topic)
 
 # =============================================================================
 # Above this line are mandatory functions

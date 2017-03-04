@@ -63,14 +63,11 @@ def on_message(topic, message):
     db_helper.disconnect_from_mysql()
 
 
-def on_connect(rc):
-    """ On connect function. Called when attempting to connect to broker
-        param rc is the result code (0=success) """
-    if rc == 0:
-        # There is now a connection
-        topic = ioant.get_topic()
-        topic['top'] = "live"
-        ioant.subscribe(topic)
+def on_connect():
+    """ On connect function. Called when connected to broker """
+    topic = ioant.get_topic()
+    topic['top'] = "live"
+    ioant.subscribe(topic)
 
 # =============================================================================
 # Above this line are mandatory functions

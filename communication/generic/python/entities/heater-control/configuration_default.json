@@ -3,13 +3,14 @@
         "mqtt" : {
             "global" : "entityglobal",
             "local" : "entitylocal",
-            "clientId" : "heaterid",
+            "client_id" : "heaterid",
             "broker" : "thisIsYourBrokerDomainAddressOrIp",
             "user" : "hero",
             "password" : "test",
             "port" : 1883
         },
-        "communicationDelay" : 5000,
+        "communication_delay" : 5000,
+        "software_version" : "tbd"
     },
     "subscribe_topic" : {
         "target" : {
@@ -56,7 +57,7 @@
             "client_id" : "tbd",
             "stream_index" : 0
         }
-    }
+    },
     "algorithm" : {
         "level" : 33.0,
         "coeff" : 0.7

@@ -170,11 +170,22 @@ namespace ioant
     bool Ioant::PublishBootInfoMessage(){
         String reset_reason = ESP.getResetReason();
         String ipadddrr = COM_MGR->GetOwnIPAddress();
+
+        CommunicationManager::Configuration current_configuration;
+        COM_MGR->GetCurrentConfiguration(current_configuration);
+
         BootInfoMessage boot_message;
-        boot_message.data.reboot_reason = (char*)reset_reason.c_str();
-        boot_message.data.program_size = ESP.getSketchSize();
+        boot_message.data.information = (char*)reset_reason.c_str();
         boot_message.data.ip_address = (char*)ipadddrr.c_str();
         boot_message.data.proto_version = ProtoVersion_VERSION;
+        boot_message.data.broker_connect_attempts = COM_MGR->GetBrokerConnectionAttempts();
+        boot_message.data.latitude = current_configuration.latitude;
+        boot_message.data.longitude = current_configuration.longitude;
+        boot_message.data.app_generic_a = current_configuration.app_generic_a;
+        boot_message.data.app_generic_b = current_configuration.app_generic_b;
+        boot_message.data.app_generic_c = current_configuration.app_generic_c;
+        boot_message.data.communication_delay = current_configuration.communication_delay;
+        boot_message.data.sdk_version = (char*)SDK_VERSION.c_str();
 
         bool result = Publish(boot_message);
         WLOG_INFO  << "Publish boot!: " << result << " bytes: " << boot_message.GetMessageMeta().number_of_bytes;
@@ -246,7 +257,12 @@ namespace ioant
                     configuration.topic_global = msg.data.topic_global;
                     configuration.topic_local = msg.data.topic_local;
                     configuration.communication_delay = msg.data.communication_delay;
-                    configuration.application_generic = msg.data.application_generic;
+                    configuration.latitude = msg.data.latitude;
+                    configuration.longitude = msg.data.longitude;
+                    configuration.app_generic_a = msg.data.app_generic_a;
+                    configuration.app_generic_b = msg.data.app_generic_b;
+                    configuration.app_generic_c = msg.data.app_generic_c;
+
 
                     ULOG_DEBUG << "client_id: " << configuration.client_id ;
                     ULOG_DEBUG << "wifi_ssid: " << configuration.wifi_ssid ;
@@ -262,7 +278,11 @@ namespace ioant
                     ULOG_DEBUG << "topic_global: " << configuration.topic_global ;
                     ULOG_DEBUG << "topic_local: " << configuration.topic_local ;
                     ULOG_DEBUG << "communication_delay: " << configuration.communication_delay ;
-                    ULOG_DEBUG << "application_generic: " << configuration.application_generic ;
+                    ULOG_DEBUG << "latitude: " << configuration.latitude ;
+                    ULOG_DEBUG << "longitude: " << configuration.longitude ;
+                    ULOG_DEBUG << "app_generic_a: " << configuration.app_generic_a ;
+                    ULOG_DEBUG << "app_generic_b: " << configuration.app_generic_b ;
+                    ULOG_DEBUG << "app_generic_c: " << configuration.app_generic_c ;
                 }
                 else{
                     ULOG_ERROR << "Failed to decode configuration settings";
@@ -329,7 +349,11 @@ namespace ioant
         msg.data.topic_global = (char*)configuration.topic_global.c_str();
         msg.data.topic_local = (char*)configuration.topic_local.c_str();
         msg.data.communication_delay = configuration.communication_delay;
-        msg.data.application_generic = configuration.application_generic;
+        msg.data.latitude = configuration.latitude;
+        msg.data.longitude = configuration.longitude;
+        msg.data.app_generic_a = configuration.app_generic_a;
+        msg.data.app_generic_b = configuration.app_generic_b;
+        msg.data.app_generic_c = configuration.app_generic_c;
 
         msg.Encode();
 
@@ -405,8 +429,16 @@ namespace ioant
             msg->data.topic_local = (char*)loaded_configuration.topic_local.c_str();
         if (msg->data.communication_delay == 0)
             msg->data.communication_delay = loaded_configuration.communication_delay;
-        if (msg->data.application_generic < 0)
-            msg->data.communication_delay = loaded_configuration.communication_delay;
+        if (msg->data.latitude == 0.0f)
+            msg->data.latitude = loaded_configuration.latitude;
+        if (msg->data.longitude == 0.0f)
+            msg->data.longitude = loaded_configuration.longitude;
+        if (msg->data.app_generic_a == 0)
+            msg->data.app_generic_a = loaded_configuration.app_generic_a;
+        if (msg->data.app_generic_b == 0)
+            msg->data.app_generic_b = loaded_configuration.app_generic_b;
+        if (msg->data.app_generic_c == 0)
+            msg->data.app_generic_c = loaded_configuration.app_generic_c;
 
         ULOG_DEBUG << "wifi ssid after:" << msg->data.wifi_ssid;
         msg->Encode();

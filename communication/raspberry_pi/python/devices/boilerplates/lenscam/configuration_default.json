@@ -1,17 +1,19 @@
 {
     "ioant" : {
         "mqtt" : {
-            "clientId" : "lenscam",
+            "global" : "tbd",
+            "local" : "tbd",
+            "client_id" : "lenscam",
             "broker" : "thisIsYourBrokerDomainAddressOrIp",
             "user" : "hero",
             "password" : "test",
         	"port" : 1883
         },
-        "communicationDelay" : 1000
+        "communication_delay" : 1000
     },
     "topic" : {
-            "global" : "kil",
-            "local" : "kvv32"},
+            "global" : "tbd",
+            "local" : "tbd"},
     "ncis" : {
         "ncis_user" : "test",
         "ncis_url" : "test.com",

@@ -1,13 +1,16 @@
 {
     "ioant" : {
         "mqtt" : {
-            "clientId" : "collector",
+            "global" : "tbd",
+            "local" : "tbd",
+            "client_id" : "collector",
             "broker" : "brokerdomain.com",
             "user" : "hero",
             "password" : "test",
         	"port" : 1883
         },
-        "communicationDelay" : 1000
+        "communication_delay" : 1000,
+        "software_version" : "v0.1"
     },
     "mysqlDatabase" : {
         "host": "localhost",

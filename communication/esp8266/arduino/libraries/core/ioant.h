@@ -21,6 +21,7 @@
 
 namespace ioant
 {
+    const String SDK_VERSION = "0.1.0";
 
     void OnMessage(char* topic, byte* payload, unsigned int length);
 

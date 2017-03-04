@@ -184,9 +184,8 @@ def on_message(topic, message):
         print message.value
     #if "Temperature" == ioant.get_message_type_name(topic[message_type]):
 
-def on_connect(rc):
-    """ On connect function. Called when attempting to connect to broker
-        param rc is the result code (0=success) """
+def on_connect():
+    """ On connect function. Called when connected to broker """
     global hash_indoor
     global hash_outdoor
     global hash_water_in
@@ -194,15 +193,14 @@ def on_connect(rc):
     global hash_smoke
     global hash_target
 
-    if rc == 0:
-        # There is now a connection
-        hash_indoor    = 0 #subscribe_to_topic("indoor","Temperature")
-        hash_outdoor   = subscribe_to_topic("outdoor","Temperature")
-        hash_water_in  = 0 #subscribe_to_topic("water_in","Temperature")
-        hash_water_out = subscribe_to_topic("water_out","Temperature")
-        hash_smoke     = 0 #subscribe_to_topic("smoke","Temperature")
+    # There is now a connection
+    hash_indoor    = 0 #subscribe_to_topic("indoor","Temperature")
+    hash_outdoor   = subscribe_to_topic("outdoor","Temperature")
+    hash_water_in  = 0 #subscribe_to_topic("water_in","Temperature")
+    hash_water_out = subscribe_to_topic("water_out","Temperature")
+    hash_smoke     = 0 #subscribe_to_topic("smoke","Temperature")
 
-        hash_target   = 0 #subscribe_to_topic("target","Trigger")
+    hash_target   = 0 #subscribe_to_topic("target","Trigger")
 
 # =============================================================================
 # Above this line are mandatory functions

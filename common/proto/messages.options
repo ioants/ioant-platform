@@ -4,7 +4,8 @@
 #
 
 # BootInfo message
-BootInfo.reboot_reason type:FT_POINTER
+BootInfo.information type:FT_POINTER
+BootInfo.sdk_version type:FT_POINTER
 BootInfo.ip_address    type:FT_POINTER
 
 # Image message

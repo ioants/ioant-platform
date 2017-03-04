@@ -45,7 +45,11 @@ namespace ioant
             String topic_local;
             String client_id;
             int communication_delay;
-            int application_generic;
+            float longitude;
+            float latitude;
+            int app_generic_a;
+            int app_generic_b;
+            int app_generic_c;
             Configuration(){
                 wifi_ssid = "";
                 wifi_password= "";
@@ -61,7 +65,11 @@ namespace ioant
                 topic_local= "";
                 client_id= "";
                 communication_delay = 1000;
-                application_generic = 0;
+                longitude = 18.6435;
+                latitude = 60.1282;
+                app_generic_a = 0;
+                app_generic_b = -1;
+                app_generic_c = -1;
             };
         };
 
@@ -101,6 +109,10 @@ namespace ioant
         void SetMqttOnMessageCallback(void (*on_message)(char* topic, byte* payload, unsigned int length));
         void (*io_callback)(char* topic, byte* payload, unsigned int length);
 
+        uint16_t GetBrokerConnectionAttempts(){
+            return broker_connection_attempts_;
+        }
+
     private:
         CommunicationManager();
        ~CommunicationManager();
@@ -116,6 +128,7 @@ namespace ioant
         Configuration config_;
         bool silent_;
         bool configuration_updated_;
+        uint16_t broker_connection_attempts_;
     };
 
 }
