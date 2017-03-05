@@ -49,7 +49,7 @@ void setup(void){
     // ########################################################################
     CommunicationManager::Configuration loaded_configuration;
     IOANT->GetCurrentConfiguration(loaded_configuration);
-    electric_meter_pulses =  loaded_configuration.application_generic;
+    electric_meter_pulses =  loaded_configuration.app_generic_a;
     bounce_value = 36000./electric_meter_pulses; // based on max power = 100 000 Watt
 
     // Add additional set up code here
