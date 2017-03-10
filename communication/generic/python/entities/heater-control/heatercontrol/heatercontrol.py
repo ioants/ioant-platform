@@ -1,6 +1,6 @@
 # =============================================
 # Benny Saxen
-# Date: 2017-02-28
+# Date: 2017-03-10
 #
 # =============================================
 from ioant.ioant import ioant as ioant_core
@@ -39,6 +39,7 @@ def heater_model():
     global temperature_smoke
     global temperature_target
 
+    # If not all values present in the model - return
     #if temperature_indoor == 999:
     #    return
     if temperature_outdoor == 999:
@@ -47,12 +48,15 @@ def heater_model():
     #    return
     if temperature_water_out == 999:
         return
-    #if temperature_smoke == 999:
-    #    return
+    if temperature_smoke == 999:
+        return
     #if temperature_target == 999:
     #    return
     level = float(configuration["algorithm"]["level"])
     coeff = float(configuration["algorithm"]["coeff"])
+    minstep = float(configuration["algorithm"]["minstep"])
+    minsmoke = float(configuration["algorithm"]["minsmoke"])
+    inertia = float(configuration["algorithm"]["inertia"])
     print "Algorithm: " + str(level) + " " + str(coeff)
     #diff = temperature_water_out - temperature_water_in
     #adjust = temperature_water_out - temperature_target
@@ -66,9 +70,9 @@ def heater_model():
     steps = int(abs(adjust*6))
 
     print "Target: " + str(target) + " Steps: " + str(steps) + " Dir: " + str(direction)
-    if etc == 0 and steps > 7:
+    if etc == 0 and steps > minstep and temperature_smoke > minsmoke:
         publishStepperMsg(steps,direction)
-        etc = 60 # 5 min if delay = 5 sec
+        etc = inertia # 5 min if delay = 5 sec
 
 
     #print "steps " + str(steps)+ "dir " + str(direction)
@@ -198,14 +202,12 @@ def on_connect():
     hash_outdoor   = subscribe_to_topic("outdoor","Temperature")
     hash_water_in  = 0 #subscribe_to_topic("water_in","Temperature")
     hash_water_out = subscribe_to_topic("water_out","Temperature")
-    hash_smoke     = 0 #subscribe_to_topic("smoke","Temperature")
+    hash_smoke     = subscribe_to_topic("smoke","Temperature")
 
     hash_target   = 0 #subscribe_to_topic("target","Trigger")
 
 # =============================================================================
 # Above this line are mandatory functions
 # =============================================================================
-
-
 # Mandatory line
 ioant = ioant_core.Ioant(on_connect, on_message)
