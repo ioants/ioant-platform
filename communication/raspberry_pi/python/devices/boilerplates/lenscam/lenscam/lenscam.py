@@ -37,11 +37,12 @@ def on_message(topic, message):
     ncis_prefix = configuration['ncis']['ncis_prefix']
     ncis_user = configuration['ncis']['ncis_user']
 
-    os.system("scp {0} {1}@{2}{3}{4}.".format(ncis_image_name,
+    os.system("scp {0} {1}@{2}{3}{4}{5}.".format("temp.jpg",
                                               ncis_user,
                                               ncis_url,
                                               ncis_internal_path,
-                                              ncis_prefix))
+                                              ncis_prefix,
+                                              ncis_image_name))
 
     msg = ioant.create_message('Image')
     msg.reference_link = ncis_url + ncis_prefix + ncis_image_name
@@ -78,7 +79,7 @@ def take_picture(path):
     configuration = ioant.get_configuration()
     camera = PiCamera()
     camera.resolution = (configuration['resolution']['width'], configuration['resolution']['height'])
-    camera.capture(path+construct_filename())
+    camera.capture("temp.jpg")
     camera.close()
 
 # Mandatory line
