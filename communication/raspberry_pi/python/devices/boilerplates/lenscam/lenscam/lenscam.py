@@ -37,11 +37,11 @@ def on_message(topic, message):
     ncis_prefix = configuration['ncis']['ncis_prefix']
     ncis_user = configuration['ncis']['ncis_user']
 
-    os.system("scp {0} {1}@{2}{3}{4}{5}.".format("temp.jpg",
+    os.system("scp {0} {1}@{2}{3}{4}{5}".format("temp.jpg",
                                               ncis_user,
                                               ncis_url,
                                               ncis_internal_path,
-                                              ncis_prefix,
+                                              ncis_prefix,t
                                               ncis_image_name))
 
     msg = ioant.create_message('Image')
