@@ -8,6 +8,7 @@ from time import sleep
 import os
 from picamera import PiCamera
 import logging
+import datetime
 logger = logging.getLogger(__name__)
 
 
@@ -68,13 +69,15 @@ def construct_filename():
     filename_image = configuration['ioant']['mqtt']['global']  \
                      + "_" + configuration['ioant']['mqtt']['local']  \
                      + "_" + configuration['ioant']['mqtt']['client_id'] \
+                     + "_" + '{:%Y_%m_%d-%H_%M_%S}'.format(datetime.datetime.now())
                      + ".jpg"
     return filename_image
 
 
 def take_picture(path):
+    configuration = ioant.get_configuration()
     camera = PiCamera()
-    camera.resolution = (1024, 768)
+    camera.resolution = (configuration['resolution']['width'], configuration['resolution']['height'])
     camera.capture(path+construct_filename())
     camera.close()
 

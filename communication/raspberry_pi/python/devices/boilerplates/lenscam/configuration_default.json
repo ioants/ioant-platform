@@ -21,5 +21,9 @@
         "ncis_url" : "test.com",
         "ncis_internal_path" : ":/var/www/html",
         "ncis_prefix" : "/images/"
+    },
+    "resolution" : {
+        "width" : 1280,
+        "height" : 720
     }
 }
