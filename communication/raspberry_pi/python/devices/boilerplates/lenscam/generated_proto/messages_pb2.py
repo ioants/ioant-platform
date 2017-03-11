@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='messages.proto',
   package='',
   syntax='proto3',
-  serialized_pb=_b('\n\x0emessages.proto\"\xd2\x02\n\rConfiguration\x12\x11\n\tclient_id\x18\x01 \x01(\t\x12\x11\n\twifi_ssid\x18\x02 \x01(\t\x12\x15\n\rwifi_password\x18\x03 \x01(\t\x12\x12\n\nbroker_url\x18\x04 \x01(\t\x12\x13\n\x0b\x62roker_port\x18\x05 \x01(\r\x12\x13\n\x0b\x62roker_user\x18\x06 \x01(\t\x12\x17\n\x0f\x62roker_password\x18\x07 \x01(\t\x12\x0f\n\x07udp_url\x18\x08 \x01(\t\x12\x10\n\x08udp_port\x18\t \x01(\r\x12\x11\n\tlow_power\x18\n \x01(\x08\x12\x12\n\nstatus_led\x18\x0b \x01(\r\x12\x14\n\x0ctopic_global\x18\x0c \x01(\t\x12\x13\n\x0btopic_local\x18\r \x01(\t\x12\x1b\n\x13\x63ommunication_delay\x18\x0e \x01(\r\x12\x1b\n\x13\x61pplication_generic\x18\x0f \x01(\r\"q\n\x08\x42ootInfo\x12\x15\n\rreboot_reason\x18\x01 \x01(\t\x12\x14\n\x0cprogram_size\x18\x02 \x01(\r\x12\x12\n\nip_address\x18\x03 \x01(\t\x12$\n\rproto_version\x18\x04 \x01(\x0e\x32\r.ProtoVersion\"\x1f\n\x05Image\x12\x16\n\x0ereference_link\x18\x01 \x01(\t\"\x18\n\x07Trigger\x12\r\n\x05\x65xtra\x18\x01 \x01(\r\"b\n\x0bTemperature\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x1f\n\x04unit\x18\x02 \x01(\x0e\x32\x11.Temperature.Unit\"#\n\x04Unit\x12\x0b\n\x07\x43\x45LSIUS\x10\x00\x12\x0e\n\nFAHRENHEIT\x10\x01\"c\n\x08Humidity\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x1c\n\x04unit\x18\x02 \x01(\x0e\x32\x0e.Humidity.Unit\"*\n\x04Unit\x12\x14\n\x10RELATIVE_PROCENT\x10\x00\x12\x0c\n\x08\x41\x42SOLUTE\x10\x01\"\x85\x01\n\x04Mass\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x18\n\x04unit\x18\x02 \x01(\x0e\x32\n.Mass.Unit\"T\n\x04Unit\x12\r\n\tKILOGRAMS\x10\x00\x12\r\n\tHECTOGRAM\x10\x01\x12\t\n\x05GRAMS\x10\x02\x12\r\n\tMILLIGRAM\x10\x03\x12\t\n\x05POUND\x10\x04\x12\t\n\x05OUNCE\x10\x05\" \n\x0fPHconcentration\x12\r\n\x05value\x18\x01 \x01(\x02\"s\n\rElectricPower\x12\r\n\x05value\x18\x01 \x01(\x02\x12!\n\x04unit\x18\x02 \x01(\x0e\x32\x13.ElectricPower.Unit\x12\x0e\n\x06pulses\x18\x03 \x01(\x05\" \n\x04Unit\x12\t\n\x05WATTS\x10\x00\x12\r\n\tKILOWATTS\x10\x01\"\xf3\x01\n\x0eGpsCoordinates\x12\x11\n\tlongitude\x18\x01 \x01(\x02\x12,\n\x0elongitude_unit\x18\x02 \x01(\x0e\x32\x14.GpsCoordinates.Unit\x12\x10\n\x08latitude\x18\x03 \x01(\x02\x12+\n\rlatitude_unit\x18\x04 \x01(\x0e\x32\x14.GpsCoordinates.Unit\x12\x0f\n\x07height_\x18\x05 \x01(\x02\x12)\n\x0bheight_unit\x18\x06 \x01(\x0e\x32\x14.GpsCoordinates.Unit\"%\n\x04Unit\x12\x12\n\x0e\x44\x45\x43IMAL_DEGREE\x10\x00\x12\t\n\x05METER\x10\x01\"\x9b\x02\n\x12RunStepperMotorRaw\x12\x30\n\tdirection\x18\x01 \x01(\x0e\x32\x1d.RunStepperMotorRaw.Direction\x12\x1b\n\x13\x64\x65lay_between_steps\x18\x02 \x01(\x05\x12\x16\n\x0enumber_of_step\x18\x03 \x01(\x05\x12/\n\tstep_size\x18\x04 \x01(\x0e\x32\x1c.RunStepperMotorRaw.StepSize\"1\n\tDirection\x12\r\n\tCLOCKWISE\x10\x00\x12\x15\n\x11\x43OUNTER_CLOCKWISE\x10\x01\":\n\x08StepSize\x12\r\n\tFULL_STEP\x10\x00\x12\r\n\tHALF_STEP\x10\x01\x12\x10\n\x0cQUARTER_STEP\x10\x02\"\x8f\x01\n\x0fRunStepperMotor\x12-\n\tdirection\x18\x01 \x01(\x0e\x32\x1a.RunStepperMotor.Direction\x12\x0b\n\x03rpm\x18\x02 \x01(\x02\x12\r\n\x05\x61ngle\x18\x03 \x01(\x02\"1\n\tDirection\x12\r\n\tCLOCKWISE\x10\x00\x12\x15\n\x11\x43OUNTER_CLOCKWISE\x10\x01\"v\n\nRunDcMotor\x12(\n\tdirection\x18\x01 \x01(\x0e\x32\x15.RunDcMotor.Direction\x12\x0b\n\x03rpm\x18\x02 \x01(\x02\"1\n\tDirection\x12\r\n\tCLOCKWISE\x10\x00\x12\x15\n\x11\x43OUNTER_CLOCKWISE\x10\x01\"y\n\x13\x41tmosphericPressure\x12\r\n\x05value\x18\x01 \x01(\x02\x12\'\n\x04unit\x18\x02 \x01(\x0e\x32\x19.AtmosphericPressure.Unit\"*\n\x04Unit\x12\x06\n\x02PA\x10\x00\x12\x07\n\x03\x42\x41R\x10\x01\x12\x07\n\x03PSI\x10\x02\x12\x08\n\x04TORR\x10\x03\"N\n\x0bIlluminance\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x1f\n\x04unit\x18\x02 \x01(\x0e\x32\x11.Illuminance.Unit\"\x0f\n\x04Unit\x12\x07\n\x03LUX\x10\x00\"\x80\x01\n\x05\x41larm\x12\x0c\n\x04info\x18\x01 \x01(\t\x12!\n\x08severity\x18\x02 \x01(\x0e\x32\x0f.Alarm.Severity\"F\n\x08Severity\x12\n\n\x06LEVEL1\x10\x00\x12\n\n\x06LEVEL2\x10\x01\x12\n\n\x06LEVEL3\x10\x02\x12\n\n\x06LEVEL4\x10\x03\x12\n\n\x06LEVEL5\x10\x04\"\x17\n\x06Switch\x12\r\n\x05state\x18\x01 \x01(\x08*1\n\x0cProtoVersion\x12\x13\n\x0fVERSION_NOT_SET\x10\x00\x12\x0c\n\x07VERSION\x10\xfc\x07\x62\x06proto3')
+  serialized_pb=_b('\n\x0emessages.proto\"\x9f\x03\n\rConfiguration\x12\x11\n\tclient_id\x18\x01 \x01(\t\x12\x11\n\twifi_ssid\x18\x02 \x01(\t\x12\x15\n\rwifi_password\x18\x03 \x01(\t\x12\x12\n\nbroker_url\x18\x04 \x01(\t\x12\x13\n\x0b\x62roker_port\x18\x05 \x01(\r\x12\x13\n\x0b\x62roker_user\x18\x06 \x01(\t\x12\x17\n\x0f\x62roker_password\x18\x07 \x01(\t\x12\x0f\n\x07udp_url\x18\x08 \x01(\t\x12\x10\n\x08udp_port\x18\t \x01(\r\x12\x11\n\tlow_power\x18\n \x01(\x08\x12\x12\n\nstatus_led\x18\x0b \x01(\r\x12\x14\n\x0ctopic_global\x18\x0c \x01(\t\x12\x13\n\x0btopic_local\x18\r \x01(\t\x12\x1b\n\x13\x63ommunication_delay\x18\x0e \x01(\r\x12\x11\n\tlongitude\x18\x0f \x01(\x02\x12\x10\n\x08latitude\x18\x10 \x01(\x02\x12\x15\n\rapp_generic_a\x18\x11 \x01(\r\x12\x15\n\rapp_generic_b\x18\x12 \x01(\r\x12\x15\n\rapp_generic_c\x18\x13 \x01(\r\"\x81\x04\n\x08\x42ootInfo\x12%\n\x08platform\x18\x01 \x01(\x0e\x32\x13.BootInfo.Platforms\x12$\n\rproto_version\x18\x02 \x01(\x0e\x32\r.ProtoVersion\x12\x13\n\x0binformation\x18\x03 \x01(\t\x12\x12\n\nip_address\x18\x04 \x01(\t\x12\x13\n\x0bsdk_version\x18\x05 \x01(\t\x12\x1b\n\x13\x63ommunication_delay\x18\x06 \x01(\r\x12\x1f\n\x17\x62roker_connect_attempts\x18\x07 \x01(\r\x12\x11\n\tlongitude\x18\x08 \x01(\x02\x12\x10\n\x08latitude\x18\t \x01(\x02\x12\x15\n\rapp_generic_a\x18\n \x01(\r\x12\x15\n\rapp_generic_b\x18\x0b \x01(\r\x12\x15\n\rapp_generic_c\x18\x0c \x01(\r\"\xc1\x01\n\tPlatforms\x12\x0b\n\x07\x45SP8266\x10\x00\x12\t\n\x05\x45SP32\x10\x01\x12\x0e\n\nPC_WINDOWS\x10\x02\x12\x0c\n\x08PC_LINUX\x10\x03\x12\n\n\x06PC_MAC\x10\x04\x12\x15\n\x11RASPBERRY_PI_ZERO\x10\x05\x12\x12\n\x0eRASPBERRY_PI_1\x10\x06\x12\x12\n\x0eRASPBERRY_PI_2\x10\x07\x12\x12\n\x0eRASPBERRY_PI_3\x10\x08\x12\x0b\n\x07\x41NDROID\x10\t\x12\x07\n\x03IOS\x10\n\x12\t\n\x05OTHER\x10\x0b\"\x1f\n\x05Image\x12\x16\n\x0ereference_link\x18\x01 \x01(\t\"\x18\n\x07Trigger\x12\r\n\x05\x65xtra\x18\x01 \x01(\r\"b\n\x0bTemperature\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x1f\n\x04unit\x18\x02 \x01(\x0e\x32\x11.Temperature.Unit\"#\n\x04Unit\x12\x0b\n\x07\x43\x45LSIUS\x10\x00\x12\x0e\n\nFAHRENHEIT\x10\x01\"c\n\x08Humidity\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x1c\n\x04unit\x18\x02 \x01(\x0e\x32\x0e.Humidity.Unit\"*\n\x04Unit\x12\x14\n\x10RELATIVE_PROCENT\x10\x00\x12\x0c\n\x08\x41\x42SOLUTE\x10\x01\"\x85\x01\n\x04Mass\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x18\n\x04unit\x18\x02 \x01(\x0e\x32\n.Mass.Unit\"T\n\x04Unit\x12\r\n\tKILOGRAMS\x10\x00\x12\r\n\tHECTOGRAM\x10\x01\x12\t\n\x05GRAMS\x10\x02\x12\r\n\tMILLIGRAM\x10\x03\x12\t\n\x05POUND\x10\x04\x12\t\n\x05OUNCE\x10\x05\" \n\x0fPHconcentration\x12\r\n\x05value\x18\x01 \x01(\x02\"s\n\rElectricPower\x12\r\n\x05value\x18\x01 \x01(\x02\x12!\n\x04unit\x18\x02 \x01(\x0e\x32\x13.ElectricPower.Unit\x12\x0e\n\x06pulses\x18\x03 \x01(\x05\" \n\x04Unit\x12\t\n\x05WATTS\x10\x00\x12\r\n\tKILOWATTS\x10\x01\"\xf3\x01\n\x0eGpsCoordinates\x12\x11\n\tlongitude\x18\x01 \x01(\x02\x12,\n\x0elongitude_unit\x18\x02 \x01(\x0e\x32\x14.GpsCoordinates.Unit\x12\x10\n\x08latitude\x18\x03 \x01(\x02\x12+\n\rlatitude_unit\x18\x04 \x01(\x0e\x32\x14.GpsCoordinates.Unit\x12\x0f\n\x07height_\x18\x05 \x01(\x02\x12)\n\x0bheight_unit\x18\x06 \x01(\x0e\x32\x14.GpsCoordinates.Unit\"%\n\x04Unit\x12\x12\n\x0e\x44\x45\x43IMAL_DEGREE\x10\x00\x12\t\n\x05METER\x10\x01\"\x9b\x02\n\x12RunStepperMotorRaw\x12\x30\n\tdirection\x18\x01 \x01(\x0e\x32\x1d.RunStepperMotorRaw.Direction\x12\x1b\n\x13\x64\x65lay_between_steps\x18\x02 \x01(\x05\x12\x16\n\x0enumber_of_step\x18\x03 \x01(\x05\x12/\n\tstep_size\x18\x04 \x01(\x0e\x32\x1c.RunStepperMotorRaw.StepSize\"1\n\tDirection\x12\r\n\tCLOCKWISE\x10\x00\x12\x15\n\x11\x43OUNTER_CLOCKWISE\x10\x01\":\n\x08StepSize\x12\r\n\tFULL_STEP\x10\x00\x12\r\n\tHALF_STEP\x10\x01\x12\x10\n\x0cQUARTER_STEP\x10\x02\"\x8f\x01\n\x0fRunStepperMotor\x12-\n\tdirection\x18\x01 \x01(\x0e\x32\x1a.RunStepperMotor.Direction\x12\x0b\n\x03rpm\x18\x02 \x01(\x02\x12\r\n\x05\x61ngle\x18\x03 \x01(\x02\"1\n\tDirection\x12\r\n\tCLOCKWISE\x10\x00\x12\x15\n\x11\x43OUNTER_CLOCKWISE\x10\x01\"v\n\nRunDcMotor\x12(\n\tdirection\x18\x01 \x01(\x0e\x32\x15.RunDcMotor.Direction\x12\x0b\n\x03rpm\x18\x02 \x01(\x02\"1\n\tDirection\x12\r\n\tCLOCKWISE\x10\x00\x12\x15\n\x11\x43OUNTER_CLOCKWISE\x10\x01\"y\n\x13\x41tmosphericPressure\x12\r\n\x05value\x18\x01 \x01(\x02\x12\'\n\x04unit\x18\x02 \x01(\x0e\x32\x19.AtmosphericPressure.Unit\"*\n\x04Unit\x12\x06\n\x02PA\x10\x00\x12\x07\n\x03\x42\x41R\x10\x01\x12\x07\n\x03PSI\x10\x02\x12\x08\n\x04TORR\x10\x03\"N\n\x0bIlluminance\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x1f\n\x04unit\x18\x02 \x01(\x0e\x32\x11.Illuminance.Unit\"\x0f\n\x04Unit\x12\x07\n\x03LUX\x10\x00\"\x80\x01\n\x05\x41larm\x12\x0c\n\x04meta\x18\x01 \x01(\t\x12!\n\x08severity\x18\x02 \x01(\x0e\x32\x0f.Alarm.Severity\"F\n\x08Severity\x12\n\n\x06LEVEL1\x10\x00\x12\n\n\x06LEVEL2\x10\x01\x12\n\n\x06LEVEL3\x10\x02\x12\n\n\x06LEVEL4\x10\x03\x12\n\n\x06LEVEL5\x10\x04\"\x17\n\x06Switch\x12\r\n\x05state\x18\x01 \x01(\x08\"@\n\x03Raw\x12\x17\n\x0fsequence_number\x18\x01 \x01(\r\x12\x12\n\ntotal_size\x18\x02 \x01(\r\x12\x0c\n\x04\x64\x61ta\x18\x03 \x01(\x0c*1\n\x0cProtoVersion\x12\x13\n\x0fVERSION_NOT_SET\x10\x00\x12\x0c\n\x07VERSION\x10\xcc\x08\x62\x06proto3')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -35,21 +35,83 @@ _PROTOVERSION = _descriptor.EnumDescriptor(
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='VERSION', index=1, number=1020,
+      name='VERSION', index=1, number=1100,
       options=None,
       type=None),
   ],
   containing_type=None,
   options=None,
-  serialized_start=2178,
-  serialized_end=2227,
+  serialized_start=2722,
+  serialized_end=2771,
 )
 _sym_db.RegisterEnumDescriptor(_PROTOVERSION)
 
 ProtoVersion = enum_type_wrapper.EnumTypeWrapper(_PROTOVERSION)
 VERSION_NOT_SET = 0
-VERSION = 1020
+VERSION = 1100
 
+
+_BOOTINFO_PLATFORMS = _descriptor.EnumDescriptor(
+  name='Platforms',
+  full_name='BootInfo.Platforms',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='ESP8266', index=0, number=0,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='ESP32', index=1, number=1,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='PC_WINDOWS', index=2, number=2,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='PC_LINUX', index=3, number=3,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='PC_MAC', index=4, number=4,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='RASPBERRY_PI_ZERO', index=5, number=5,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='RASPBERRY_PI_1', index=6, number=6,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='RASPBERRY_PI_2', index=7, number=7,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='RASPBERRY_PI_3', index=8, number=8,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='ANDROID', index=9, number=9,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='IOS', index=10, number=10,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='OTHER', index=11, number=11,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=757,
+  serialized_end=950,
+)
+_sym_db.RegisterEnumDescriptor(_BOOTINFO_PLATFORMS)
 
 _TEMPERATURE_UNIT = _descriptor.EnumDescriptor(
   name='Unit',
@@ -68,8 +130,8 @@ _TEMPERATURE_UNIT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=596,
-  serialized_end=631,
+  serialized_start=1074,
+  serialized_end=1109,
 )
 _sym_db.RegisterEnumDescriptor(_TEMPERATURE_UNIT)
 
@@ -90,8 +152,8 @@ _HUMIDITY_UNIT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=690,
-  serialized_end=732,
+  serialized_start=1168,
+  serialized_end=1210,
 )
 _sym_db.RegisterEnumDescriptor(_HUMIDITY_UNIT)
 
@@ -128,8 +190,8 @@ _MASS_UNIT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=784,
-  serialized_end=868,
+  serialized_start=1262,
+  serialized_end=1346,
 )
 _sym_db.RegisterEnumDescriptor(_MASS_UNIT)
 
@@ -150,8 +212,8 @@ _ELECTRICPOWER_UNIT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=987,
-  serialized_end=1019,
+  serialized_start=1465,
+  serialized_end=1497,
 )
 _sym_db.RegisterEnumDescriptor(_ELECTRICPOWER_UNIT)
 
@@ -172,8 +234,8 @@ _GPSCOORDINATES_UNIT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1228,
-  serialized_end=1265,
+  serialized_start=1706,
+  serialized_end=1743,
 )
 _sym_db.RegisterEnumDescriptor(_GPSCOORDINATES_UNIT)
 
@@ -194,8 +256,8 @@ _RUNSTEPPERMOTORRAW_DIRECTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1442,
-  serialized_end=1491,
+  serialized_start=1920,
+  serialized_end=1969,
 )
 _sym_db.RegisterEnumDescriptor(_RUNSTEPPERMOTORRAW_DIRECTION)
 
@@ -220,8 +282,8 @@ _RUNSTEPPERMOTORRAW_STEPSIZE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1493,
-  serialized_end=1551,
+  serialized_start=1971,
+  serialized_end=2029,
 )
 _sym_db.RegisterEnumDescriptor(_RUNSTEPPERMOTORRAW_STEPSIZE)
 
@@ -242,8 +304,8 @@ _RUNSTEPPERMOTOR_DIRECTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1442,
-  serialized_end=1491,
+  serialized_start=1920,
+  serialized_end=1969,
 )
 _sym_db.RegisterEnumDescriptor(_RUNSTEPPERMOTOR_DIRECTION)
 
@@ -264,8 +326,8 @@ _RUNDCMOTOR_DIRECTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1442,
-  serialized_end=1491,
+  serialized_start=1920,
+  serialized_end=1969,
 )
 _sym_db.RegisterEnumDescriptor(_RUNDCMOTOR_DIRECTION)
 
@@ -294,8 +356,8 @@ _ATMOSPHERICPRESSURE_UNIT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1898,
-  serialized_end=1940,
+  serialized_start=2376,
+  serialized_end=2418,
 )
 _sym_db.RegisterEnumDescriptor(_ATMOSPHERICPRESSURE_UNIT)
 
@@ -312,8 +374,8 @@ _ILLUMINANCE_UNIT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2005,
-  serialized_end=2020,
+  serialized_start=2483,
+  serialized_end=2498,
 )
 _sym_db.RegisterEnumDescriptor(_ILLUMINANCE_UNIT)
 
@@ -346,8 +408,8 @@ _ALARM_SEVERITY = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2081,
-  serialized_end=2151,
+  serialized_start=2559,
+  serialized_end=2629,
 )
 _sym_db.RegisterEnumDescriptor(_ALARM_SEVERITY)
 
@@ -458,8 +520,36 @@ _CONFIGURATION = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='application_generic', full_name='Configuration.application_generic', index=14,
-      number=15, type=13, cpp_type=3, label=1,
+      name='longitude', full_name='Configuration.longitude', index=14,
+      number=15, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='latitude', full_name='Configuration.latitude', index=15,
+      number=16, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='app_generic_a', full_name='Configuration.app_generic_a', index=16,
+      number=17, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='app_generic_b', full_name='Configuration.app_generic_b', index=17,
+      number=18, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='app_generic_c', full_name='Configuration.app_generic_c', index=18,
+      number=19, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -477,7 +567,7 @@ _CONFIGURATION = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=19,
-  serialized_end=357,
+  serialized_end=434,
 )
 
 
@@ -489,29 +579,85 @@ _BOOTINFO = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='reboot_reason', full_name='BootInfo.reboot_reason', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='program_size', full_name='BootInfo.program_size', index=1,
-      number=2, type=13, cpp_type=3, label=1,
+      name='platform', full_name='BootInfo.platform', index=0,
+      number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='ip_address', full_name='BootInfo.ip_address', index=2,
+      name='proto_version', full_name='BootInfo.proto_version', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='information', full_name='BootInfo.information', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='proto_version', full_name='BootInfo.proto_version', index=3,
-      number=4, type=14, cpp_type=8, label=1,
+      name='ip_address', full_name='BootInfo.ip_address', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='sdk_version', full_name='BootInfo.sdk_version', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='communication_delay', full_name='BootInfo.communication_delay', index=5,
+      number=6, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='broker_connect_attempts', full_name='BootInfo.broker_connect_attempts', index=6,
+      number=7, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='longitude', full_name='BootInfo.longitude', index=7,
+      number=8, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='latitude', full_name='BootInfo.latitude', index=8,
+      number=9, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='app_generic_a', full_name='BootInfo.app_generic_a', index=9,
+      number=10, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='app_generic_b', full_name='BootInfo.app_generic_b', index=10,
+      number=11, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='app_generic_c', full_name='BootInfo.app_generic_c', index=11,
+      number=12, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -521,6 +667,7 @@ _BOOTINFO = _descriptor.Descriptor(
   ],
   nested_types=[],
   enum_types=[
+    _BOOTINFO_PLATFORMS,
   ],
   options=None,
   is_extendable=False,
@@ -528,8 +675,8 @@ _BOOTINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=359,
-  serialized_end=472,
+  serialized_start=437,
+  serialized_end=950,
 )
 
 
@@ -559,8 +706,8 @@ _IMAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=474,
-  serialized_end=505,
+  serialized_start=952,
+  serialized_end=983,
 )
 
 
@@ -590,8 +737,8 @@ _TRIGGER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=507,
-  serialized_end=531,
+  serialized_start=985,
+  serialized_end=1009,
 )
 
 
@@ -629,8 +776,8 @@ _TEMPERATURE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=533,
-  serialized_end=631,
+  serialized_start=1011,
+  serialized_end=1109,
 )
 
 
@@ -668,8 +815,8 @@ _HUMIDITY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=633,
-  serialized_end=732,
+  serialized_start=1111,
+  serialized_end=1210,
 )
 
 
@@ -707,8 +854,8 @@ _MASS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=735,
-  serialized_end=868,
+  serialized_start=1213,
+  serialized_end=1346,
 )
 
 
@@ -738,8 +885,8 @@ _PHCONCENTRATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=870,
-  serialized_end=902,
+  serialized_start=1348,
+  serialized_end=1380,
 )
 
 
@@ -784,8 +931,8 @@ _ELECTRICPOWER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=904,
-  serialized_end=1019,
+  serialized_start=1382,
+  serialized_end=1497,
 )
 
 
@@ -851,8 +998,8 @@ _GPSCOORDINATES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1022,
-  serialized_end=1265,
+  serialized_start=1500,
+  serialized_end=1743,
 )
 
 
@@ -905,8 +1052,8 @@ _RUNSTEPPERMOTORRAW = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1268,
-  serialized_end=1551,
+  serialized_start=1746,
+  serialized_end=2029,
 )
 
 
@@ -951,8 +1098,8 @@ _RUNSTEPPERMOTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1554,
-  serialized_end=1697,
+  serialized_start=2032,
+  serialized_end=2175,
 )
 
 
@@ -990,8 +1137,8 @@ _RUNDCMOTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1699,
-  serialized_end=1817,
+  serialized_start=2177,
+  serialized_end=2295,
 )
 
 
@@ -1029,8 +1176,8 @@ _ATMOSPHERICPRESSURE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1819,
-  serialized_end=1940,
+  serialized_start=2297,
+  serialized_end=2418,
 )
 
 
@@ -1068,8 +1215,8 @@ _ILLUMINANCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1942,
-  serialized_end=2020,
+  serialized_start=2420,
+  serialized_end=2498,
 )
 
 
@@ -1081,7 +1228,7 @@ _ALARM = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='info', full_name='Alarm.info', index=0,
+      name='meta', full_name='Alarm.meta', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -1107,8 +1254,8 @@ _ALARM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2023,
-  serialized_end=2151,
+  serialized_start=2501,
+  serialized_end=2629,
 )
 
 
@@ -1138,11 +1285,58 @@ _SWITCH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2153,
-  serialized_end=2176,
+  serialized_start=2631,
+  serialized_end=2654,
 )
 
+
+_RAW = _descriptor.Descriptor(
+  name='Raw',
+  full_name='Raw',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='sequence_number', full_name='Raw.sequence_number', index=0,
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='total_size', full_name='Raw.total_size', index=1,
+      number=2, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='data', full_name='Raw.data', index=2,
+      number=3, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b(""),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2656,
+  serialized_end=2720,
+)
+
+_BOOTINFO.fields_by_name['platform'].enum_type = _BOOTINFO_PLATFORMS
 _BOOTINFO.fields_by_name['proto_version'].enum_type = _PROTOVERSION
+_BOOTINFO_PLATFORMS.containing_type = _BOOTINFO
 _TEMPERATURE.fields_by_name['unit'].enum_type = _TEMPERATURE_UNIT
 _TEMPERATURE_UNIT.containing_type = _TEMPERATURE
 _HUMIDITY.fields_by_name['unit'].enum_type = _HUMIDITY_UNIT
@@ -1186,6 +1380,7 @@ DESCRIPTOR.message_types_by_name['AtmosphericPressure'] = _ATMOSPHERICPRESSURE
 DESCRIPTOR.message_types_by_name['Illuminance'] = _ILLUMINANCE
 DESCRIPTOR.message_types_by_name['Alarm'] = _ALARM
 DESCRIPTOR.message_types_by_name['Switch'] = _SWITCH
+DESCRIPTOR.message_types_by_name['Raw'] = _RAW
 DESCRIPTOR.enum_types_by_name['ProtoVersion'] = _PROTOVERSION
 
 Configuration = _reflection.GeneratedProtocolMessageType('Configuration', (_message.Message,), dict(
@@ -1306,6 +1501,13 @@ Switch = _reflection.GeneratedProtocolMessageType('Switch', (_message.Message,),
   # @@protoc_insertion_point(class_scope:Switch)
   ))
 _sym_db.RegisterMessage(Switch)
+
+Raw = _reflection.GeneratedProtocolMessageType('Raw', (_message.Message,), dict(
+  DESCRIPTOR = _RAW,
+  __module__ = 'messages_pb2'
+  # @@protoc_insertion_point(class_scope:Raw)
+  ))
+_sym_db.RegisterMessage(Raw)
 
 
 # @@protoc_insertion_point(module_scope)
