@@ -52,8 +52,8 @@ def on_connect():
     # There is now a connection
     topic = ioant.get_topic()
     topic['top'] = "live"
-    topic['global'] = configuration['topic']['global']
-    topic['local'] = configuration['topic']['local']
+    topic['global'] = configuration['ioant']['mqtt']['global']
+    topic['local'] = configuration['ioant']['mqtt']['local']
     ioant.subscribe(topic)
 
 # =============================================================================
@@ -63,9 +63,9 @@ def on_connect():
 
 def construct_filename():
     configuration = ioant.get_configuration()
-    filename_image = configuration['topic']['global'] \
-                     + "_" + configuration['topic']['local'] \
-                     + "_" + configuration['ioant']['mqtt']['clientId'] \
+    filename_image = configuration['ioant']['mqtt']['global']  \
+                     + "_" + configuration['ioant']['mqtt']['local']  \
+                     + "_" + configuration['ioant']['mqtt']['client_id'] \
                      + ".jpg"
     return filename_image
 

@@ -16,9 +16,6 @@
         "app_generic_b" : 0,
         "app_generic_c" : 0
     },
-    "topic" : {
-            "global" : "tbd",
-            "local" : "tbd"},
     "ncis" : {
         "ncis_user" : "test",
         "ncis_url" : "test.com",
