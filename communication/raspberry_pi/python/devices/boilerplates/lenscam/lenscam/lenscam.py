@@ -69,7 +69,7 @@ def construct_filename():
     filename_image = configuration['ioant']['mqtt']['global']  \
                      + "_" + configuration['ioant']['mqtt']['local']  \
                      + "_" + configuration['ioant']['mqtt']['client_id'] \
-                     + "_" + '{:%Y_%m_%d-%H_%M_%S}'.format(datetime.datetime.now())
+                     + "_" + '{:%Y_%m_%d-%H_%M_%S}'.format(datetime.datetime.now()) \
                      + ".jpg"
     return filename_image
 
