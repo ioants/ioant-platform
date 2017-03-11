@@ -25,6 +25,7 @@ def on_message(topic, message):
     """ Message function. Handles recieved message from broker """
     if topic['message_type'] is not ioant.get_message_type('Trigger'):
         logger.error("not a trigger message. Skipping..")
+        return None
 
     take_picture("")
     logger.info("Picture taken!")
@@ -54,6 +55,7 @@ def on_connect():
     topic['top'] = "live"
     topic['global'] = configuration['ioant']['mqtt']['global']
     topic['local'] = configuration['ioant']['mqtt']['local']
+    topic['client_id'] = configuration['ioant']['mqtt']['client_id']
     ioant.subscribe(topic)
 
 # =============================================================================
