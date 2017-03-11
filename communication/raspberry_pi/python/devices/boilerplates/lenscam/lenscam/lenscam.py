@@ -41,7 +41,7 @@ def on_message(topic, message):
                                               ncis_user,
                                               ncis_url,
                                               ncis_internal_path,
-                                              ncis_prefix,t
+                                              ncis_prefix, 
                                               ncis_image_name))
 
     msg = ioant.create_message('Image')
