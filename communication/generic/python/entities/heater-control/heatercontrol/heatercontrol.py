@@ -3,12 +3,12 @@
 # Date: 2017-03-10
 #
 # =============================================
-from ioant.sdk import IOant
+from ioant.sdk import IOAnt
 import logging
 import hashlib
 logger = logging.getLogger(__name__)
 
-def publishStepperMsg(steps,direction):
+def publishStepperMsg(steps, direction):
     print "ORDER steps to move: "+str(steps) + " dir:" + str(direction)
     #return
     if steps > 100:
@@ -18,7 +18,7 @@ def publishStepperMsg(steps,direction):
     out_msg.direction = direction
     out_msg.delay_between_steps = 5
     out_msg.number_of_step = steps
-    out_msg.step_size = 0 #FULL_STEP
+    out_msg.step_size = out_msg.StepSize.Value("FULL_STEP")
     topic = ioant.get_topic_structure()
     topic['top'] = 'live'
     topic['global'] = configuration["publish_topic"]["stepper"]["global"]
@@ -71,7 +71,7 @@ def heater_model():
 
     print "Target: " + str(target) + " Steps: " + str(steps) + " Dir: " + str(direction)
     if etc == 0 and steps > minstep and temperature_smoke > minsmoke:
-        publishStepperMsg(steps,direction)
+        publishStepperMsg(steps, direction)
         etc = inertia # 5 min if delay = 5 sec
 
 
@@ -209,4 +209,4 @@ def on_connect():
 # Above this line are mandatory functions
 # =============================================================================
 # Mandatory line
-ioant = IOant(on_connect, on_message)
+ioant = IOAnt(on_connect, on_message)
