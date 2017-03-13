@@ -3,7 +3,7 @@
 # Date: 2017-02-19
 # Descriptio: Collector Entity - stores messages to MYSQL
 # =============================================
-from ioant.ioant import ioant as ioant_core
+from ioant.sdk import IOAnt
 from ioant_mysqlhelper.db import db
 from time import sleep
 import os
@@ -35,8 +35,7 @@ def setup(configuration, schema):
 
 def loop():
     """ Loop function takes care of regular logic"""
-    while True:
-        ioant.update_loop()
+    ioant.update_loop()
 
 
 def on_message(topic, message):
@@ -65,7 +64,7 @@ def on_message(topic, message):
 
 def on_connect():
     """ On connect function. Called when connected to broker """
-    topic = ioant.get_topic()
+    topic = ioant.get_topic_structure()
     topic['top'] = "live"
     ioant.subscribe(topic)
 
@@ -102,4 +101,4 @@ def create_stream_table(message, sid):
 
 
 # Mandatory line
-ioant = ioant_core.Ioant(on_connect, on_message)
+ioant = IOAnt(on_connect, on_message)
