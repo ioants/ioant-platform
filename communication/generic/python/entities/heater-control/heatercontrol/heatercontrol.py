@@ -19,7 +19,7 @@ def publishStepperMsg(steps,direction):
     out_msg.delay_between_steps = 5
     out_msg.number_of_step = steps
     out_msg.step_size = 0 #FULL_STEP
-    topic = ioant.get_topic()
+    topic = ioant.get_topic_structure()
     topic['top'] = 'live'
     topic['global'] = configuration["publish_topic"]["stepper"]["global"]
     topic['local'] = configuration["publish_topic"]["stepper"]["local"]
@@ -100,7 +100,7 @@ def getTopicHash(topic):
 
 def subscribe_to_topic(par,msgt):
     configuration = ioant.get_configuration()
-    topic = ioant.get_topic()
+    topic = ioant.get_topic_structure()
     topic['top'] = 'live'
     topic['global'] = configuration["subscribe_topic"][par]["global"]
     topic['local'] = configuration["subscribe_topic"][par]["local"]
