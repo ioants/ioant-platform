@@ -30,5 +30,6 @@ if __name__ == "__main__":
                                                    'configuration.json')
     configuration = utils.fetch_json_file_as_dict(configuration_path)
     control.setup(configuration)
-    control.loop()
+    while True:
+        control.loop()
     sys.exit()

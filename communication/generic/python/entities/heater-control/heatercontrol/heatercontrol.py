@@ -136,12 +136,11 @@ def setup(configuration):
 def loop():
     """ Loop function """
     global etc
-    while True:
-        ioant.update_loop()
-        if etc > 0:
-            etc -= 1
+    ioant.update_loop()
+    if etc > 0:
+        etc -= 1
 
-        heater_model()
+    heater_model()
 
 
 def on_message(topic, message):
