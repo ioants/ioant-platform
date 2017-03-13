@@ -1,7 +1,7 @@
 ///
 /// @file   main.cpp
 /// @Author Benny Saxen
-/// @date   2017-02-24
+/// @date   2017-03-13
 /// @brief  NILM
 ///
 
@@ -83,13 +83,14 @@ void on_message(Ioant::Topic received_topic, ProtoIO* message){
 // Always stored in RAM
 void ICACHE_RAM_ATTR measure(){
     digitalWrite(led_pin,HIGH);
-    ttemp = t2;
+    ttemp = t1;
     t2 = t1;
     t1 = millis();
     dt = t1 - t2;
     if (dt < bounce_value)
     {
-        t2 = ttemp;
+        t1 = ttemp;
+        digitalWrite(led_pin,LOW);
         return;
     }
     elpow = 3600.*1000.*1000./(electric_meter_pulses*dt);
