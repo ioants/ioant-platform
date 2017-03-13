@@ -3,7 +3,7 @@
 # Date: 2017-03-10
 #
 # =============================================
-from ioant.ioant import ioant as ioant_core
+from ioant.sdk import IOant
 import logging
 import hashlib
 logger = logging.getLogger(__name__)
@@ -209,4 +209,4 @@ def on_connect():
 # Above this line are mandatory functions
 # =============================================================================
 # Mandatory line
-ioant = ioant_core.Ioant(on_connect, on_message)
+ioant = IOant(on_connect, on_message)
