@@ -1,6 +1,6 @@
 import heatercontrol.heatercontrol as control
 import sys
-from ioant.utils import utils
+import ioant.utils as utils
 import os
 import logging
 
