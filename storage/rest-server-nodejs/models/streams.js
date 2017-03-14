@@ -83,7 +83,8 @@ class StreamsModel {
         Logger.log('debug', 'Stream list query:', {query:query});
         return this.db.queryAsync(query).then((rows) =>{
             var actions = rows.map((row) => {
-                return this.getLatestData(row)});
+                return this.getLatestData(row)
+            });
             return Promise.all(actions);
         }).catch(function(error){
             Logger.log('error', 'Failed to get stream list.', {error:error});

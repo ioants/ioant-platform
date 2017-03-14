@@ -2,11 +2,47 @@ extend default
 
 
 block content
-    link(rel='stylesheet', href='/css/analytics.css')
+    link(rel="stylesheet", type="text/css" href="/lib/css/magnific-popup.css")
+    #analyticsBox(class="white-popup mfp-hide")
+        .form-nab
+            h2="Add analytics"
+            form(id="analyticsForm", method="get")
+                #analyticFields
+                #selectedStreams
+                br
+                br
+                input(type="submit", value="Save analytic")
+        #streamList
+
     h1.
         Analytics
-    img(src="img/icons/layers-icon.png", class="addAnalytic" title="Add analytic")
+    a(href="#analyticsBox", class="addAnalyticLink")
+        img(src="img/icons/noun_860135_cc.png", class="addAnalyticImage", title="Add analytic" style="cursor: pointer;")
 
+    .stable
+        .srow.header
+            .scell.
+                Name
+            .scell.
+                Message types
+            .scell.
+                Number of Streams
+
+        each analytic in analytics
+            .srow
+                .scell(onclick="", style="cursor: pointer;")
+                    |#{analytic.name}
+                .scell(onclick="", style="cursor: pointer;")
+                    | asd
+                .scell(onclick="", style="cursor: pointer;")
+                    | 2
 
     script(type="text/javascript", src="/lib/js/jquery.magnific-popup.min.js")
+    script(type="text/javascript", src="/js/utils.js")
     script(type="text/javascript", src="/js/analytics.js")
+
+    script.
+        $('.addAnalyticLink').magnificPopup({
+              type:'inline',
+              midClick: true
+        });

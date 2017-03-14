@@ -14,3 +14,5 @@ function $_GET(param) {
     }
     return vars;
 }
+
+// Used when automating form generation

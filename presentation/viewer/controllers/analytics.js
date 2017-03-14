@@ -16,13 +16,20 @@ router.get('/', function(req, res) {
   })
 })
 
+router.get('/structure', function(req, res) {
+  Analytics.getStructure(req, function(err, structure) {
+     res.json(structure);
+  })
+})
+
 router.get('/add', function(req, res) {
-  Analytics.add(function(err, analytics) {
-      if (typeof analytics !== 'undefined' ){
-          res.render('analytics', {});
+  Analytics.add(req, function(err, analytics) {
+      if (!err) {
+          res.json(true);
       }
-      else{
-          res.render('notimplemented', {});
+      else {
+          Logger.log('error','Failed to save analytic');
+          res.json(false);
       }
   })
 })
