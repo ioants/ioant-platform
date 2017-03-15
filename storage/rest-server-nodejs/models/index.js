@@ -87,8 +87,8 @@ exports.getStreamList = function(res) {
         streamsModel.getStreamList().then(function(result) {
                    res.json(result);
                }).catch(function(error){
-                Logger.log('error', 'Failed to get stream list ModelIndex.');
-                res.status(500).send('Query failed');
+                Logger.log('error', 'Failed to get stream list (index.js).');
+                res.status(500).send('Query failed: getStreamList');
             });
     });
 }

@@ -44,8 +44,10 @@ class StreamsModel {
                     return new Promise((resolve, reject) =>{
                         resolve(latest_value_field);
                     });
-                })
-                .then(latest_value_field => {
+                }).catch((error) => {
+                    Logger.log('error', 'Failed to retreive proto definition for message_type:', {msg_type:row[column_message_type]});
+                    throw error;
+                }).then(latest_value_field => {
                     let query = `SELECT ts, ${latest_value_field} AS latestvalue from ${table_prefix}${row[column_sid_name]}_${row[column_message_name]} ORDER BY ts DESC LIMIT 1`;
                     Logger.log('debug', 'Latest value query:', {query:query});
                     return this.db.queryAsync(query)
@@ -57,16 +59,18 @@ class StreamsModel {
                                     }
                                     else {
                                         // No latest value found, but stream exists
-                                        row.latest_value = 42;
+                                        row.latest_value = "N/D";
                                         row.update_ts = moment().format("YYYY-MM-DD");
                                     }
                                     resolve(row);
                                 })
-                            }).catch(function(error){
+                            }).catch((error) => {
                                 Logger.log('error', 'Failed to get stream list latest values.', {query:query});
-                                row.latest_value = 42;
+                                row.latest_value = "N/D";
                                 row.update_ts = moment().format("YYYY-MM-DD");
-                                resolve(row);
+                                return new Promise(function (resolve, reject){
+                                    resolve(row);
+                                });
                             });
                 });
     };

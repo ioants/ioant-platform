@@ -7,6 +7,7 @@
     "copy-proto": "cp ../../common/proto/messages.proto proto/.",
     "start": "nodejs restserver.js",
     "build": "npm run copy-proto",
+    "watch": "npm run copy-proto && npm run start",
     "debug": "NODE_ENV=development && nodejs restserver.js"
   },
   "author": "Adam Saxén",
