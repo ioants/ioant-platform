@@ -6,6 +6,7 @@
 from ioant.sdk import IOAnt
 import logging
 import hashlib
+import math
 logger = logging.getLogger(__name__)
 
 def publishStepperMsg(steps, direction):
@@ -52,22 +53,25 @@ def heater_model():
         return
     #if temperature_target == 999:
     #    return
-    level = float(configuration["algorithm"]["level"])
-    coeff = float(configuration["algorithm"]["coeff"])
+    c1 = float(configuration["algorithm"]["c1"])
+    c2 = float(configuration["algorithm"]["c2"])
+    c3 = float(configuration["algorithm"]["c3"])
+    c4 = float(configuration["algorithm"]["c4"])
     minstep = float(configuration["algorithm"]["minstep"])
     minsmoke = float(configuration["algorithm"]["minsmoke"])
     inertia = float(configuration["algorithm"]["inertia"])
     print "Algorithm: " + str(level) + " " + str(coeff)
     #diff = temperature_water_out - temperature_water_in
     #adjust = temperature_water_out - temperature_target
-    target = level - coeff*temperature_outdoor
+    #target = level - coeff*temperature_outdoor
+    target = c1 + c2*(1-1/(1+math.exp(-temperature_outdoor/c3)))
     adjust = target - temperature_water_out
     if adjust < 0:
         direction = CLOCKWISE # decrease temperature
     else:
         direction = COUNTERCLOCKWISE # increase temperature
 
-    steps = int(abs(adjust*6))
+    steps = int(abs(adjust*c4))
 
     print "Target: " + str(target) + " Steps: " + str(steps) + " Dir: " + str(direction)
     if etc == 0 and steps > minstep and temperature_smoke > minsmoke:

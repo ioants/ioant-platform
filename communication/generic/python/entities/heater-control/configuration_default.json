@@ -63,8 +63,10 @@
         }
     },
     "algorithm" : {
-        "level" : 33.0,
-        "coeff" : 0.7,
+        "c1" : 20.0,
+        "c2" : 30.0,
+        "c3" : 3.0,
+        "c4" : 6,
         "minstep" : 5,
         "minsmoke" : 27.0,
         "inertia" : 60
