@@ -35,12 +35,14 @@ router.get('/add', function(req, res) {
 })
 
 router.get('/delete', function(req, res) {
-    Analytics.delete(function(err, analytics) {
-        if (typeof analytics !== 'undefined' ){
-            res.render('analytics', {});
+    Analytics.delete(req, function(err, result) {
+        if (!err) {
+            Logger.log('info','Success in removing analytic', {id:req.query.id});
+            res.json(true);
         }
-        else{
-            res.render('notimplemented', {});
+        else {
+            Logger.log('error','Failed to remove analytic', {id:req.query.id});
+            res.json(false);
         }
     })
 })

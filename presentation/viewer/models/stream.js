@@ -36,7 +36,7 @@ exports.get = function(sid, startdate, enddate, filter, cb) {
         for (var key in streamData){
             delete streamData[key]['id'];
         }
-        cb(error, response, streamData);
+        cb(error, response, {streamId: sid, streamData:streamData});
      });
 }
 
@@ -45,7 +45,7 @@ exports.getInfo = function(streamId, cb) {
     request_options.uri += '/id/'+streamId;
     request(request_options, function(error, response, streamInfo){
           var streamInformation = streamInfo[0];
-          Logger.log('debug', 'stream information retrieved:',{streamInformation:streamInfo[0]});
+          Logger.log('debug', 'stream information retreived:',{streamInformation:streamInfo[0]});
           if(!error){
               Proto.getProtoMessage(streamInformation.message_type).then((message) =>{
                   let fields = Object.keys(message.fields);
@@ -78,6 +78,7 @@ exports.getInfo = function(streamId, cb) {
 
 
 exports.getDates = function(sid, cb) {
+    Logger.log('info', 'getDates model', {sid:sid})
     request_stream_options.qs = {'streamid': sid}
     var request_options = Object.assign({}, request_stream_options);
     request_options.uri += '/id/'+sid+'/dates';

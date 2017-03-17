@@ -5,10 +5,10 @@
   "scripts": {
     "test": "NODE_ENV=test ./node_modules/.bin/mocha --reporter spec",
     "copy-proto": "cp ../../common/proto/messages.proto proto/.",
-    "start": "nodejs restserver.js",
+    "start": "node restserver.js",
     "build": "npm run copy-proto",
     "watch": "npm run copy-proto && npm run start",
-    "debug": "NODE_ENV=development && nodejs restserver.js"
+    "debug": "NODE_ENV=development && node restserver.js"
   },
   "author": "Adam Saxén",
   "license": "MIT",

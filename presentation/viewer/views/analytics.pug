@@ -20,22 +20,29 @@ block content
         img(src="img/icons/noun_860135_cc.png", class="addAnalyticImage", title="Add analytic" style="cursor: pointer;")
 
     .stable
-        .srow.header
+        .srow.header.green
             .scell.
                 Name
             .scell.
-                Message types
-            .scell.
                 Number of Streams
+            .scell.
+                Message types
+            .scell
+
 
         each analytic in analytics
             .srow
-                .scell(onclick="", style="cursor: pointer;")
+                .scell(onclick="location.href='/analytic?aid="+analytic._id+"'", style="cursor: pointer;")
                     |#{analytic.name}
-                .scell(onclick="", style="cursor: pointer;")
-                    | asd
-                .scell(onclick="", style="cursor: pointer;")
-                    | 2
+                .scell(onclick="location.href='/analytic?aid="+analytic._id+"'", style="cursor: pointer;")
+                    | #{analytic.number_of_streams}
+                .scell(onclick="location.href='/analytic?aid="+analytic._id+"'", style="cursor: pointer;")
+                    each stream in analytic.streams
+                        img(src=stream.icon_ref, class="analyticTypeIcons")
+                .scell(style="cursor: pointer;")
+                    a(class="removeAnalytic" data-id=analytic._id)
+                        img(src="/img/icons/noun_30090_cc.png", class="removeAnalyticIcon")
+
 
     script(type="text/javascript", src="/lib/js/jquery.magnific-popup.min.js")
     script(type="text/javascript", src="/js/utils.js")
