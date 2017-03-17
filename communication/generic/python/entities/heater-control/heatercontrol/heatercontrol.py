@@ -101,6 +101,12 @@ def heater_model():
     #target = c1 + c2*(1-1/(1+math.exp(-temperature_outdoor/c3)))
     #adjust = target - temperature_water_out
 
+    if temperature_outdoor > 10:
+        temperature_outdoor = 10
+
+    if temperature_outdoor < -20:
+        temperature_outdoor = -20
+
     n = 0
     prev_x = 0
     for x in mc:
