@@ -9,6 +9,30 @@ import hashlib
 import math
 logger = logging.getLogger(__name__)
 
+def read_shunt_position():
+    try:
+        f = open("shunt_position.work",'r')
+        pos = int(f.read())
+        f.close()
+    except:
+        print("WARNING Create shunt position file")
+        f = open("shunt_position.work",'w')
+        s = str(0)
+        f.write(s)
+        f.close()
+        pos = 0
+    return pos
+
+def write_shunt_position(pos):
+    try:
+        f = open("shunt_position.work",'w')
+        s = str(int(pos))
+        f.write(s)
+        f.close()
+    except:
+        print "ERROR write to shunt position file"
+    return
+
 def publishStepperMsg(steps, direction):
     print "ORDER steps to move: "+str(steps) + " dir:" + str(direction)
     #return
@@ -32,6 +56,7 @@ def heater_model():
     CLOCKWISE = 0
     COUNTERCLOCKWISE = 1
     global etc
+    global current_shunt_position
     configuration = ioant.get_configuration()
     global temperature_indoor
     global temperature_outdoor
@@ -39,6 +64,7 @@ def heater_model():
     global temperature_water_out
     global temperature_smoke
     global temperature_target
+
 
     # If not all values present in the model - return
     #if temperature_indoor == 999:
@@ -53,51 +79,62 @@ def heater_model():
         return
     #if temperature_target == 999:
     #    return
-    c1 = float(configuration["algorithm"]["c1"])
-    c2 = float(configuration["algorithm"]["c2"])
-    c3 = float(configuration["algorithm"]["c3"])
-    c4 = float(configuration["algorithm"]["c4"])
-    minstep = float(configuration["algorithm"]["minstep"])
+    mc = []
+    mc.append(float(configuration["algorithm"]["c0"]))
+    mc.append(float(configuration["algorithm"]["c1"]))
+    mc.append(float(configuration["algorithm"]["c2"]))
+    mc.append(float(configuration["algorithm"]["c3"]))
+    mc.append(float(configuration["algorithm"]["c4"]))
+    mc.append(float(configuration["algorithm"]["c5"]))
+    mc.append(float(configuration["algorithm"]["c6"]))
+    mc.append(float(configuration["algorithm"]["c7"]))
+    mc.append(float(configuration["algorithm"]["c8"]))
+    mc.append(float(configuration["algorithm"]["c9"]))
+
+    minstep  = float(configuration["algorithm"]["minstep"])
     minsmoke = float(configuration["algorithm"]["minsmoke"])
-    inertia = float(configuration["algorithm"]["inertia"])
-    print "Algorithm: " + str(level) + " " + str(coeff)
+    inertia  = float(configuration["algorithm"]["inertia"])
+    #print "Algorithm: " + str(level) + " " + str(coeff)
     #diff = temperature_water_out - temperature_water_in
     #adjust = temperature_water_out - temperature_target
     #target = level - coeff*temperature_outdoor
-    target = c1 + c2*(1-1/(1+math.exp(-temperature_outdoor/c3)))
-    adjust = target - temperature_water_out
+    #target = c1 + c2*(1-1/(1+math.exp(-temperature_outdoor/c3)))
+    #adjust = target - temperature_water_out
+
+    n = 0
+    prev_x = 0
+    for x in mc:
+        if(temperature_outdoor > x):
+            delta = 10*(temperature_outdoor - prev_x)/(x - prev_x)
+            new_shunt_position  = (n-1)*10 + delta
+            break
+        else:
+            n = n + 1
+            prev_x = x
+            print x
+
+    #print "xxxx " + str(new_shunt_position)
+
+    adjust = new_shunt_position - current_shunt_position
     if adjust < 0:
         direction = CLOCKWISE # decrease temperature
     else:
         direction = COUNTERCLOCKWISE # increase temperature
 
-    steps = int(abs(adjust*c4))
+    steps = int(abs(adjust*3)) # 3 steps = 0.1 unit of 1-10 scale
 
-    print "Target: " + str(target) + " Steps: " + str(steps) + " Dir: " + str(direction)
+    print "New Shunt Position: " + str(new_shunt_position) + " Steps: " + str(steps) + " Dir: " + str(direction)
+    print "Current shunt position " + str(current_shunt_position)
     if etc == 0 and steps > minstep and temperature_smoke > minsmoke:
+        current_shunt_position = round(new_shunt_position,0)
+        write_shunt_position(current_shunt_position)
         publishStepperMsg(steps, direction)
         etc = inertia # 5 min if delay = 5 sec
 
-
-    #print "steps " + str(steps)+ "dir " + str(direction)
     print "etc " + str(etc)
-    #print "target " + str(temperature_target)
-    #print "model " + str(diff) + "indoor " + str(temperature_indoor) + "outdoor " + str(temperature_outdoor)
-    #print "water out " + str(temperature_water_out)
-
-    #out_msg = ioant.create_message("Temperature")
-    #out_msg.value = diff
-    #topic = ioant.get_topic()
-    #topic['top'] = 'live'
-    #topic['global'] = configuration["ioant"]["mqtt"]["global"]
-    #topic['local'] = configuration["ioant"]["mqtt"]["local"]
-    #topic['client_id'] = configuration["ioant"]["mqtt"]["clientId"]
-    #topic['stream_index'] = 1
-    #ioant.publish(out_msg, topic)
 
 def getTopicHash(topic):
     res = topic['top'] + topic['global'] + topic['local'] + topic['client_id'] + str(topic['message_type']) + str(topic['stream_index'])
-    #print "subscribe to " + res
     tres = hash(res)
     tres = tres% 10**8
     return tres
@@ -120,6 +157,9 @@ def subscribe_to_topic(par,msgt):
 def setup(configuration):
     """ setup function """
     global etc
+    global current_shunt_position
+    current_shunt_position = read_shunt_position()
+    print "Initial shunt position: " + str(current_shunt_position)
     etc = 0
     global temperature_indoor
     global temperature_outdoor
