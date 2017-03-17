@@ -1,4 +1,5 @@
-var MongoClient = require('mongodb').MongoClient
+var mongodb = require('mongodb');
+var MongoClient = mongodb.MongoClient;
 
 var state = {
   db: null,
@@ -29,5 +30,5 @@ exports.close = function(done) {
 }
 
 exports.convertID = function(id) {
-  return new MongoClient.ObjectID(id);
+   return new mongodb.ObjectID(id);
 }

@@ -9,7 +9,7 @@ var numberOfPoints;
 //=============================================================================
 function handleData(error, streamData) {
 
-    streamValues = streamData[0];
+    streamValues = streamData[0].streamData;
     streamInfo = streamData[1];
     streamConfig = streamData[2].settingFound;
     if (streamValues == false){
