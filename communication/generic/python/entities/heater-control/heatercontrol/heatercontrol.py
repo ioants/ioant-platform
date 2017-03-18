@@ -34,16 +34,30 @@ def write_shunt_position(pos):
     return
 
 def publishStepperMsg(steps, direction):
+    global current_shunt_position
     print "ORDER steps to move: "+str(steps) + " dir:" + str(direction)
     #return
     if steps > 100:
         return
     configuration = ioant.get_configuration()
+
+    # Prepare and publish RunStepperMotorRaw
     out_msg = ioant.create_message("RunStepperMotorRaw")
     out_msg.direction = direction
     out_msg.delay_between_steps = 5
     out_msg.number_of_step = steps
     out_msg.step_size = out_msg.StepSize.Value("FULL_STEP")
+    topic = ioant.get_topic_structure()
+    topic['top'] = 'live'
+    topic['global'] = configuration["publish_topic"]["stepper"]["global"]
+    topic['local'] = configuration["publish_topic"]["stepper"]["local"]
+    topic['client_id'] = configuration["publish_topic"]["stepper"]["client_id"]
+    topic['stream_index'] = 0
+    ioant.publish(out_msg, topic)
+
+    # Prepare and publish Raw
+    out_msg = ioant.create_message("Trigger")
+    out_msg.extra = current_shunt_position
     topic = ioant.get_topic_structure()
     topic['top'] = 'live'
     topic['global'] = configuration["publish_topic"]["stepper"]["global"]
