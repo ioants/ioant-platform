@@ -5,16 +5,17 @@
 /// @brief  Boiler plate application for running stepper motor
 ///
 
-#include <core.h>
+#include <ioant.h>
 using namespace ioant;
 /// @brief on_message() function
 /// Function definition for handling received MQTT messages
 ///
 /// @param received_topic contains the complete topic structure
-/// @param payload contains the contents of the message received
-/// @param length the number of bytes received
+/// @param message is the proto message recieved
 ///
-void on_message(Core::Topic received_topic, ProtoIO* message);
+/// Proto message is casted to appropriate message
+///
+void on_message(Ioant::Topic received_topic, ProtoIO* message);
 
 // ############################################################################
 // Everything above this line is mandatory
@@ -72,7 +73,7 @@ void stepCCW(int steps,int dd)
 
 void setup(void){
     //Initialize
-    Core::GetInstance(on_message);
+    Ioant::GetInstance(on_message);
     pinMode(DIR,OUTPUT);
     pinMode(STEP,OUTPUT);
     pinMode(SLEEP,OUTPUT);
@@ -87,7 +88,7 @@ void setup(void){
     //Possible settings are (MS1/MS2) : full step (0,0), half step (1,0), 1/4 step (0,1), and 1/8 step (1,1)
 
     //Subscribe stepper commands
-    Core::Topic subscribe_topic = IOANT->GetConfiguredTopic();
+    Ioant::Topic subscribe_topic = IOANT->GetConfiguredTopic();
     subscribe_topic.message_type = ProtoIO::MessageTypes::RUNSTEPPERMOTORRAW;
     IOANT->Subscribe(subscribe_topic);
 }
@@ -98,7 +99,7 @@ void loop(void){
 }
 
 // Function for handling received MQTT messages
-void on_message(Core::Topic received_topic, ProtoIO* message){
+void on_message(Ioant::Topic received_topic, ProtoIO* message){
 
     if (received_topic.message_type == ProtoIO::MessageTypes::RUNSTEPPERMOTORRAW)
     {

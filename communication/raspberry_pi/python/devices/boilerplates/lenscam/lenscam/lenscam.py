@@ -1,102 +1,86 @@
-import paho.mqtt.client as mqtt
-import time
-import datetime
-import sys
-import os
-import generated_proto.messages_pb2 as messages_pb2
-import generated_proto.proto_io as ProtoIO
-from ioant.utils import utils
-from google.protobuf.message import Message
-from google.protobuf.descriptor import FieldDescriptor
-
-# Specific to raspberry
+# =============================================
+# Adam Saxen
+# Date: 2017-02-19
+# Descriptio: application for running a picamera
+# =============================================
+from ioant.ioant import ioant as ioant_core
 from time import sleep
+import os
 from picamera import PiCamera
+import logging
+import datetime
+logger = logging.getLogger(__name__)
+
+
+def setup(configuration):
+    ioant.setup(configuration)
+
+
+def loop():
+    """ Loop function takes care of regular logic"""
+    while True:
+        ioant.update_loop()
+
+
+def on_message(topic, message):
+    """ Message function. Handles recieved message from broker """
+    if topic['message_type'] is not ioant.get_message_type('Trigger'):
+        logger.error("not a trigger message. Skipping..")
+        return None
+
+    take_picture("")
+    logger.info("Picture taken!")
+    configuration = ioant.get_configuration()
+    ncis_image_name = construct_filename()
+    ncis_url = configuration['ncis']['ncis_url']
+    ncis_internal_path = configuration['ncis']['ncis_internal_path']
+    ncis_prefix = configuration['ncis']['ncis_prefix']
+    ncis_user = configuration['ncis']['ncis_user']
+
+    os.system("scp {0} {1}@{2}{3}{4}{5}".format("temp.jpg",
+                                              ncis_user,
+                                              ncis_url,
+                                              ncis_internal_path,
+                                              ncis_prefix, 
+                                              ncis_image_name))
+
+    msg = ioant.create_message('Image')
+    msg.reference_link = ncis_url + ncis_prefix + ncis_image_name
+    ioant.publish(msg, topic)
+
+
+def on_connect():
+    """ On connect function. Called when connected to broker """
+    configuration = ioant.get_configuration()
+    # There is now a connection
+    topic = ioant.get_topic()
+    topic['top'] = "live"
+    topic['global'] = configuration['ioant']['mqtt']['global']
+    topic['local'] = configuration['ioant']['mqtt']['local']
+    topic['client_id'] = configuration['ioant']['mqtt']['client_id']
+    ioant.subscribe(topic)
+
+# =============================================================================
+# Above this line are mandatory functions
+# =============================================================================
 
 
 def construct_filename():
-    filename_image = configurations['mqtt']['topic']['global'] \
-                     + "_" + configurations['mqtt']['topic']['local'] \
-                     + "_" + configurations['mqtt']['clientId'] \
+    configuration = ioant.get_configuration()
+    filename_image = configuration['ioant']['mqtt']['global']  \
+                     + "_" + configuration['ioant']['mqtt']['local']  \
+                     + "_" + configuration['ioant']['mqtt']['client_id'] \
+                     + "_" + '{:%Y_%m_%d-%H_%M_%S}'.format(datetime.datetime.now()) \
                      + ".jpg"
     return filename_image
 
 
 def take_picture(path):
+    configuration = ioant.get_configuration()
     camera = PiCamera()
-    camera.resolution = (1024, 768)
-    camera.capture(path+construct_filename())
+    camera.resolution = (configuration['resolution']['width'], configuration['resolution']['height'])
+    camera.capture("temp.jpg")
     camera.close()
 
-
-def mqtt_on_connect(client, userdata, rc):
-    print("[info] Connected with result code "+str(rc))
-    topic = "live/"+configurations['mqtt']['topic']['global']+"/"+configurations['mqtt']['topic']['local']+"/#"
-    print "[info] Subscribed to topic:" + topic
-    client.subscribe(topic)
-
-
-def mqtt_on_message(client, userdata, msg):
-    print "Processing message"
-    process_message(client, msg.payload, msg.topic)
-
-
-def process_message(client,payload, topic):
-    topic_dict = utils.topic_to_dict(topic)
-    if topic_dict is None:
-        print "Topic invalid"
-        return
-    elif topic_dict['message_type'] is not ProtoIO.message_type_index_dict.get('Trigger'):
-        print "[error] not a trigger message. Skipping.."
-        return
-
-    take_picture("")
-    print "Picture taken!"
-
-    ncis_image_name = construct_filename()
-    ncis_url = configurations['ncis']['ncis_url']
-    ncis_internal_path = configurations['ncis']['ncis_internal_path']
-    ncis_prefix = configurations['ncis']['ncis_prefix']
-    ncis_user = configurations['ncis']['ncis_user']
-
-    os.system("scp {0} {1}@{2}{3}{4}.".format(ncis_image_name,
-                                              ncis_user,
-                                              ncis_url,
-                                              ncis_internal_path,
-                                              ncis_prefix))
-
-    msg = messages_pb2.Image()
-    msg.reference_link = ncis_url + ncis_prefix + ncis_image_name
-
-    payload = msg.SerializeToString()
-    msg_type = str(ProtoIO.message_type_index_dict.get('Image'))
-    pub_topic = "image/"+configurations['mqtt']['topic']['global']+"/"+configurations['mqtt']['topic']['local']+"/"+configurations['mqtt']['clientId']+"/"+msg_type+"/0"
-    (result, mid) = client.publish(pub_topic, bytearray(payload))
-
-    if result is not 0:
-        print "Publish failed " + msg.reference_link
-
-
-def initiate_mqtt_client(broker, port):
-    mqtt_client = mqtt.Client()
-    mqtt_client.on_connect = mqtt_on_connect
-    mqtt_client.on_message = mqtt_on_message
-    mqtt_client.connect(broker, port, 60)
-    return mqtt_client
-
-
-def loop_mqtt_client(client):
-    while True:
-        rc = client.loop()
-        if rc is not 0:
-            print "[info] No connection!"
-            time.sleep(2)
-            client.reconnect()
-
-
-def initiate_client(broker, port, configuration_dict):
-
-    global configurations
-    configurations = configuration_dict
-    client = initiate_mqtt_client(broker, port)
-    return client
+# Mandatory line
+ioant = ioant_core.Ioant(on_connect, on_message)

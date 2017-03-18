@@ -10,17 +10,19 @@ var streamConfig
 var chartsArray = [];
 var currentRange = [];
 var streamTableId = "#streamTable";
+var toAutoFit;
 
 //=============================================================================
 //  On load of template
 //=============================================================================
 $(function() {
-    var latestValueDate = $_GET('startdate')
-    $('#aggregate').hide();
-    $('#aggregatelabel').hide();
-    start = moment(latestValueDate);
-    deriveRange(start, start);
-    loadData(start, start);
+    loadDates();
+    toAutoFit = $('#autofit').is(":checked");
+    var start = moment($_GET('startdate')).subtract($('#viewnumberofdays').val(), "days");
+    var end = moment($_GET('startdate')).add(1,'days');
+
+    deriveRange(start, end);
+    loadData(start, end);
 });
 
 function deriveRange(start, end){
@@ -40,32 +42,58 @@ function deriveRange(start, end){
 
 // Trigger on value changed
 $('#filter').change(function(){
+    toAutoFit = $('#autofit').is(":checked");
     start =  moment(currentRange[0]);
     end = moment(currentRange[1]);
     loadData(start, end);
 });
 
 // Trigger on checkbox changed
-$('#aggregate').change(function(){
-    //toAggregate = $('#aggregate').is(":checked");
-    //renderCharts();
-    $('#aggregate').hide();
-});
-
-// Trigger on daterange changed
-$('input[name="daterange"]').daterangepicker(
-{
-    locale: {
-      format: 'YYYY-MM-DD'
-    },
-    startDate: $_GET('startdate'),
-    endDate: $_GET('startdate')
-},
-
-function(start, end, label) {
-    deriveRange(start, end);
+$('#autofit').change(function(){
+    toAutoFit = $('#autofit').is(":checked");
+    start =  moment(currentRange[0]);
+    end = moment(currentRange[1]);
     loadData(start, end);
 });
+
+
+//=============================================================================
+//  loadDates function
+//  Desc: Will request unique dates of a certain data stream
+//=============================================================================
+function loadDates(){
+    var rest_request_dates = "/stream/getstreamdates?streamid="+streamId;
+    queue()
+        .defer(d3.json, rest_request_dates)
+        .awaitAll(loadDateRangePicker);
+}
+
+
+function loadDateRangePicker(error, streamDates){
+    var valid_dates =  streamDates[0];
+    $('input[name="daterange"]').daterangepicker(
+    {
+        locale: {
+          format: 'YYYY-MM-DD'
+        },
+        startDate: moment($_GET('startdate')).subtract($('#viewnumberofdays').val(), "days").format('YYYY-MM-DD'),
+        endDate: moment($_GET('startdate')).format('YYYY-MM-DD'),
+        isInvalidDate: function(date) {
+            if ( valid_dates.indexOf(date.format('YYYY-MM-DD')) == -1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    },
+
+    function(start, end, label) {
+        toAutoFit = $('#autofit').is(":checked");
+        deriveRange(start, end);
+        loadData(start, end);
+    });
+
+}
 
 
 //=============================================================================
@@ -73,7 +101,6 @@ function(start, end, label) {
 //  Desc: Will request data from stream given a specific timeframe (start, end)
 //=============================================================================
 function loadData(start, end){
-    console.log("datareq")
     var filter = $('#filter').val();
     if ($.isNumeric(filter) == false){
         filter = 1;
@@ -84,6 +111,9 @@ function loadData(start, end){
                     +"&startdate="+start.format('YYYY-MM-DD')
                     +"&enddate="+end.format('YYYY-MM-DD')
                     +"&filter=" + filter;
+
+    console.log(start.format('YYYY-MM-DD'))
+    console.log(end.format('YYYY-MM-DD'))
 
     var rest_request_info = "/stream/getstreaminfo?streamid="+streamId;
     var rest_request_setting = "/streams/settings?streamid="+streamId+"&msgtype="+messageType;

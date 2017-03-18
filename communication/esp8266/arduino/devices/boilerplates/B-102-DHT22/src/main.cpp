@@ -5,7 +5,7 @@
 /// @brief  Boiler plate for DHT22 sensor, measuring humidity and temperature
 ///
 
-#include <core.h>
+#include <ioant.h>
 
 using namespace ioant;
 /// @brief on_message() function
@@ -16,7 +16,7 @@ using namespace ioant;
 ///
 /// Proto message is casted to appropriate message
 ///
-void on_message(Core::Topic received_topic, ProtoIO* message);
+void on_message(Ioant::Topic received_topic, ProtoIO* message);
 
 // ############################################################################
 // Everything above this line is mandatory
@@ -29,12 +29,12 @@ void on_message(Core::Topic received_topic, ProtoIO* message);
 /// END OF - Custom function definitions
 
 ///. CUSTOM variables
-DHT dht(2, DHT22);
+DHT dht(5, DHT22);
 
 /// END OF - CUSTOM variables
 
 void setup(void){
-    Core::GetInstance(on_message);
+    Ioant::GetInstance(on_message);
     // ########################################################################
     //    Now he basics all set up. Send logs to your computer either
     //    over Serial or WifiManager.
@@ -71,6 +71,6 @@ void loop(void){
 }
 
 // Function for handling received MQTT messages
-void on_message(Core::Topic received_topic, ProtoIO* message){
+void on_message(Ioant::Topic received_topic, ProtoIO* message){
     WLOG_DEBUG << "Message received! topic:" << received_topic.global  << " message type:" << received_topic.message_type ;
 }

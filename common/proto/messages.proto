@@ -1,9 +1,9 @@
 // messages.proto
 syntax = "proto3";
 
-enum ProtoVersion{
+enum ProtoVersion {
     VERSION_NOT_SET = 0;
-    VERSION = 1020;
+    VERSION = 1100;
 }
 
 // Message types below - Please note! Order is important
@@ -22,14 +22,40 @@ message Configuration {
     string topic_global = 12;
     string topic_local = 13;
     uint32 communication_delay = 14;
-    uint32 application_generic = 15;
+    float longitude = 15;
+    float latitude = 16;
+    uint32 app_generic_a = 17;
+    uint32 app_generic_b = 18;
+    uint32 app_generic_c = 19;
 }
 
 message BootInfo {
-    string reboot_reason = 1;
-    uint32 program_size = 2;
-    string ip_address = 3;
-    ProtoVersion proto_version = 4;
+    enum Platforms {
+        ESP8266 = 0;
+        ESP32 = 1;
+        PC_WINDOWS = 2;
+        PC_LINUX = 3;
+        PC_MAC = 4;
+        RASPBERRY_PI_ZERO = 5;
+        RASPBERRY_PI_1 = 6;
+        RASPBERRY_PI_2 = 7;
+        RASPBERRY_PI_3 = 8;
+        ANDROID = 9;
+        IOS = 10;
+        OTHER = 11;
+    }
+    Platforms platform = 1;
+    ProtoVersion proto_version = 2;
+    string information = 3;
+    string ip_address = 4;
+    string sdk_version = 5;
+    uint32 communication_delay = 6;
+    uint32 broker_connect_attempts = 7;
+    float longitude = 8;
+    float latitude = 9;
+    uint32 app_generic_a = 10;
+    uint32 app_generic_b = 11;
+    uint32 app_generic_c = 12;
 }
 
 message Image {
@@ -169,10 +195,17 @@ message Alarm {
         LEVEL5 = 4;
     }
 
-    string info = 1;
+    string meta = 1;
     Severity severity = 2;
 }
 
 message Switch {
     bool state = 1;
+}
+
+
+message Raw {
+    uint32 sequence_number = 1;
+    uint32 total_size = 2;
+    bytes data = 3;
 }

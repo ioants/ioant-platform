@@ -1,91 +1,88 @@
-var db = require('../db')
-
+'use strict';
+/**
+ * @file streams.js
+ * @author Adam Saxén
+ *
+ *  Model for listing multiple streams
+ */
 var request = require('request');
 var moment = require('moment');
-var config = require('../configuration.json');
-var protoio = require('./../proto/protoio');
-const winston = require('winston');
+var Proto = require('ioant-proto');
+var Logger = require('ioant-logger');
+var Loader = require('ioant-loader');
+var Utils = require('./utils');
+let rest_api_request;
+let request_options;
+
+Loader.load('./configuration.json', 'configuration').then((config) => {
+    rest_api_request = config.restApiServer.url + ":" + config.restApiServer.port;
+    request_options = {
+        method: 'GET',
+        uri: rest_api_request+'/v0.1/streams',
+        json: true
+    }
+}).catch(function(error){
+      Logger.log('error', 'Failed to load asset: configuration');
+});
 
 
-function getImageOfMessageType(message_type) {
-     switch(message_type) {
-        case protoio.enumerate("Temperature"):
-            return "/img/icons/temperature.png"
-            break;
-        case protoio.enumerate("Humidity"):
-            return "/img/icons/umbrella-and-raindrops.png"
-            break;
-        case protoio.enumerate("Mass"):
-            return "/img/icons/jar-almost-full-outline.png"
-            break;
-        case protoio.enumerate("ElectricPower"):
-            return "/img/icons/lighting-button.png"
-            break;
-        case protoio.enumerate("GpsCoordinates"):
-            return "/img/icons/map-pin-marked.png"
-            break;
-        case protoio.enumerate("RunStepperMotorRaw"):
-            return "/img/icons/nut-icon.png"
-            break;
-        case protoio.enumerate("RunStepperMotor"):
-            return "/img/icons/nut-icon.png"
-            break;
-        case protoio.enumerate("RunDcMotor"):
-            return "/img/icons/nut-icon.png"
-            break;
-        case protoio.enumerate("BootInfo"):
-            return "/img/icons/power-button-outline.png"
-            break;
-        case protoio.enumerate("Image"):
-            return "/img/icons/photo-camera-outline.png"
-            break;
-        case protoio.enumerate("Trigger"):
-            return "/img/icons/bell-ringing.png"
-            break;
-        default:
-            return "/img/icons/layers-icon.png"
-      }
+function enrichStreamWithMeta(stream) {
+    return Proto.getProtoMessage(stream.message_type)
+          .then((message) => {
+               Logger.log('debug', 'Enriching stream', {stream:stream});
+               let fields = Object.keys(message.fields);
+               let list_of_fields = [];
+               fields.forEach(function(field) {
+                    list_of_fields.push(Proto.underScore(field));
+                 })
+               stream.message_fields = list_of_fields;
+
+               stream.image_type_url = Utils.getImageOfMessageType(stream.message_type);
+               let tempMoment = moment(stream.update_ts);
+               let timeStampNow = moment();
+               stream.update_ts = tempMoment.format('MMMM Do YYYY, H:mm:ss');
+               stream.latest_value_date = tempMoment.format('YYYY-MM-DD');
+               //Calc duration since last message
+               let duration = moment.duration(timeStampNow.diff(tempMoment));
+               stream.ts_diff = Math.round( duration.asHours() * 10 ) / 10;
+
+               if (Proto.enumerate("Image") == stream.message_type){
+                   stream.isimage = true;
+               }
+               else {
+                   stream.isimage = false;
+               }
+
+               return new Promise((resolve, reject) =>{
+                   resolve(stream);
+               });
+           }).catch(function(error){
+               Logger.log('error', 'Failed enrich stream', {stream:stream});
+               throw(error);
+           });
 }
-
-rest_api_request = config.restApiServer.url + ":" + config.restApiServer.port;
-
-const request_options = {
-    method: 'GET',
-    uri: rest_api_request+'/v0.1/streams',
-    json: true
-}
-
 
 exports.all = function(cb) {
-    winston.log('info', 'Get streams list called',{restcall: rest_api_request})
-    request(request_options, function(error, response, body){
+    Logger.log('info', 'Get streams list called',{restcall: rest_api_request})
+    request(request_options, function(error, response, streams){
         if(error) {
-            cb(error, body)
+            cb(error, {})
         } else {
-            if (body.length > 0){
-                for (var key in body){
-                    var stream = body[key];
-                    winston.log('debug', 'stream', {stream:stream});
+            if (streams.length > 0){
 
-                    stream.image_type_url = getImageOfMessageType(stream.message_type);
-                    tempMoment = moment(stream.update_ts);
-                    timeStampNow = moment();
-                    stream.update_ts = tempMoment.format('MMMM Do YYYY, H:mm:ss');
-                    stream.latest_value_date = tempMoment.format('YYYY-MM-DD');
-                    //Calc duration since last message
-                    duration = moment.duration(timeStampNow.diff(tempMoment));
-                    stream.ts_diff = Math.round( duration.asHours() * 10 ) / 10;
+                var promises = streams.map((stream) => {
+                    return enrichStreamWithMeta(stream)
+                });
 
-                    if (protoio.enumerate("Image") == stream.message_type){
-                        stream.isimage = true;
-                    }
-                    else {
-                        stream.isimage = false;
-                    }
-                }
-                cb(error, body);
+                return Promise.all(promises).then(function(streams) {
+                    Logger.log('debug', 'All streams enriched');
+                    cb(error, streams);
+                }).catch(function(e1){
+                    Logger.log('error', 'Failed enrich stream', {stream:stream});
+                    cb(e1, {});
+                });
+
             }
         }
     });
-
-}
+};

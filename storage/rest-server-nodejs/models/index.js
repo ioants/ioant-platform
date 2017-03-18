@@ -8,12 +8,11 @@
 
 var mysql = require('mysql');
 var Promise = require('bluebird');
-var Loader = require("../utils/loader");
-var Logger = require("../utils/logger");
+var Loader = require("ioant-loader");
+var Logger = require("ioant-logger");
 var moment = require("moment");
 
 var StreamsModel = require("./streams");
-
 
 const Connection = require('mysql/lib/Connection');
 const Pool = require('mysql/lib/Pool');
@@ -25,52 +24,51 @@ var loaded_configuration;
 var pool;
 var getConnection;
 
-
 Promise.promisifyAll([
     Connection,
     Pool
 ]);
 
-function loadConfiguration(){
-    Loader.load("./configuration.json").then(function(configuration) {
-               Logger.log('info', 'Loaded configuration in streams module!');
-               loaded_configuration = configuration;
+/**
+* @desc load assests
+*/
+exports.loadAssets = function(){
 
-               pool = mysql.createPool({
-                      connectionLimit : configuration.restApiNodejs.connectionlimit,
-                      host     : configuration.mysqlDatabase.host,
-                      user     : configuration.mysqlDatabase.user,
-                      password : configuration.mysqlDatabase.password,
-                      database : loaded_schema.database.name,
-                      debug    : false
-               });
+    var p1 = Loader.getLoadedAsset("configuration").then(function(configuration) {
+        loaded_configuration = configuration;
+    });
 
-               getConnection = (pool) => {
-                   return pool
-                       .getConnectionAsync()
-                       .then((connection) => {
-                           Logger.log('info', 'Connection req');
-                           return connection;
-                       }).disposer((connection) => {
-                            Logger.log('info', 'Connection released');
-                            connection.release();
-                        });
-               };
+    var p2 = Loader.getLoadedAsset("schema").then(function(schema) {
+        loaded_schema = schema;
+    });
 
-          }).catch(function(error){
-              console.log(error);
-              Logger.log('error', 'Failed to load configuration in streams module');
-          });
+    return Promise.join(p1, p2, function() {
+        Logger.log('info', 'Creating Mysql connection pool');
+
+        pool = mysql.createPool({
+               connectionLimit : loaded_configuration.restApiNodejs.connectionlimit,
+               host     : loaded_configuration.mysqlDatabase.host,
+               user     : loaded_configuration.mysqlDatabase.user,
+               password : loaded_configuration.mysqlDatabase.password,
+               database : loaded_schema.database.name,
+               debug    : false
+        });
+
+        getConnection = (pool) => {
+            return pool
+                .getConnectionAsync()
+                .then((connection) => {
+                    Logger.log('info', 'Connection req');
+                    return connection;
+                }).disposer((connection) => {
+                     Logger.log('info', 'Connection released');
+                     connection.release();
+                 });
+        };
+    }).catch(function(error){
+        Logger.log('error', 'Failed to create MySQL pool', {error:error});
+    });
 }
-
-Loader.load("../schema.json").then(function(schema) {
-            Logger.log('info', 'Loaded schema!');
-            loaded_schema = schema;
-            loadConfiguration();
-       }).catch(function(error){
-           Logger.log('error', 'Failed to load schema');
-       })
-
 
 // Functin for handling a database query request
 function retrieve_database_connection() {
@@ -89,8 +87,8 @@ exports.getStreamList = function(res) {
         streamsModel.getStreamList().then(function(result) {
                    res.json(result);
                }).catch(function(error){
-                Logger.log('error', 'Failed to get stream list.');
-                res.status(500).send('Query failed');
+                Logger.log('error', 'Failed to get stream list (index.js).');
+                res.status(500).send('Query failed: getStreamList');
             });
     });
 }
@@ -180,6 +178,33 @@ exports.getStreamInfo = function(res, streamid) {
                res.json(result);
            }).catch(function(error){
             logger.log('error', 'Failed to get stream data.');
+            res.status(500).send('Internal error, Request failed');
+        });
+    });
+}
+
+
+/**
+* @desc Fetch unique dates of stream
+*/
+exports.getStreamDates = function(res, streamid) {
+    if (streamid === undefined){
+        res.status(400).send('Bad request - streamid missing');
+        return;
+    }
+    var param_stream_id = streamid;
+
+    if (isNaN(param_stream_id)) {
+        res.status(400).send('Bad request - streamid not a number');
+        return;
+    }
+
+    retrieve_database_connection().then(function (connection){
+    let streamsModel = new StreamsModel(connection, loaded_schema);
+    streamsModel.getStreamDates(param_stream_id).then(function(dates) {
+               res.json(dates);
+           }).catch(function(error){
+            Logger.log('error', 'Failed to get unique dates stream.');
             res.status(500).send('Internal error, Request failed');
         });
     });

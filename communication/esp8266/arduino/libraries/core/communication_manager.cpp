@@ -14,7 +14,7 @@ namespace ioant{
 
     CommunicationManager* CommunicationManager::instance_ = NULL;
 
-    const int NUMBER_OF_CONFIGURATION_FIELDS = 15;
+    const int NUMBER_OF_CONFIGURATION_FIELDS = 19;
     String CSS = ".form-style-8{font-family:arial,sans;width:500px;padding:30px;background:#FFF;margin:50px auto;box-shadow:0 0 15px rgba(0,0,0,.22);-moz-box-shadow:0 0 15px rgba(0,0,0,.22);-webkit-box-shadow:0 0 15px rgba(0,0,0,.22)}.form-style-8 h2{background:#4D4D4D;text-transform:uppercase;font-family:sans-serif;color:#797979;font-size:18px;font-weight:100;padding:20px;margin:-30px -30px 30px}.form-style-8 input[type=text],.form-style-8 input[type=date],.form-style-8 input[type=datetime],.form-style-8 input[type=email],.form-style-8 input[type=number],.form-style-8 input[type=search],.form-style-8 input[type=time],.form-style-8 input[type=url],.form-style-8 input[type=password],.form-style-8 select,.form-style-8 textarea{box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;outline:0;display:block;width:100%;padding:7px;border:none;border-bottom:1px solid #ddd;background:0 0;margin-bottom:10px;font:16px Arial,Helvetica,sans-serif;height:45px}.form-style-8 textarea{resize:none;overflow:hidden}.form-style-8 input[type=submit],.form-style-8 input[type=button]{-moz-box-shadow:inset 0 1px 0 0 #45D6D6;-webkit-box-shadow:inset 0 1px 0 0 #45D6D6;box-shadow:inset 0 1px 0 0 #45D6D6;background-color:#2CBBBB;border:1px solid #27A0A0;display:inline-block;cursor:pointer;color:#FFF;font-family:sans-serif;font-size:14px;padding:8px 18px;text-decoration:none;text-transform:uppercase}.form-style-8 input[type=submit]:hover,.form-style-8 input[type=button]:hover{background:linear-gradient(to bottom,#34CACA 5%,#30C9C9 100%);background-color:#34CACA}";
     String CONFIGURATION_FIELDS[NUMBER_OF_CONFIGURATION_FIELDS] = {"client_id",
                                                                    "topic_global",
@@ -30,7 +30,11 @@ namespace ioant{
                                                                    "low_power",
                                                                    "status_led",
                                                                    "communication_delay",
-                                                                   "application_generic"};
+                                                                   "longitude",
+                                                                   "latitude",
+                                                                   "app_generic_a",
+                                                                   "app_generic_b",
+                                                                   "app_generic_c"};
 
    String CONFIGURATION_FIELDS_READABLE[NUMBER_OF_CONFIGURATION_FIELDS] = {"Client id",
                                                                           "Topic Global",
@@ -46,7 +50,11 @@ namespace ioant{
                                                                           "Low Power Mode (true/false)",
                                                                           "Status LED Pin (Flashes when messages are sent)",
                                                                           "Communication Delay (E.g delay between sensor readings)",
-                                                                          "Application Generic configuration"};
+                                                                          "GPS longitude",
+                                                                          "GPS latitude",
+                                                                          "Generic variable a",
+                                                                          "Generic variable b",
+                                                                          "Generic variable c"};
 
 
     CommunicationManager* CommunicationManager::GetInstance(){
@@ -68,7 +76,8 @@ namespace ioant{
                                             silent_(false),
                                             io_callback(NULL),
                                             web_server_(NULL),
-                                            configuration_updated_(false){
+                                            configuration_updated_(false),
+                                            broker_connection_attempts_(0){
         Serial.begin(115200);
     }
 
@@ -196,8 +205,16 @@ namespace ioant{
                 config_.topic_local =  web_server_->arg("topic_local");
             if (web_server_->arg("communication_delay").toInt())
                 config_.communication_delay =  web_server_->arg("communication_delay").toInt();
-            if (web_server_->arg("application_generic").toInt())
-                config_.application_generic =  web_server_->arg("application_generic").toInt();
+            if (web_server_->arg("latitude").toFloat())
+                config_.latitude =  web_server_->arg("latitude").toFloat();
+            if (web_server_->arg("longitude").toFloat())
+                config_.longitude =  web_server_->arg("longitude").toFloat();
+            if (web_server_->arg("app_generic_a").toInt())
+                config_.app_generic_a =  web_server_->arg("app_generic_a").toInt();
+            if (web_server_->arg("app_generic_b").toInt())
+                config_.app_generic_a =  web_server_->arg("app_generic_b").toInt();
+            if (web_server_->arg("app_generic_c").toInt())
+                config_.app_generic_a =  web_server_->arg("app_generic_c").toInt();
 
             configuration_updated_ = true;
         }
@@ -234,8 +251,11 @@ namespace ioant{
     bool CommunicationManager::UpdateBrokerConnection(bool clean_session){
         bool result = false;
         for(int i=0; i < 4; i++){
-            if (result)
+            if (result){
                 return result;
+            }
+
+            broker_connection_attempts_++;
 
             if(!mqtt_client_.connected()){
                 ULOG_DEBUG << "Connecting to broker:" << config_.broker_url;

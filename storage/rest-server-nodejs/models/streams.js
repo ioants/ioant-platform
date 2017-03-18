@@ -7,10 +7,12 @@
  */
 
 var Promise = require('bluebird');
-var Loader = require("../utils/loader");
-var Logger = require("../utils/logger");
-var protoio = require('../proto/protoio');
+var Loader = require("ioant-loader");
+var Logger = require("ioant-logger");
+var protoio = require('ioant-proto');
 var moment = require('moment');
+
+protoio.setup("proto/messages.proto");
 
 
 class StreamsModel {
@@ -34,27 +36,41 @@ class StreamsModel {
          var column_message_name = this.schema.database.tables[0].columns[6].name;
          var column_timestamp_name = this.schema.database.tables[0].columns[7].name;
          var table_prefix = this.schema.database.messageTablePrefix;
-
          return protoio.getProtoMessage(row[column_message_type])
                .then((message) => {
                     var fields = Object.keys(message.fields);
+                    Logger.log('debug', 'Message fields:', {fields:fields});
                     var latest_value_field = protoio.underScore(fields[0]);
                     return new Promise((resolve, reject) =>{
                         resolve(latest_value_field);
                     });
-                })
-                .then(latest_value_field => {
+                }).catch((error) => {
+                    Logger.log('error', 'Failed to retreive proto definition for message_type:', {msg_type:row[column_message_type]});
+                    throw error;
+                }).then(latest_value_field => {
                     let query = `SELECT ts, ${latest_value_field} AS latestvalue from ${table_prefix}${row[column_sid_name]}_${row[column_message_name]} ORDER BY ts DESC LIMIT 1`;
+                    Logger.log('debug', 'Latest value query:', {query:query});
                     return this.db.queryAsync(query)
                             .then(function(result){
                                 return new Promise(function (resolve, reject){
-                                    row.latest_value = result[0].latestvalue;
-                                    row.update_ts = result[0].ts;
+                                    if (result.length > 0){
+                                        row.latest_value = result[0].latestvalue;
+                                        row.update_ts = result[0].ts;
+                                    }
+                                    else {
+                                        // No latest value found, but stream exists
+                                        row.latest_value = "N/D";
+                                        row.update_ts = moment().format("YYYY-MM-DD");
+                                    }
                                     resolve(row);
                                 })
-                            }).catch(function(error){
-                                logger.log('error', 'Failed to get stream list latest values.');
-                                throw error;
+                            }).catch((error) => {
+                                Logger.log('error', 'Failed to get stream list latest values.', {query:query});
+                                row.latest_value = "N/D";
+                                row.update_ts = moment().format("YYYY-MM-DD");
+                                return new Promise(function (resolve, reject){
+                                    resolve(row);
+                                });
                             });
                 });
     };
@@ -68,9 +84,11 @@ class StreamsModel {
         var stream_table = this.schema.database.tables[0].name;
 
         var query = `SELECT * from ${stream_table}`;
+        Logger.log('debug', 'Stream list query:', {query:query});
         return this.db.queryAsync(query).then((rows) =>{
             var actions = rows.map((row) => {
-                return this.getLatestData(row)});
+                return this.getLatestData(row)
+            });
             return Promise.all(actions);
         }).catch(function(error){
             Logger.log('error', 'Failed to get stream list.', {error:error});
@@ -143,6 +161,32 @@ class StreamsModel {
             Logger.log('error', 'Failed to get stream data.', {streamid:streamid});
             throw error;
         });
+    };
+
+
+    /**
+    * @desc getStreamDates method, for retrieving unique dates of a stream
+    *
+    * @param {Integer} streamid - the stream id
+    * @return {Promise} - resolves rows array
+    */
+    getStreamDates(streamid) {
+        Logger.log('debug', 'Get unique dates from a stream', {streamid:streamid});
+        var stream_table = this.schema.database.tables[0].name;
+        var primary_key_field = this.schema.database.tables[0].primaryKey;
+
+        var query = `SELECT * from ${stream_table} WHERE ${primary_key_field}=${streamid}`;
+        Logger.log('debug', 'query_dates', {query:query});
+        return this.db.queryAsync(query).then((rows) => {
+                    let message_name = rows[0].message_name;
+                    let stream_table_prefix = this.schema.database.messageTablePrefix;
+                    let query_distinct = `SELECT DISTINCT(DATE(ts)) AS date FROM ${stream_table_prefix}${streamid}_${message_name}`;
+                    Logger.log('debug', 'query_distinct', {query_distinct:query_distinct});
+                    return this.db.queryAsync(query_distinct);
+                }).catch(function(error){
+                    Logger.log('error', 'Failed to get unique dates from stream.', {streamid:streamid});
+                    throw error;
+                });
     };
 
 

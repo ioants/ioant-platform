@@ -1,20 +1,21 @@
 ///
 /// @file   main.cpp
-/// @Author Adam Saxen, Simon Lövgren
+/// @Author Simon Lövgren
 /// @date   Oktober, 2016
-/// @brief  Boiler plate application for MQTT communication
+/// @brief  Boiler plate for simple switch application
 ///
 
-#include <core.h>
+#include <ioant.h>
 using namespace ioant;
 /// @brief on_message() function
 /// Function definition for handling received MQTT messages
 ///
 /// @param received_topic contains the complete topic structure
-/// @param payload contains the contents of the message received
-/// @param length the number of bytes received
+/// @param message is the proto message recieved
 ///
-void on_message(Core::Topic received_topic, ProtoIO* message);
+/// Proto message is casted to appropriate message
+///
+void on_message(Ioant::Topic received_topic, ProtoIO* message);
 
 // ############################################################################
 // Everything above this line is mandatory
@@ -40,7 +41,7 @@ bool latch = false;
 
 void setup(void){
     //Initialize IOAnt core
-    Core::GetInstance(on_message);
+    Ioant::GetInstance(on_message);
 
     // ########################################################################
     //    Now he basics all set up. Send logs to your computer either
@@ -67,7 +68,7 @@ void loop(void){
     // Send trigger message 1 for switch open
     TriggerMessage msg;
     msg.data.extra = 1;
-    IOANT->Publish(msg);    
+    IOANT->Publish(msg);
     // Set latch to true to enable new
     // "door closed" message
     latch = true;
@@ -87,11 +88,11 @@ void loop(void){
     TriggerMessage msg;
     msg.data.extra = 0;
     IOANT->Publish(msg);
-    
+
     // Set latch to false to enable new
     // "door opened" message
     latch = false;
-    
+
     // If led connected, flash twice
 #if LED_CONNECTED
     digitalWrite(LED_PIN, HIGH);  // Debug
@@ -106,4 +107,4 @@ void loop(void){
 }
 
 // Function for handling received MQTT messages
-void on_message(Core::Topic received_topic, ProtoIO* message){}
+void on_message(Ioant::Topic received_topic, ProtoIO* message){}

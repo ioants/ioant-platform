@@ -2,26 +2,25 @@ var express = require('express')
   , router = express.Router()
   , Stream = require('../models/stream')
   , StreamSetting = require('../models/stream_setting')
-const winston = require('winston');
+const Logger = require('ioant-logger');
 
 router.get('/', function(req, res) {
     StreamSetting.get( req.query.sid,
                        req.query.mid,
                         function(err, streamSettings) {
                             if (streamSettings.settingFound === false){
-                                winston.log('info','No configuration found!', {streamid: parseInt(req.query.sid)});
-                                res.render('streamtypes/chart', {settings: false})
+                                Logger.log('info','No configuration found!', {streamid: parseInt(req.query.sid)});
+                                res.render('streamtypes/chart', {settings: streamSettings.streamSettings})
                             }
                             else{
-                                console.log(streamSettings)
-                                winston.log('info','Get stream configuration success!', {streamSettings: streamSettings});
-                                res.render('streamtypes/'+streamSettings.settingFound.template, {settings: streamSettings.settingFound});
+                                Logger.log('info','Get stream configuration success!', {streamSettings: streamSettings});
+                                res.render('streamtypes/'+streamSettings.settingFound.presentationTemplate, {settings: streamSettings.settingFound});
                             }
                         });
 })
 
 router.get('/getstreamdata', function(req, res) {
-    winston.log('info', 'Retreieve stream data - controller')
+    Logger.log('info', 'Retreive stream data - controller')
     Stream.get(req.query.streamid,
               req.query.startdate,
               req.query.enddate,
@@ -31,7 +30,7 @@ router.get('/getstreamdata', function(req, res) {
                     res.json(streamdata);
                 }
                 else {
-                    winston.log('error','Failed to retrieve stream data.', {streamid: req.query.streamid,
+                    Logger.log('error','Failed to retrieve stream data.', {streamid: req.query.streamid,
                                                                             startdate: req.query.startdate,
                                                                             enddate: req.query.enddate,
                                                                             filter: req.query.filter});
@@ -40,11 +39,25 @@ router.get('/getstreamdata', function(req, res) {
             })
 })
 
+router.get('/getstreamdates', function(req, res) {
+    Logger.log('info', 'Retreive stream dates - controller')
+    Stream.getDates(req.query.streamid,
+            function(err, response, streamdates) {
+                if (!err && response.statusCode == 200) {
+                    res.json(streamdates);
+                }
+                else {
+                    Logger.log('error','Failed to retrieve stream dates.', {streamid: req.query.streamid});
+                    res.json(false);
+                }
+            });
+});
+
 router.get('/getstreaminfo', function(req, res) {
-    winston.log('info', 'Retrieve stream info - controller')
+    Logger.log('info', 'Retrieve stream info - controller')
     Stream.getInfo(req.query.streamid,
             function(streaminfo) {
-                winston.log('info','Get stream info!', {streaminfo: streaminfo});
+                Logger.log('info','Get stream info!', {streaminfo: streaminfo});
                 res.json(streaminfo);
             })
 })

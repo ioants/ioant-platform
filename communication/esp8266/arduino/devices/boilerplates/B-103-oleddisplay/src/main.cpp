@@ -7,7 +7,7 @@
 /// the row with U8G2_SSD1306_128X64_NONAME_F_SW_I2C below
 ///
 
-#include <core.h>
+#include <ioant.h>
 
 using namespace ioant;
 /// @brief on_message() function
@@ -18,7 +18,7 @@ using namespace ioant;
 ///
 /// Proto message is casted to appropriate message
 ///
-void on_message(Core::Topic received_topic, ProtoIO* message);
+void on_message(Ioant::Topic received_topic, ProtoIO* message);
 
 // ############################################################################
 // Everything above this line is mandatory
@@ -38,7 +38,7 @@ U8G2_SSD1306_128X64_NONAME_F_SW_I2C u8g2(U8G2_R0, 5, 4, U8X8_PIN_NONE);
 ODraw odraw(u8g2);
 
 void setup(void){
-    Core::GetInstance(on_message);
+    Ioant::GetInstance(on_message);
     // ########################################################################
     //    Now he basics all set up. Send logs to your computer either
     //    over Serial or WifiManager.
@@ -48,7 +48,7 @@ void setup(void){
 
 
     // TSubscribe to everything at "live/wermland/kil/#"
-    Core::Topic t;
+    Ioant::Topic t;
     t.global = "wermland";
     t.local = "kil";
     IOANT->Subscribe(t);
@@ -95,7 +95,7 @@ void loop(void){
 
 
 // Function for handling received MQTT messages
-void on_message(Core::Topic received_topic, ProtoIO* message){
+void on_message(Ioant::Topic received_topic, ProtoIO* message){
     WLOG_DEBUG << "Message received! topic:" << received_topic.global << " message type:" << received_topic.message_type;
 
     if (received_topic.message_type == TemperatureMessage::GetType()){

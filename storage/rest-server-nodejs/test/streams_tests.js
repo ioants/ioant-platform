@@ -1,4 +1,8 @@
 'use strict';
+
+const Logger = require('ioant-logger');
+Logger.setup('logs/', 'debug', 'debug', 'debug');
+
 var chai = require('chai'),
     should = chai.should(),
     chaiAsPromised = require('chai-as-promised'),
@@ -7,6 +11,7 @@ var chai = require('chai'),
     Promise = require('bluebird'),
     StreamsModel = require('../models/streams.js'),
     moment = require('moment');
+
 
 var schema = require('./data/schema.json');
 var expect = require('chai').expect;
@@ -73,12 +78,9 @@ describe('The streams model class', function() {
 
     it('getStreamList: catch error when requesting list of streams', function() {
 
-        // Fake stream list data returned from initial query
-        var db_list_data = [{sid:44, global:"global", local:"local", client_id:"dix", stream_index:0, message_type:4, message_name:"temperature", creation_ts:"2017-01-13T17:19:48.000Z"}];
+        // Fake stream list data returned from initial query (return non_existing message type "-1")
+        var db_list_data = [{sid:44, global:"global", local:"local", client_id:"dix", stream_index:0, message_type:-1, message_name:"temperature", creation_ts:"2017-01-13T17:19:48.000Z"}];
         queryAsyncStub.onCall(0).returns(Promise.resolve(db_list_data));
-        queryAsyncStub.onCall(1).returns(Promise.reject());
-
-
         return streamsmodel.getStreamList().should.eventually.be.rejectedWith(Error);
 
     });

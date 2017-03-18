@@ -5,7 +5,7 @@
 /// @brief  Boiler plate application for onewire temperature sensor(DS18B20)
 ///
 
-#include <core.h>
+#include <ioant.h>
 
 using namespace ioant;
 /// @brief on_message() function
@@ -16,7 +16,7 @@ using namespace ioant;
 ///
 /// Proto message is casted to appropriate message
 ///
-void on_message(Core::Topic received_topic, ProtoIO* message);
+void on_message(Ioant::Topic received_topic, ProtoIO* message);
 
 // ############################################################################
 // Everything above this line is mandatory
@@ -56,7 +56,7 @@ void SetUpTemperatureSensors(){
 
 
 void setup(void){
-    Core::GetInstance(on_message);
+    Ioant::GetInstance(on_message);
     // ########################################################################
     //    Now he basics all set up. Send logs to your computer either
     //    over Serial or WifiManager.
@@ -82,7 +82,7 @@ void loop(void){
             msg.data.unit = Temperature_Unit_CELSIUS;
             msg.data.value = temperature;
 
-            Core::Topic topic = IOANT->GetConfiguredTopic();
+            Ioant::Topic topic = IOANT->GetConfiguredTopic();
             topic.stream_index = i;
             bool result = IOANT->Publish(msg, topic);
             //WLOG_INFO << "Temperature message sent with value:" << msg.data.value << " and result:" << result;
@@ -95,6 +95,6 @@ void loop(void){
 }
 
 // Function for handling received MQTT messages
-void on_message(Core::Topic received_topic, ProtoIO* message){
+void on_message(Ioant::Topic received_topic, ProtoIO* message){
     WLOG_DEBUG << "Message received! topic:" << received_topic.global  << " message type:" << received_topic.message_type ;
 }

@@ -1,4 +1,7 @@
 import ioant.proto.proto as proto
+import sys
 
 proto.python_main("../../../../../common/proto/",
-                  "heatercontrol/generated_proto/.")
+                  "generated_proto/.")
+
+sys.path.append("generated_proto/")

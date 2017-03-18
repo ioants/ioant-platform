@@ -1,11 +1,11 @@
 ///
 /// @file   main.cpp
 /// @Author Benny Saxen
-/// @date   2017-02-02
+/// @date   2017-03-13
 /// @brief  NILM
 ///
 
-#include <core.h>
+#include <ioant.h>
 using namespace ioant;
 /// @brief on_message() function
 /// Function definition for handling received MQTT messages
@@ -15,7 +15,7 @@ using namespace ioant;
 ///
 /// Proto message is casted to appropriate message
 ///
-void on_message(Core::Topic received_topic, ProtoIO* message);
+void on_message(Ioant::Topic received_topic, ProtoIO* message);
 
 // ############################################################################
 // Everything above this line is mandatory
@@ -34,12 +34,14 @@ unsigned long t1,t2,dt,ttemp;
 float elpow = 0.0;
 int interrupt_counter = 0;
 int electric_meter_pulses = 1000;  //1000 pulses/kWh
+int bounce_value = 50; // minimum time between interrupts
+
 // END OF - CUSTOM variables
 
 /// END OF - CUSTOM variables
 
 void setup(void){
-    Core::GetInstance(on_message);
+    Ioant::GetInstance(on_message);
 
     // ########################################################################
     //    Now he basics all set up. Send logs to your computer either
@@ -47,7 +49,8 @@ void setup(void){
     // ########################################################################
     CommunicationManager::Configuration loaded_configuration;
     IOANT->GetCurrentConfiguration(loaded_configuration);
-    electric_meter_pulses =  loaded_configuration.application_generic;
+    electric_meter_pulses =  loaded_configuration.app_generic_a;
+    bounce_value = 36000./electric_meter_pulses; // based on max power = 100 000 Watt
 
     // Add additional set up code here
     pinMode(interrupt_pin, INPUT_PULLUP);
@@ -71,7 +74,7 @@ void loop(void){
 }
 
 // Function for handling received MQTT messages
-void on_message(Core::Topic received_topic, ProtoIO* message){
+void on_message(Ioant::Topic received_topic, ProtoIO* message){
     WLOG_DEBUG << "Message received! topic:" << received_topic.global  << " message type:" << received_topic.message_type ;
 }
 
@@ -80,13 +83,14 @@ void on_message(Core::Topic received_topic, ProtoIO* message){
 // Always stored in RAM
 void ICACHE_RAM_ATTR measure(){
     digitalWrite(led_pin,HIGH);
-    ttemp = t2;
+    ttemp = t1;
     t2 = t1;
     t1 = millis();
     dt = t1 - t2;
-    if (dt < 50)
+    if (dt < bounce_value)
     {
-        t2 = ttemp;
+        t1 = ttemp;
+        digitalWrite(led_pin,LOW);
         return;
     }
     elpow = 3600.*1000.*1000./(electric_meter_pulses*dt);

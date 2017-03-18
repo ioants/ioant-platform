@@ -1,4 +1,4 @@
 #Generated proto files
 messages_pb2.py
-proto_nab.py
 configuration.json
+shunt_position.work

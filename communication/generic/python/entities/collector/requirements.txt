@@ -1,3 +1,5 @@
 paho-mqtt>=1.2
 MySQL-python>1.2.5
 protobuf>=3.1.0
+ioant>=0.1.9
+ioant_mysqlhelper>=0.1

@@ -1,69 +1,93 @@
+'use strict';
+/**
+ * @file stream_setting.js
+ * @author Adam Saxén
+ *
+ *  Module for settings associated with a stream
+ */
+
 var db = require('../db');
-var config = require('../configuration.json');
 var streamOptions = require('./stream_options');
-var protoio = require('./../proto/protoio');
-const winston = require('winston');
+var Proto = require('ioant-proto');
+const Logger = require('ioant-logger');
+var Loader = require('ioant-loader');
+
+let configuration;
+Loader.load('./configuration.json', 'configuration').then((config) => {
+    configuration = config;
+}).catch(function(error){
+      Logger.log('error', 'Failed to load asset: configuration');
+});
+
 
 var streamSetting = {
                      name : "Stream name",
-                     template : streamOptions.getStreamTemplates(),
+                     presentationTemplate : streamOptions.getStreamTemplates(),
                      filter: 10,
+                     viewNumberOfDays: 1,
                      dataTable : {
                         tableTitle: "Table title",
                         show : streamOptions.getStreamBooleans(),
                         maxNumberOfRows : 10
                      },
-                     charts : {}
+                     subcharts : {}
                  };
 
-var chartSetting = {
-                    title : "Chart title",
-                    xLabel: "X label",
-                    yLabel: "Y label",
-                    type : streamOptions.getChartTypes(),
-                    fieldName : "",
-                    }
+var subchartSetting = {
+                     title : "Chart title",
+                     xLabel: "X label",
+                     yLabel: "Y label",
+                     type : streamOptions.getChartTypes(),
+                     fieldName : "",
+                     yMax  : 0,
+                     yMin  : 0
+                 }
 
-var fieldTypes = {
-                  streamId : 0,
-                  title : "string",
-                  tableTitle: "string",
-                  show : true,
-                  dataTable: {},
-                  charts: {},
-                  maxNumberOfRows : 0,
-                  template : "string",
-                  type : "string",
-                  fieldName: "string",
-                  xLabel: "string",
-                  yLabel: "string",
-                  filter: 0,
-                  name : "string"
+var fieldMetaList = {
+                  streamId : ["Stream ID", 0],
+                  title : ["Title", "string"],
+                  tableTitle: ["Table title", "string"],
+                  show : ["Show data table", true],
+                  dataTable: ["Table settings", {}],
+                  subcharts: ["Add a subchart", {}],
+                  compositecharts: ["Combine Streams", {}],
+                  maxNumberOfRows : ["Number of rows to show", 0],
+                  presentationTemplate : ["Presentation Template", "string"],
+                  type : ["Chart type", "string"],
+                  fieldName: ["Select message field", ""],
+                  xLabel: ["Label for x axis", "string"],
+                  yLabel: ["Label for y axis", "string"],
+                  filter: ["Select every x:th datapoint", 0],
+                  name : ["Stream name", "string"],
+                  yMax  : ["Maximum Y value", 0],
+                  yMin  : ["Minimum Y value", 0],
+                  viewNumberOfDays : ["Number of days to show", 0]
               };
 
 
 function convertValue(key, value){
-    if (typeof fieldTypes[key] === 'string'){
+    if (typeof fieldMetaList[key][1] === 'string'){
         //Do nothing, alredy a string
     }
-    else if(typeof fieldTypes[key] === 'number'){
+    else if(typeof fieldMetaList[key][1] === 'number'){
         value = parseInt(value);
     }
-    else if(typeof fieldTypes[key] === 'boolean'){
+    else if(typeof fieldMetaList[key][1] === 'boolean'){
         if (value == 'true')
             value = true;
         else if (value == 'false')
             value = false;
     }
-    else if (typeof fieldTypes[key] === 'object'){
+    else if (typeof fieldMetaList[key][1] === 'object'){
         value = {};
     }
     else {
-        winston.log('error', 'Failed to indentify field type',{field: key, type : typeof fieldTypes[key]})
+        Logger.log('error', 'Failed to indentify field type',{field: key, type : typeof fieldMetaList[key]})
     }
     return value;
 }
 
+// When storing to mongodb
 function populateDocument(queryResults){
     var documentToStore = {};
     documentToStore['streamId'] =  convertValue("streamId", queryResults["streamId"]);
@@ -72,53 +96,57 @@ function populateDocument(queryResults){
         documentToStore[key] = convertValue(key, queryResults[key]);
     }
 
-    for(var key in streamSetting.dataTable){
-        documentToStore['dataTable'][key] = convertValue(key, queryResults[key]);
-    }
+    if (documentToStore['presentationTemplate'] == 'chart') {
+        for(var key in streamSetting.dataTable){
+            documentToStore['dataTable'][key] = convertValue(key, queryResults[key]);
+        }
 
-    for(var key in streamSetting.dataTable){
-        documentToStore['dataTable'][key] = convertValue(key, queryResults[key]);
-    }
-
-    documentToStore['charts'] = [];
-    var currentIndex = -1;
-    var i = -1;
-    for(var key in queryResults){
-        var res = key.split("_");
-        if (res.length > 1){
-            if (currentIndex != res[1]){
-                currentIndex = res[1];
-                i++;
-                documentToStore['charts'].push({})
+        documentToStore['subcharts'] = [];
+        var currentIndex = -1;
+        var i = -1;
+        for(var key in queryResults){
+            var res = key.split("_");
+            if (res.length > 1){
+                if (currentIndex != res[1]){
+                    currentIndex = res[1];
+                    i++;
+                    documentToStore['subcharts'].push({})
+                }
+                let value = convertValue(res[0], queryResults[key]);
+                documentToStore['subcharts'][i][res[0]] = value;
             }
-            value = convertValue(res[0], queryResults[key]);
-            documentToStore['charts'][i][res[0]] = value;
         }
     }
 
+    console.log(documentToStore)
     return documentToStore;
 }
 
 exports.get = function(streamId, messageType, cb) {
-    protoio.getProtoMessage(messageType ,function (message){
-        chartSetting.fieldName = Object.keys(message.fields);
-        var collection = db.get().collection(config.mongoDbServer.streamConfigurationCollectionName)
+    Proto.getProtoMessage(messageType).then((message) => {
+        subchartSetting.fieldName = Object.keys(message.fields);
+        var collection = db.get().collection(configuration.mongoDbServer.streamConfigurationCollectionName)
         collection.findOne({streamId: parseInt(streamId)}, function (err, config) {
               if (config !== null){
-                  cb(err, {settingFound: config, streamSetting: streamSetting, chartSetting: chartSetting});
+                  Logger.log('debug', 'Configuartion found', {messageType:messageType, streamId: streamId});
+                  cb(err, {settingFound: config, fieldMetaList: fieldMetaList, streamSetting: streamSetting, subchartSetting: subchartSetting});
               }
               else{
-                  cb(err, {settingFound: false, streamSetting: streamSetting, chartSetting: chartSetting});
+                  Logger.log('debug', 'No configuartion found', {messageType:messageType, streamId: streamId});
+                  cb(err, {settingFound: false, fieldMetaList: fieldMetaList,
+                                                streamSetting: streamSetting,
+                                                subchartSetting: subchartSetting});
               }
         });
+    }).catch(function(error){
+         Logger.log('error', 'Failed to get proto message', {messageType:messageType, streamId: streamId});
     });
-}
+};
 
 exports.save = function(req, cb) {
-    console.log(req.query);
     var documentToStore = populateDocument(req.query);
 
-    var collection = db.get().collection(config.mongoDbServer.streamConfigurationCollectionName)
+    var collection = db.get().collection(configuration.mongoDbServer.streamConfigurationCollectionName)
     // Does it exists?
     collection.findOne({streamId: parseInt(req.query.streamId)}, function (err, config) {
           if (config !== null){
@@ -129,17 +157,17 @@ exports.save = function(req, cb) {
                         // Now insert
                         collection.insertOne( documentToStore, function(err, result) {
                             if (result !== null){
-                                winston.log('info', 'Insert success! For stream id',{streamId : req.query.streamId})
+                                Logger.log('info', 'Insert success! For stream id',{streamId : req.query.streamId})
                             }
                             else{
-                                winston.log('error', 'Failed to add settings for stream',{streamId : req.query.streamId})
+                                Logger.log('error', 'Failed to add settings for stream',{streamId : req.query.streamId})
                             }
                             cb(err, result);
                           });
                     }
                     else{
                         // Failed to insert
-                        winston.log('error', 'Failed to remove settings for stream',{streamId : req.query.streamId})
+                        Logger.log('error', 'Failed to remove settings for stream',{streamId : req.query.streamId})
                         cb(err, result);
                     }
               });
@@ -148,10 +176,10 @@ exports.save = function(req, cb) {
               // Nothing in collection. Add
               collection.insertOne( documentToStore, function(err, result) {
                   if (result !== null){
-                      winston.log('info', 'Insert success! For stream id',{streamId : req.query.streamId})
+                      Logger.log('info', 'Insert success! For stream id',{streamId : req.query.streamId})
                   }
                   else{
-                      winston.log('error', 'Failed to add settings for stream',{streamId : req.query.streamId})
+                      Logger.log('error', 'Failed to add settings for stream',{streamId : req.query.streamId})
                   }
                   cb(err, result);
                 });
