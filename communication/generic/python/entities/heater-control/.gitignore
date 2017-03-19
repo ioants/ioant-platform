@@ -1,3 +1,4 @@
 #Generated proto files
 messages_pb2.py
 configuration.json
+shunt_position.work
