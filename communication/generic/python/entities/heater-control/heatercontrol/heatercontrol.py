@@ -55,9 +55,9 @@ def publishStepperMsg(steps, direction):
     topic['stream_index'] = 0
     ioant.publish(out_msg, topic)
 
-    # Prepare and publish Raw
+    # Prepare and publish Trigger
     out_msg = ioant.create_message("Trigger")
-    out_msg.extra = current_shunt_position
+    out_msg.extra = int(current_shunt_position)
     topic = ioant.get_topic_structure()
     topic['top'] = 'live'
     topic['global'] = configuration["publish_topic"]["stepper"]["global"]
