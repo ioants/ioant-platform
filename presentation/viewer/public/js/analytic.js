@@ -105,8 +105,8 @@ function loadDateRangePicker(unique_dates){
         locale: {
           format: 'YYYY-MM-DD'
         },
-        startDate: valid_dates[valid_dates.length-1],
-        endDate: valid_dates[valid_dates.length-1],
+        startDate: currentRange.start,
+        endDate: currentRange.end,
         isInvalidDate: function(date) {
             if ( valid_dates.indexOf(date.format('YYYY-MM-DD')) == -1) {
                 return true;
@@ -117,7 +117,9 @@ function loadDateRangePicker(unique_dates){
     },
 
     function(start, end, label) {
-        //toAutoFit = $('#autofit').is(":checked");
+        delete(compositeChart);
+        subCharts = [];
+        compositeChart = dc.compositeChart('#analytic-chart');
         deriveRange(start, end);
         loadDataSets(start, end);
     });
@@ -151,7 +153,6 @@ function loadDataSets(start, end){
 function handleLoadedDataSets(error, datasets){
     console.log("5. Data sets received");
     if (!error){
-        console.log(datasets);
         //Combine datasets to one
         var mergedDataSet = [];
 
@@ -178,7 +179,6 @@ function handleLoadedDataSets(error, datasets){
 
         }
 
-        console.log(mergedDataSet);
         generateCharts(mergedDataSet);
     }
 }
@@ -186,7 +186,7 @@ function handleLoadedDataSets(error, datasets){
 
 function accessor(curIndex) {
     return function(d) {
-        if (typeof d[curIndex] !== 'undefined' && d[curIndex]){
+        if (typeof d[curIndex] !== 'undefined' && d[curIndex] != null){
             return d[curIndex];
         }
         else{
@@ -196,33 +196,29 @@ function accessor(curIndex) {
 }
 
 
+
 //=============================================================================
 //  generateCharts function
 //  Desc: Define and assign data to chart
 //=============================================================================
 function generateCharts(cleanData){
     var cf = crossfilter(cleanData);
-    subCharts = [];
     // generate the different dimensions
     var leftYAxisLabel = "";
     var rightYAxisLabel = "";
-    var groups = [];
     for(var i=0; i < metaData.streams.length; i++){
         var tsName = 'ts_'+metaData.streams[i].sid;
-        var dim = cf.dimension(accessor(tsName)).filter(function(d) {
-                return (typeof d !== 'undefined');
-            });
+        var dim = cf.dimension(accessor(tsName));
 
         var fieldIndex = "value_"+metaData.streams[i].sid;
 
-        groups.push(dim.group().reduceSum(accessor(fieldIndex)));
-
+        var groups = dim.group().reduceSum(accessor(fieldIndex));
 
         var chartHandle = dc.lineChart(compositeChartHandle);
 
         chartHandle
             .dimension(dim)
-            .group(groups[i], metaData.streams[i].topic + ' - ' + metaData.streams[i].msgname+"("+metaData.streams[i].sid+")")
+            .group(groups, metaData.streams[i].topic + ' - ' + metaData.streams[i].msgname+"("+metaData.streams[i].sid+")")
             .colors(streamColors[i])
             .title(function(d) { return d.key + ": " + d.value; });
 
@@ -247,7 +243,7 @@ function generateCharts(cleanData){
     compositeChartHandle
         .width(xs*0.7)
         .height(ys*0.6)
-        .x(d3.time.scale().domain([currentRange.start, currentRange.end]))
+        .x(d3.time.scale().domain([currentRange.start, moment(currentRange.end).add(1,'days').toDate()]))
         .elasticY(true)
         .xAxisLabel('Time(s)')
         .brushOn(false)
