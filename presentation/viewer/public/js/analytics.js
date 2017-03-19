@@ -50,7 +50,7 @@ $('#analyticsForm').submit(function(e) {
              if ($(tablerow).data("selected") == 1){
                  at_least_one_sid_selected = true;
              }
-         })
+         });
 
          if (at_least_one_sid_selected){
              var rest_request_analytic_save = "/analytics/add?"+$('#analyticsForm').serialize();

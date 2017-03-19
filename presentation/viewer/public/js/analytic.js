@@ -213,7 +213,7 @@ function generateCharts(cleanData){
                 return (typeof d !== 'undefined');
             });
 
-        var fieldIndex = metaData.streams[i].field+"_"+metaData.streams[i].sid;
+        var fieldIndex = "value_"+metaData.streams[i].sid;
 
         groups.push(dim.group().reduceSum(accessor(fieldIndex)));
 
