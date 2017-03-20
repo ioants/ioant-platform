@@ -43,7 +43,6 @@ function loadAnalyticMeta(){
 //=============================================================================
 function handleMetaResponse(error, meta) {
     console.log("2. Prepare meta");
-    console.log(meta);
     metaData = meta[0];
 
     //Get available dates for all streams
@@ -85,10 +84,7 @@ function deriveRange(start, end){
     var dateFormat = d3.time.format.iso;
     s = dateFormat.parse(start.toDate())
     e = dateFormat.parse(end.toDate())
-    diff = e-s;
-    if (diff === 0){
-        e = dateFormat.parse(moment(end).add(1,'days'));
-    }
+
     currentRange.start = s;
     currentRange.end = e;
 }
@@ -99,14 +95,15 @@ function deriveRange(start, end){
 //=============================================================================
 function loadDateRangePicker(unique_dates){
     var valid_dates = Object.keys(unique_dates);
+    valid_dates.sort();
     deriveRange(moment(valid_dates[valid_dates.length-1]), moment(valid_dates[valid_dates.length-1]));
     $('input[name="daterange"]').daterangepicker(
     {
         locale: {
           format: 'YYYY-MM-DD'
         },
-        startDate: valid_dates[valid_dates.length-1],
-        endDate: valid_dates[valid_dates.length-1],
+        startDate: currentRange.start,
+        endDate: currentRange.end,
         isInvalidDate: function(date) {
             if ( valid_dates.indexOf(date.format('YYYY-MM-DD')) == -1) {
                 return true;
@@ -117,7 +114,9 @@ function loadDateRangePicker(unique_dates){
     },
 
     function(start, end, label) {
-        //toAutoFit = $('#autofit').is(":checked");
+        delete(compositeChart);
+        subCharts = [];
+        compositeChart = dc.compositeChart('#analytic-chart');
         deriveRange(start, end);
         loadDataSets(start, end);
     });
@@ -151,7 +150,7 @@ function loadDataSets(start, end){
 function handleLoadedDataSets(error, datasets){
     console.log("5. Data sets received");
     if (!error){
-        console.log(datasets);
+
         //Combine datasets to one
         var mergedDataSet = [];
 
@@ -186,7 +185,7 @@ function handleLoadedDataSets(error, datasets){
 
 function accessor(curIndex) {
     return function(d) {
-        if (typeof d[curIndex] !== 'undefined' && d[curIndex]){
+        if (typeof d[curIndex] !== 'undefined' && d[curIndex] != null){
             return d[curIndex];
         }
         else{
@@ -202,27 +201,25 @@ function accessor(curIndex) {
 //=============================================================================
 function generateCharts(cleanData){
     var cf = crossfilter(cleanData);
-    subCharts = [];
+
     // generate the different dimensions
     var leftYAxisLabel = "";
     var rightYAxisLabel = "";
-    var groups = [];
+
     for(var i=0; i < metaData.streams.length; i++){
         var tsName = 'ts_'+metaData.streams[i].sid;
-        var dim = cf.dimension(accessor(tsName)).filter(function(d) {
-                return (typeof d !== 'undefined');
-            });
+        var dim = cf.dimension(accessor(tsName));
 
-        var fieldIndex = metaData.streams[i].field+"_"+metaData.streams[i].sid;
+        var fieldIndex = "value"+"_"+metaData.streams[i].sid;
 
-        groups.push(dim.group().reduceSum(accessor(fieldIndex)));
+        var groups = dim.group().reduceSum(accessor(fieldIndex));
 
 
         var chartHandle = dc.lineChart(compositeChartHandle);
 
         chartHandle
             .dimension(dim)
-            .group(groups[i], metaData.streams[i].topic + ' - ' + metaData.streams[i].msgname+"("+metaData.streams[i].sid+")")
+            .group(groups, metaData.streams[i].topic + ' - ' + metaData.streams[i].msgname+"("+metaData.streams[i].sid+")")
             .colors(streamColors[i])
             .title(function(d) { return d.key + ": " + d.value; });
 
@@ -247,14 +244,14 @@ function generateCharts(cleanData){
     compositeChartHandle
         .width(xs*0.7)
         .height(ys*0.6)
-        .x(d3.time.scale().domain([currentRange.start, currentRange.end]))
+        .x(d3.time.scale().domain([currentRange.start, moment(currentRange.end).add(1,'days').toDate()]))
         .elasticY(true)
         .xAxisLabel('Time(s)')
         .brushOn(false)
         .mouseZoomable(true)
         .rightYAxisLabel(rightYAxisLabel)
         .yAxisLabel(leftYAxisLabel)
-        .legend(dc.legend().x(xs*0.25).y(ys*0.4).itemHeight(16).gap(4))
+        .legend(dc.legend().x(xs*0.42).y(ys*0).itemHeight(16).gap(4))
         .margins({top: 40, right: 60, bottom: 40, left: 40})
         .renderHorizontalGridLines(true)
         .renderVerticalGridLines(true)
