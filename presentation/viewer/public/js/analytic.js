@@ -85,10 +85,10 @@ function deriveRange(start, end){
     var dateFormat = d3.time.format.iso;
     s = dateFormat.parse(start.toDate())
     e = dateFormat.parse(end.toDate())
-    diff = e-s;
-    if (diff === 0){
-        e = dateFormat.parse(moment(end).add(1,'days'));
-    }
+    // diff = e-s;
+    // if (diff === 0){
+    //     e = dateFormat.parse(moment(end).add(1,'days'));
+    // }
     currentRange.start = s;
     currentRange.end = e;
 }
@@ -99,6 +99,8 @@ function deriveRange(start, end){
 //=============================================================================
 function loadDateRangePicker(unique_dates){
     var valid_dates = Object.keys(unique_dates);
+    valid_dates.sort();
+    console.log(valid_dates[valid_dates.length-1]);
     deriveRange(moment(valid_dates[valid_dates.length-1]), moment(valid_dates[valid_dates.length-1]));
     $('input[name="daterange"]').daterangepicker(
     {
@@ -250,7 +252,7 @@ function generateCharts(cleanData){
         .mouseZoomable(true)
         .rightYAxisLabel(rightYAxisLabel)
         .yAxisLabel(leftYAxisLabel)
-        .legend(dc.legend().x(xs*0.25).y(ys*0.4).itemHeight(16).gap(4))
+        .legend(dc.legend().x(xs*0.42).y(0).itemHeight(16).gap(4))
         .margins({top: 40, right: 60, bottom: 40, left: 40})
         .renderHorizontalGridLines(true)
         .renderVerticalGridLines(true)
