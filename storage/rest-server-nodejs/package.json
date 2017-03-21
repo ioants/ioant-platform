@@ -4,7 +4,7 @@
   "main": "restserver.js",
   "scripts": {
     "test": "NODE_ENV=test ./node_modules/.bin/mocha --reporter spec",
-    "copy-proto": "cp ../../common/proto/messages.proto proto/.",
+    "copy-proto": "python proto_generator.py",
     "start": "node restserver.js",
     "build": "npm run copy-proto",
     "watch": "npm run copy-proto && npm run start",
