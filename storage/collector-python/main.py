@@ -19,7 +19,6 @@ def init_ascii():
 ========================================================================="
     return message
 
-relative_path_steps = "../../../../../"
 
 if __name__ == "__main__":
     print(init_ascii())
@@ -28,7 +27,7 @@ if __name__ == "__main__":
     configuration_path = utils.return_absolut_path(os.path.dirname(__file__),
                                                    'configuration.json')
     configuration = utils.fetch_json_file_as_dict(configuration_path)
-    db_schema_path = utils.return_absolut_path(script_dir, relative_path_steps
+    db_schema_path = utils.return_absolut_path(script_dir, "../"
                                                + "storage/schema.json")
     schema = utils.fetch_json_file_as_dict(db_schema_path)
     collector.setup(configuration, schema)
