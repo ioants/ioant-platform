@@ -5,7 +5,7 @@ import os
 import logging
 
 logging.basicConfig(filename='logs/output.log',
-                    level=logging.INFO,
+                    level=logging.DEBUG,
                     format='%(asctime)s %(name)-5s %(levelname)-8s %(message)s',
                     datefmt='%m-%d %H:%M')
 console = logging.StreamHandler()

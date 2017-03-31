@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 def setup(configuration, schema):
-    ioant.setup(configuration)
+
     db_host = configuration['mysqlDatabase']['host']
     db_user = configuration['mysqlDatabase']['user']
     db_password = configuration['mysqlDatabase']['password']
@@ -26,12 +26,17 @@ def setup(configuration, schema):
                                   db_password)
 
     if db_helper.connect_to_mysql_database():
-        if db_helper.does_database_exist():
-            db_helper.disconnect_from_mysql()
-        else:
-            logger.info("Database:" + db_name + " does not exist. Create it using db-creator.py")
+        logger.info("Connected to database")
     else:
-        logger.error("Could not connect to database. Please check username, password and host")
+        logger.info("Database did not exist or wrong user or password")
+        db_helper.connect_to_mysql()
+        if db_helper.create_database():
+            db_helper.create_database_tables()
+        else:
+            logger.error("Failed to create database")
+        db_helper.disconnect_from_mysql()
+
+    ioant.setup(configuration)
 
 
 def loop():
