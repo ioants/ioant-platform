@@ -16,10 +16,11 @@ def setup(configuration, schema):
     db_host = configuration['mysqlDatabase']['host']
     db_user = configuration['mysqlDatabase']['user']
     db_password = configuration['mysqlDatabase']['password']
-    db_name = schema['database']['name']
+    db_name = configuration['mysqlDatabase']['name']
 
     global db_helper
-    db_helper = db.DatabaseHelper(schema,
+    db_helper = db.DatabaseHelper(db_name,
+                                  schema,
                                   db_host,
                                   db_user,
                                   db_password)

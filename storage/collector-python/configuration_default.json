@@ -18,6 +18,7 @@
     },
     "mysqlDatabase" : {
         "host": "localhost",
+        "name" : "db_name",
         "user" : "",
         "password" : ""
     }
