@@ -28,7 +28,7 @@ if __name__ == "__main__":
                                                    'configuration.json')
     configuration = utils.fetch_json_file_as_dict(configuration_path)
     db_schema_path = utils.return_absolut_path(script_dir, "../"
-                                               + "storage/schema.json")
+                                               + "schema.json")
     schema = utils.fetch_json_file_as_dict(db_schema_path)
     collector.setup(configuration, schema)
     logging.info('Application running')
