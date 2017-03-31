@@ -22,10 +22,16 @@ def init_ascii():
 
 if __name__ == "__main__":
     print(init_ascii())
+    number_of_arguments = len(sys.argv)
+    argument_list = sys.argv
     logging.info('Starting application')
     script_dir = os.path.dirname(os.path.realpath(__file__))
-    configuration_path = utils.return_absolut_path(os.path.dirname(__file__),
-                                                   'configuration.json')
+    if number_of_arguments is not 1:
+        configuration_path = utils.return_absolut_path(os.path.dirname(__file__),
+                                                       argument_list[1])
+    else:
+        configuration_path = utils.return_absolut_path(os.path.dirname(__file__),
+                                                       'configuration.json')
     configuration = utils.fetch_json_file_as_dict(configuration_path)
     db_schema_path = utils.return_absolut_path(script_dir, "../"
                                                + "schema.json")
