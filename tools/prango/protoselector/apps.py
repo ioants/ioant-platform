@@ -1,14 +1,10 @@
 from __future__ import unicode_literals
 
 from django.apps import AppConfig
-import ioant.proto.proto as proto
+import ioant.proto as proto
 from ioant.utils import utils
 import os
 import sys
-
-
-python_proto_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                            '../../../common/proto/'))
 
 output_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                             'generated_proto/'))
@@ -24,5 +20,4 @@ class ProtoselectorConfig(AppConfig):
     name = 'protoselector'
     def ready(self):
         print "Running proto generation:"
-        proto.python_main(python_proto_path,
-                          output_path)
+        proto.python_main(output_path)

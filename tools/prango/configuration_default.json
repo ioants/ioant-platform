@@ -1,5 +1,4 @@
 {
-    "os" : "linux",
     "mqtt" : {
         "mqttClientId" : "prango",
         "broker" : "thisIsYourBrokerDomainAddressOrIp",
