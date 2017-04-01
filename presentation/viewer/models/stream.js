@@ -13,7 +13,7 @@ var moment = require('moment');
 
 let rest_api_request;
 let request_stream_options;
-Loader.load('./configuration.json', 'configuration').then((config) => {
+Loader.getLoadedAsset('configuration').then((config) => {
     rest_api_request = config.restApiServer.url + ":" + config.restApiServer.port;
     request_stream_options = {
      method: 'GET',

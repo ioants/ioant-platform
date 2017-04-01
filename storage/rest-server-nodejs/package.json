@@ -1,6 +1,6 @@
 {
   "name": "rest-server-ioant",
-  "version": "0.1.0",
+  "version": "0.1.5",
   "main": "restserver.js",
   "scripts": {
     "test": "NODE_ENV=test ./node_modules/.bin/mocha --reporter spec",

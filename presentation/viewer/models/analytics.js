@@ -14,7 +14,7 @@ var Promise = require('bluebird');
 var Utils = require('./utils');
 
 let configuration;
-Loader.load('./configuration.json', 'configuration').then((config) => {
+Loader.getLoadedAsset('configuration').then((config) => {
     configuration = config;
 }).catch(function(error){
       Logger.log('error', 'Failed to load asset: configuration');

@@ -13,7 +13,7 @@ const Logger = require('ioant-logger');
 var Loader = require('ioant-loader');
 
 let configuration;
-Loader.load('./configuration.json', 'configuration').then((config) => {
+Loader.getLoadedAsset('configuration').then((config) => {
     configuration = config;
 }).catch(function(error){
       Logger.log('error', 'Failed to load asset: configuration');
@@ -27,7 +27,7 @@ var streamSetting = {
                      viewNumberOfDays: 1,
                      dataTable : {
                         tableTitle: "Table title",
-                        show : streamOptions.getStreamBooleans(),
+                        show : true,
                         maxNumberOfRows : 10
                      },
                      subcharts : {}
@@ -73,10 +73,7 @@ function convertValue(key, value){
         value = parseInt(value);
     }
     else if(typeof fieldMetaList[key][1] === 'boolean'){
-        if (value == 'true')
-            value = true;
-        else if (value == 'false')
-            value = false;
+        value = value;
     }
     else if (typeof fieldMetaList[key][1] === 'object'){
         value = {};
@@ -93,30 +90,31 @@ function populateDocument(queryResults){
     documentToStore['streamId'] =  convertValue("streamId", queryResults["streamId"]);
 
     for(var key in streamSetting){
+        console.log(key+':'+ queryResults[key])
         documentToStore[key] = convertValue(key, queryResults[key]);
     }
 
-    if (documentToStore['presentationTemplate'] == 'chart') {
-        for(var key in streamSetting.dataTable){
-            documentToStore['dataTable'][key] = convertValue(key, queryResults[key]);
-        }
+    for(var key in streamSetting.dataTable){
+        console.log(key+':'+ queryResults[key])
+        documentToStore['dataTable'][key] = convertValue(key, queryResults[key]);
+    }
 
-        documentToStore['subcharts'] = [];
-        var currentIndex = -1;
-        var i = -1;
-        for(var key in queryResults){
-            var res = key.split("_");
-            if (res.length > 1){
-                if (currentIndex != res[1]){
-                    currentIndex = res[1];
-                    i++;
-                    documentToStore['subcharts'].push({})
-                }
-                let value = convertValue(res[0], queryResults[key]);
-                documentToStore['subcharts'][i][res[0]] = value;
+    documentToStore['subcharts'] = [];
+    var currentIndex = -1;
+    var i = -1;
+    for(var key in queryResults){
+        var res = key.split("_");
+        if (res.length > 1){
+            if (currentIndex != res[1]){
+                currentIndex = res[1];
+                i++;
+                documentToStore['subcharts'].push({})
             }
+            let value = convertValue(res[0], queryResults[key]);
+            documentToStore['subcharts'][i][res[0]] = value;
         }
     }
+
 
     console.log(documentToStore)
     return documentToStore;
@@ -144,6 +142,15 @@ exports.get = function(streamId, messageType, cb) {
 };
 
 exports.save = function(req, cb) {
+
+    if (req.query.show == 'on'){
+        console.log('exists')
+        req.query.show = true;
+    }
+    else{
+        console.log('did not exist')
+        req.query.show = false;
+    }
     var documentToStore = populateDocument(req.query);
 
     var collection = db.get().collection(configuration.mongoDbServer.streamConfigurationCollectionName)

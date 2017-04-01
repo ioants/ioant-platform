@@ -112,7 +112,6 @@ function setPresentationTemplateFields (template){
             parseObject($('#dataTableArea'), streamFields.dataTable, streamFields.dataTable, -1);
         }
         else {
-            console.log(storedSettings);
             parseObject($('#dataTableArea'), storedSettings.dataTable, storedSettings.dataTable, -1);
         }
 
@@ -180,12 +179,7 @@ function parseObject(formHandle, settingFound, objectFields, index){
             formHandle.append("<input type='text' name='"+key+index+"' value='"+fieldValue+"'/>");
         }
         else if (typeof objectFields[key] === 'boolean'){
-            if (fieldValue === null)
-            {
-                fieldValue = true;
-            }
-
-            if (fieldValue){
+            if (objectFields[key]){
                 formHandle.append("<input type='checkbox' name='"+key+index+"'  checked/>");
             }
             else{

@@ -14,10 +14,23 @@ var modelIndex = require('./models/index.js');
 
 // Set up express
 var app = express();
-app.use(require('./controllers'));
+
+
+// Determine what configuration file to load
+var configuration_path = 'configuration.json';
+
+if (typeof process.argv[2] !== 'undefined'){
+    //IF started with npm without specifying configuration file, then argv[2] will be 'index.js'
+    if (process.argv[2] !== 'index.js'){
+        Logger.log('info', "Started with configuration file:", {file:process.argv[2]});
+        configuration_path = process.argv[2];
+    }
+}
+///
 
 var startApplication = function(port){
     Logger.log('info', 'Starting application');
+    app.use(require('./controllers'));
     var server = app.listen(port, function () {
         var host = server.address().address;
         var port = server.address().port;
@@ -27,7 +40,7 @@ var startApplication = function(port){
 }
 
 var main = function(){
-    var p1 = Loader.load("./configuration.json", "configuration").then(function(configuration) {
+    var p1 = Loader.load(configuration_path, "configuration").then(function(configuration) {
                 Logger.log('info', 'Loaded configuration!', {configuration:configuration});
                 loaded_configuration = configuration;
            }).catch(function(error){

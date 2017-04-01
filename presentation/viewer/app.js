@@ -6,7 +6,7 @@
  *  Main file for Viewer application
  */
  var Logger = require('ioant-logger');
- Logger.setup('logs/', 'error', 'error', 'error');
+ Logger.setup('logs/', 'info', 'info', 'info');
  var Proto = require('ioant-proto');
  var Loader = require('ioant-loader');
 
@@ -18,21 +18,33 @@ var express = require('express')
 
 var db = require('./db')
 
-app.engine('pug', require('pug').__express)
-app.set('view engine', 'pug')
-app.use(express.static(__dirname + '/public'))
-app.use(require('./controllers'))
-
 var Promise = require('bluebird');
 
+// Determine what configuration file to load
+var configuration_path = 'configuration.json';
+
+if (typeof process.argv[2] !== 'undefined'){
+    //IF started with npm without specifying configuration file, then argv[2] will be 'index.js'
+    if (process.argv[2] !== 'index.js'){
+        Logger.log('info', "Started with configuration file:", {file:process.argv[2]});
+        configuration_path = process.argv[2];
+    }
+}
+///
 
 var setup = function() {
-    var p1 = Loader.load('configuration.json', 'configuration');
 
+    var p1 = Loader.load(configuration_path, 'configuration');
     var p2 = Proto.loadProtoDefinition();
 
     return Promise.join(p1, p2, function(configuration, proto) {
         Logger.log('info', "Starting application");
+
+        app.engine('pug', require('pug').__express)
+        app.set('view engine', 'pug')
+        app.use(express.static(__dirname + '/public'))
+        app.use(require('./controllers'))
+
         startApplication(configuration);
     });
 }
