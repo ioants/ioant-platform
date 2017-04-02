@@ -25,7 +25,7 @@ SECRET_KEY = 'ykdcf@^*&0z(bu)o@23qb@9t72y6dz4u2p3fvvu!z&xf88xt5h'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ioant.com', 'localhost', '127.0.0.1', 'broker.codeterrific.com']
+ALLOWED_HOSTS = ['ioant.com', 'localhost', '127.0.0.1', 'broker.codeterrific.com', 'bsaxen.ioant.com', 'kilsslakteri.ioant.com']
 
 
 # Application definition
