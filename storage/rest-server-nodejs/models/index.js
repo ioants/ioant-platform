@@ -50,7 +50,7 @@ exports.loadAssets = function(){
                host     : loaded_configuration.mysqlDatabase.host,
                user     : loaded_configuration.mysqlDatabase.user,
                password : loaded_configuration.mysqlDatabase.password,
-               database : loaded_schema.database.name,
+               database : loaded_configuration.mysqlDatabase.name,
                debug    : false
         });
 

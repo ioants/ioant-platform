@@ -1,9 +1,8 @@
 {
     "mysqlDatabase" : {
         "host": "localhost",
-        "name": "dbname",
-        "user" : "dbUser",
-        "password" : "myDBPassword"
+        "user" : "root",
+        "password" : "lember34"
     },
     "restApiNodejs" : {
         "port": 1881,
