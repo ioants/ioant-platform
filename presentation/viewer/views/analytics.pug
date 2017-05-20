@@ -1,0 +1,55 @@
+extend default
+
+
+block content
+    link(rel="stylesheet", type="text/css" href="/lib/css/magnific-popup.css")
+    #analyticsBox(class="white-popup mfp-hide")
+        .form-nab
+            h2="Add analytics"
+            form(id="analyticsForm", method="get")
+                #analyticFields
+                #selectedStreams
+                br
+                br
+                input(type="submit", value="Save analytic")
+        #streamList
+
+    h1.
+        Analytics
+    a(href="#analyticsBox", class="addAnalyticLink")
+        img(src="img/icons/noun_860135_cc.png", class="addAnalyticImage", title="Add analytic" style="cursor: pointer;")
+
+    .stable
+        .srow.header.green
+            .scell.
+                Name
+            .scell.
+                Number of Streams
+            .scell.
+                Message types
+            .scell
+
+
+        each analytic in analytics
+            .srow
+                .scell(onclick="location.href='/analytic?aid="+analytic._id+"'", style="cursor: pointer;")
+                    |#{analytic.name}
+                .scell(onclick="location.href='/analytic?aid="+analytic._id+"'", style="cursor: pointer;")
+                    | #{analytic.number_of_streams}
+                .scell(onclick="location.href='/analytic?aid="+analytic._id+"'", style="cursor: pointer;")
+                    each stream in analytic.streams
+                        img(src=stream.icon_ref, class="analyticTypeIcons")
+                .scell(style="cursor: pointer;")
+                    a(class="removeAnalytic" data-id=analytic._id)
+                        img(src="/img/icons/noun_30090_cc.png", class="removeAnalyticIcon")
+
+
+    script(type="text/javascript", src="/lib/js/jquery.magnific-popup.min.js")
+    script(type="text/javascript", src="/js/utils.js")
+    script(type="text/javascript", src="/js/analytics.js")
+
+    script.
+        $('.addAnalyticLink').magnificPopup({
+              type:'inline',
+              midClick: true
+        });

@@ -12,8 +12,14 @@ block content
                 br
                 br
                 input(type="submit", value="Save settings")
-    h1.
-        Streams
+    #streamsfilter
+        #streamsTitle
+            h1.
+                Streams
+        img(src="img/icons/performance-clock-speed.svg", class="filterIcons oldStreamsIcon" title="Show old streams", data-isactive=0, style="opacity:0.5")
+        img(src="img/icons/layers-icon.png", class="filterAllIcons" title="Filter all")
+        each msg_type in message_type_list
+            img(src=msg_type.image_type_url, class="filterIcons" title=msg_type.message_name, data-msgtype=msg_type.message_type, data-isactive=1)
     .stable
         .srow.header
             .scell.
@@ -25,16 +31,20 @@ block content
             .scell.
                 Client
             .scell.
-                index
+                Index
             .scell.
                 Lastest value
             .scell.
-                Lastest value - timestamp
+                Lastest value - date
             .scell.
 
-
         each stream in streamlist
-            .srow
+            - var isOld = 1
+            - var styleHidden = "display:none;"
+            if stream.ts_diff < 24
+                - isOld=0
+                - styleHidden = "display:table-row;"
+            .srow(data-msgtype=stream.message_type, data-isOld=isOld, style=styleHidden)
                 .scell(onclick="location.href='/stream?sid="+stream.sid+"&mid="+stream.message_type+"&startdate="+stream.latest_value_date+"';", style="cursor: pointer;")
                     img(src=stream.image_type_url, class="imageIcons" title=stream.message_name)
                 .scell(onclick="location.href='/stream?sid="+stream.sid+"&mid="+stream.message_type+"&startdate="+stream.latest_value_date+"';", style="cursor: pointer;")
@@ -51,7 +61,7 @@ block content
                 else
                     .scell(onclick="location.href='/stream?sid="+stream.sid+"&mid="+stream.message_type+"&startdate="+stream.latest_value_date+"';", style="cursor: pointer;")
                         | #{stream.latest_value}
-                if stream.ts_diff < 1
+                if stream.ts_diff < 24
                     .scell(onclick="location.href='/stream?sid="+stream.sid+"&mid="+stream.message_type+"&startdate="+stream.latest_value_date+"';", style="cursor: pointer;")
                         | #{stream.update_ts}
                 else
@@ -62,6 +72,7 @@ block content
                         img(src="/img/icons/action-switches.svg", class="imageIcons", style="cursor: pointer;")
 
         script(type="text/javascript", src="/lib/js/jquery.magnific-popup.min.js")
+        script(type="text/javascript", src="/js/streams.js")
         script(type="text/javascript", src="/js/settings.js")
 
         script.

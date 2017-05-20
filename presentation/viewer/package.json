@@ -1,12 +1,12 @@
 {
   "name": "viewer",
-  "version": "0.4.0",
+  "version": "0.6.1",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build-css": "stylus views/stylesheets/index.styl -o public/css",
-    "watch-css": "stylus views/stylesheets/index.styl -o public/css -w",
-    "copy-proto": "cp ../../common/proto/messages.proto proto/.",
+    "build-css": "stylus views/stylesheets/index.styl -o public/css ",
+    "watch-css": "stylus views/stylesheets/index.styl -o public/css -w ",
+    "copy-proto": "python proto_generator.py",
     "clean": "rm -rf public/css && mkdir -p public/css",
     "build": "npm run clean && npm run build-css ",
     "watch": "npm run clean && npm run copy-proto && npm run watch-css & nodemon app -e js ",
@@ -27,7 +27,10 @@
     "pug": "^2.0.0-beta6",
     "request": "^2.78.0",
     "stylus": "^0.54.5",
-    "winston": "^2.3.0"
+    "winston": "^2.3.0",
+    "ioant-proto" : ">=0.1.1",
+    "ioant-loader": ">=0.1.1",
+    "ioant-logger": ">=0.1.0"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"

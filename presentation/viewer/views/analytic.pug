@@ -1,0 +1,23 @@
+extend default
+
+block content
+    link(rel="stylesheet", type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css")
+
+    // Toolbar
+    label.
+        Select time frame:
+    input(type="text", name="daterange", value="" class="datepicker")
+    label(id="datapoints").
+        Data points:
+    label(id="datapts").
+    // Toolbar - End
+
+    #analytic-chart
+    .clear(style="clear: both;")
+
+    script(type="text/javascript", src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js")
+    script(src="/lib/js/crossfilter.min.js")
+    script(src="/lib/js/d3.js")
+    script(src="/lib/js/dc.js")
+    script(src="/js/utils.js", type='text/javascript')
+    script(src="/js/analytic.js", type='text/javascript')

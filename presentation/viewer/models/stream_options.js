@@ -1,3 +1,9 @@
+/**
+ * @file stream_options.js
+ * @author Adam Saxén
+ *
+ *  Container for available chart types, templates and other options
+ */
 
 var chartTypesOptions = ['line', 'bar'];
 var streamTemplateOptions = ['chart', 'imagegallery'];

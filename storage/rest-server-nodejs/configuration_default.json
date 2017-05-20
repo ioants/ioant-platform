@@ -1,6 +1,7 @@
 {
     "mysqlDatabase" : {
         "host": "localhost",
+        "name": "dbname",
         "user" : "dbUser",
         "password" : "myDBPassword"
     },

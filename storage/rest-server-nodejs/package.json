@@ -1,13 +1,14 @@
 {
   "name": "rest-server-ioant",
-  "version": "0.1.0",
+  "version": "0.1.5",
   "main": "restserver.js",
   "scripts": {
     "test": "NODE_ENV=test ./node_modules/.bin/mocha --reporter spec",
-    "copy-proto": "cp ../../common/proto/messages.proto proto/.",
-    "start": "nodejs restserver.js",
+    "copy-proto": "python proto_generator.py",
+    "start": "node restserver.js",
     "build": "npm run copy-proto",
-    "debug": "NODE_ENV=development && nodejs restserver.js"
+    "watch": "npm run copy-proto && npm run start",
+    "debug": "NODE_ENV=development && node restserver.js"
   },
   "author": "Adam Saxén",
   "license": "MIT",
@@ -17,12 +18,15 @@
     "chai-as-promised": "^6.0.0",
     "express": "^4.10.6",
     "mocha": "^3.2.0",
-    "moment": "^2.4.0",
+    "moment": ">=2.16.0",
     "mysql": "^2.5.4",
     "protobufjs": "^6.5.2",
     "request": "^2.79.0",
     "sinon": "^1.17.7",
     "sinon-as-promised": "^4.0.2",
-    "winston": "^2.3.0"
+    "winston": "^2.3.0",
+    "ioant-proto" : ">=0.1.1",
+    "ioant-loader": ">=0.1.1",
+    "ioant-logger": ">=0.1.0"
   }
 }

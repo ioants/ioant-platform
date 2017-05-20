@@ -1,12 +1,13 @@
 {
-    "os": "linux",
     "port": 8080,
     "restApiServer": {
         "url" : "http://domain.com",
         "port": 1881
     },
     "mongoDbServer": {
-        "port": 11510,
-        "streamConfigurationCollectionName" : "StreamConfiguration"
+        "port": 27017,
+        "database": "viewer",
+        "streamConfigurationCollectionName" : "StreamConfiguration",
+        "analyticsCollectionName" : "AnalyticsStreams"
     }
 }

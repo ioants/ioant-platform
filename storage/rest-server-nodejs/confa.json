@@ -1,0 +1,11 @@
+{
+    "mysqlDatabase" : {
+        "host": "localhost",
+        "user" : "root",
+        "password" : "lember34"
+    },
+    "restApiNodejs" : {
+        "port": 1881,
+        "connectionlimit": 10
+    }
+}
