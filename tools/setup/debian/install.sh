@@ -26,37 +26,36 @@ EOF
 }
 
 base() {
-    sudo apt install -y python-dev
-    sudo apt install -y python-pip
-    sudo apt install -y protobuf-compiler
-    sudo apt install -y npm
-    sudo pip install --upgrade pip
-    sudo npm install npm@latest -g
-    sudo npm install -g n
-    sudo n stable
-    sudo apt install -y protobuf-compiler
+    sudo apt-get install -y python-dev 1>/dev/null
+    sudo apt-get install -y python-pip 1>/dev/null
+    sudo apt-get install -y protobuf-compiler 1>/dev/null
+    sudo apt-get install -y npm 1>/dev/null
+    sudo pip install --upgrade pip 1>/dev/null
+    sudo npm install -g n 1>/dev/null
+    sudo n stable 1>/dev/null
+    sudo apt-get install -y protobuf-compiler 1>/dev/null
 }
 
 platform() {
     # install mysql server
-    sudo apt install -y mysql-server
+    sudo apt-get install -y mysql-server 1>/dev/null
     # install mongodb
-    sudo apt install -y mongodb
+    sudo apt-get install -y mongodb 1>/dev/null
     # install dev mysql
-    sudo apt-get install -y libmysqlclient-dev
+    sudo apt-get install -y libmysqlclient-dev 1>/dev/null
     # install pm2 process manager
-    sudo npm install -g pm2
+    sudo npm install -g pm2 1>/dev/null
 }
 
 broker() {
-    apt-get install -y mosquitto
+    sudo apt-get install -y mosquitto 1>/dev/null
     # TODO add mosquitto_passwd to add users here
 }
 
 virtualenv() {
     # Virtual environment set up
-    sudo pip install virtualenv
-    sudo pip install virtualenvwrapper
+    sudo pip install virtualenv 1>/dev/null
+    sudo pip install virtualenvwrapper 1>/dev/null
 
     file="$HOME/.bashrc"
     if [ -f "$file" ]
@@ -82,10 +81,6 @@ virtualenv() {
     echo "Virtualenv installed. Restart terminal"
 }
 
-## Step one install base dependencies
-base
-
-## Install addiotional dependencies based on options
 while [ $# -gt 0 ]; do
     case $1 in
         --help)
@@ -93,19 +88,49 @@ while [ $# -gt 0 ]; do
             exit 1
             ;;
         --platform)
-            echo '# Platform install'
-            platform
+            platform_s=1
             ;;
         --broker)
-            echo '# Broker install'
-            broker
+            broker_s=1
             ;;
         --virtualenv)
-            echo '# Virtualenv install'
-            virtualenv
+            virtualenv_s=1
             ;;
         *)
             usage
     esac
     shift
 done
+
+echo '# Installing base requirements'
+
+read -n1 -p "Proceed? (Y/n)" decision
+case $decision in
+  y|Y) printf ' \n Seleceted: yes \n' ;;
+  n|N)
+    printf ' \n Selected: no \n'
+    exit 1
+    ;;
+  *)
+    printf ' \n Seleceted: yes \n'
+    ;;
+esac
+
+echo 'Working...'
+base
+echo '# Base installed'
+
+if ! [ -z ${platform_s+x} ]; then
+    echo '# Platform install'
+    platform
+fi
+
+if ! [ -z ${broker_s+x} ]; then
+    echo '# Broker install'
+    broker
+fi
+
+if ! [ -z ${virtualenv_s+x} ]; then
+    echo '# Virtualenv install'
+    virtualenv
+fi
