@@ -11,6 +11,7 @@ var streamOptions = require('./stream_options');
 var Proto = require('ioant-proto');
 const Logger = require('ioant-logger');
 var Loader = require('ioant-loader');
+var deepcopy = require("deepcopy");
 
 let configuration;
 Loader.getLoadedAsset('configuration').then((config) => {
@@ -90,12 +91,10 @@ function populateDocument(queryResults){
     documentToStore['streamId'] =  convertValue("streamId", queryResults["streamId"]);
 
     for(var key in streamSetting){
-        console.log(key+':'+ queryResults[key])
         documentToStore[key] = convertValue(key, queryResults[key]);
     }
 
     for(var key in streamSetting.dataTable){
-        console.log(key+':'+ queryResults[key])
         documentToStore['dataTable'][key] = convertValue(key, queryResults[key]);
     }
 
@@ -114,10 +113,22 @@ function populateDocument(queryResults){
             documentToStore['subcharts'][i][res[0]] = value;
         }
     }
-
-
-    console.log(documentToStore)
     return documentToStore;
+}
+
+
+function determineStreamTypes(message_type){
+    let template = deepcopy(streamSetting.presentationTemplate);
+    switch (parseInt(message_type)) {
+        case Proto.enumerate('GpsCoordinates'):
+            template.push('map');
+            break;
+        case Proto.enumerate('Image'):
+            template.push('imagegallery');
+            break;
+        default:
+    }
+    return template;
 }
 
 exports.get = function(streamId, messageType, cb) {
@@ -125,14 +136,17 @@ exports.get = function(streamId, messageType, cb) {
         subchartSetting.fieldName = Object.keys(message.fields);
         var collection = db.get().collection(configuration.mongoDbServer.streamConfigurationCollectionName)
         collection.findOne({streamId: parseInt(streamId)}, function (err, config) {
+              let template = determineStreamTypes(messageType);
+              let newStreamSettings = deepcopy(streamSetting);
+              newStreamSettings.presentationTemplate = template;
               if (config !== null){
                   Logger.log('debug', 'Configuartion found', {messageType:messageType, streamId: streamId});
-                  cb(err, {settingFound: config, fieldMetaList: fieldMetaList, streamSetting: streamSetting, subchartSetting: subchartSetting});
+                  cb(err, {settingFound: config, fieldMetaList: fieldMetaList, streamSetting: newStreamSettings, subchartSetting: subchartSetting});
               }
               else{
                   Logger.log('debug', 'No configuartion found', {messageType:messageType, streamId: streamId});
                   cb(err, {settingFound: false, fieldMetaList: fieldMetaList,
-                                                streamSetting: streamSetting,
+                                                streamSetting: newStreamSettings,
                                                 subchartSetting: subchartSetting});
               }
         });
@@ -141,14 +155,13 @@ exports.get = function(streamId, messageType, cb) {
     });
 };
 
+
 exports.save = function(req, cb) {
 
     if (req.query.show == 'on'){
-        console.log('exists')
         req.query.show = true;
     }
     else{
-        console.log('did not exist')
         req.query.show = false;
     }
     var documentToStore = populateDocument(req.query);

@@ -30,7 +30,6 @@ if (typeof process.argv[2] !== 'undefined'){
         configuration_path = process.argv[2];
     }
 }
-///
 
 var setup = function() {
 

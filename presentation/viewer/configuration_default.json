@@ -9,5 +9,6 @@
         "database": "viewer",
         "streamConfigurationCollectionName" : "StreamConfiguration",
         "analyticsCollectionName" : "AnalyticsStreams"
-    }
+    },
+    "googleAPIKey" : ""
 }

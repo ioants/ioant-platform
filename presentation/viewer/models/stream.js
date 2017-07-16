@@ -13,8 +13,10 @@ var moment = require('moment');
 
 let rest_api_request;
 let request_stream_options;
+let configuration_object;
 Loader.getLoadedAsset('configuration').then((config) => {
     rest_api_request = config.restApiServer.url + ":" + config.restApiServer.port;
+    configuration_object = config;
     request_stream_options = {
      method: 'GET',
      uri: rest_api_request+'/v0.1/streams',
@@ -88,4 +90,8 @@ exports.getDates = function(sid, cb) {
         }
         cb(error, response, streamDates);
      });
+}
+
+exports.getConfiguration = function() {
+    return configuration_object;
 }

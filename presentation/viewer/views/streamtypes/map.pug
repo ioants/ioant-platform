@@ -1,0 +1,15 @@
+extend ../stream
+
+block streamarea
+    h1(id="gTitle")
+    div(id="floating-panel")
+        button(onclick="toggleHeatmap()") Toggle HeatMap
+        button(onclick="toggleMarkers()") Toggle Markers
+        button(onclick="toggleLine()") Toggle Line
+    div(id="map")
+    script(type="text/javascript", src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js")
+    script(src="/js/utils.js", type='text/javascript')
+    script(src="/js/streamtypes/map.js", type='text/javascript')
+    script(src="/js/stream.js", type='text/javascript')
+    if config.googleAPIKey
+        script(async, defer, src='https://maps.googleapis.com/maps/api/js?key='+config.googleAPIKey+'&callback=initMap&libraries=visualization', type='text/javascript')

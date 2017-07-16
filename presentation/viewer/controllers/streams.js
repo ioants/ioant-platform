@@ -27,7 +27,6 @@ router.get('/', function(req, res) {
 })
 
 
-
 router.get('/list', function(req, res) {
   Stream.all(function(err, streams) {
       if (typeof streams !== 'undefined' ){
@@ -58,7 +57,7 @@ router.get('/settings', function(req, res) {
                               res.json(settings);
                           }
                           else {
-                              Logger.log('error','Failed to retrieve stream settings.');
+                              Logger.log('error','Failed to retreive stream settings.');
                               res.json(false);
                           }
                       });

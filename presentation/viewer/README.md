@@ -1,5 +1,8 @@
 # Versions
 
+## 0.7.0
+- Add possibility to show GPScoordinates on google map.  
+
 ## 0.5.0
 - A lot of refactoring
     - Now depends on the ioant npm packages

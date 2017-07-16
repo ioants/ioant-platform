@@ -6,7 +6,7 @@
  */
 
 var chartTypesOptions = ['line', 'bar'];
-var streamTemplateOptions = ['chart', 'imagegallery'];
+var streamTemplateOptions = ['chart'];
 var streamBoolean = ['true', 'false'];
 
 exports.getChartTypes = function() {

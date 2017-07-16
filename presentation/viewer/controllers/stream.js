@@ -5,6 +5,7 @@ var express = require('express')
 const Logger = require('ioant-logger');
 
 router.get('/', function(req, res) {
+    let config = Stream.getConfiguration();
     StreamSetting.get( req.query.sid,
                        req.query.mid,
                         function(err, streamSettings) {
@@ -14,7 +15,9 @@ router.get('/', function(req, res) {
                             }
                             else{
                                 Logger.log('info','Get stream configuration success!', {streamSettings: streamSettings});
-                                res.render('streamtypes/'+streamSettings.settingFound.presentationTemplate, {settings: streamSettings.settingFound});
+                                Logger.log('info','Get main config!', {config: config});
+                                res.render('streamtypes/'+streamSettings.settingFound.presentationTemplate, {settings: streamSettings.settingFound,
+                                                                                                             config: config});
                             }
                         });
 })

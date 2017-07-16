@@ -1,6 +1,6 @@
 {
   "name": "viewer",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -15,11 +15,16 @@
   "author": "Adam Saxen",
   "license": "MIT",
   "dependencies": {
+    "@google/maps": "^0.4.2",
     "bluebird": "^3.4.6",
     "child-process-promise": "^2.2.0",
+    "deepcopy": "^0.6.3",
     "express": "^4.14.0",
     "google-protobuf": "^3.1.1",
     "hashcode": "^1.0.3",
+    "ioant-loader": ">=0.1.1",
+    "ioant-logger": ">=0.1.0",
+    "ioant-proto": ">=0.1.1",
     "moment": "^2.16.0",
     "mongodb": "^2.2.11",
     "morgan": "^1.7.0",
@@ -27,10 +32,7 @@
     "pug": "^2.0.0-beta6",
     "request": "^2.78.0",
     "stylus": "^0.54.5",
-    "winston": "^2.3.0",
-    "ioant-proto": ">=0.1.1",
-    "ioant-loader": ">=0.1.1",
-    "ioant-logger": ">=0.1.0"
+    "winston": "^2.3.0"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"
