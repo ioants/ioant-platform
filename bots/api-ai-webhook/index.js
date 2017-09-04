@@ -23,12 +23,37 @@ const bodyParser = require('body-parser');
 const restService = express();
 restService.use(bodyParser.json());
 
+var http = require('http');
+
+function getLatestValue(sid, callback) {
+
+    return http.get({
+        host: 'ioant.com:1881',
+        path: '/v0.1/'+"streams/id/"+Str(sid)+"/data"
+    }, function(response) {
+        // Continuously update stream with data
+        var body = '';
+        response.on('data', function(d) {
+            body += d;
+        });
+        response.on('end', function() {
+
+            // Data reception is done, do whatever with it!
+            var parsed = JSON.parse(body);
+            callback({
+                parsed;
+            });
+        });
+    });
+
+}
+
 restService.post('/', function (req, res) {
 
     console.log('hook request');
 
     try {
-        var speech = 'empty speech';
+        var speech;
 
         if (req.body) {
             var requestBody = req.body;
@@ -41,6 +66,12 @@ restService.post('/', function (req, res) {
                     }
                     if (requestBody.result.action == "light.off") {
                         speech += 'light is now off';
+                    }
+                    if (requestBody.result.action == "power.status") {
+                        getLatestValue(33, function(result){
+
+                            speech = "Power is now:" + result[0].value + " watts";
+                        })
                     }
                 }
             }
