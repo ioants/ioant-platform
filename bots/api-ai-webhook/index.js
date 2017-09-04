@@ -98,7 +98,7 @@ restService.post('/', function (req, res) {
              }
          }
      }
-//        });
+
  } catch (err) {
      console.error("Can't process request", err);
 
@@ -114,4 +114,3 @@ restService.post('/', function (req, res) {
 restService.listen((7777), function () {
  console.log("Server listening");
 });
-                                                                                112,1         Bot
