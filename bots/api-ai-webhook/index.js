@@ -28,8 +28,10 @@ var http = require('http');
 function getLatestValue(sid, callback) {
 
     return http.get({
-        host: 'ioant.com:1881',
-        path: '/v0.1/'+"streams/id/"+Str(sid)+"/data"
+        host: 'ioant.com',
+        //path: '/v0.1/'+"streams/id/"+sid.toString()+"/data&filter=1",
+        path: '/v0.1/streams',
+        port: 1881
     }, function(response) {
         // Continuously update stream with data
         var body = '';
@@ -39,10 +41,13 @@ function getLatestValue(sid, callback) {
         response.on('end', function() {
 
             // Data reception is done, do whatever with it!
+            //console.log(body)
             var parsed = JSON.parse(body);
-            callback({
-                parsed;
-            });
+            for(var i=0; i < parsed.length; i++){
+               if (sid == parsed[i].sid){
+                callback(parsed[i]);
+               }
+            }
         });
     });
 
@@ -53,49 +58,61 @@ restService.post('/', function (req, res) {
     console.log('hook request');
 
     try {
-        var speech;
+     var speech;
 
-        if (req.body) {
-            var requestBody = req.body;
+     if (req.body) {
+         var requestBody = req.body;
 
-            if (requestBody.result) {
+         if (requestBody.result) {
 
-                if (requestBody.result.action) {
-                    if (requestBody.result.action == "light.on") {
-                        speech += 'light is now on';
-                    }
-                    if (requestBody.result.action == "light.off") {
-                        speech += 'light is now off';
-                    }
-                    if (requestBody.result.action == "power.status") {
-                        getLatestValue(33, function(result){
+             if (requestBody.result.action) {
+                 if (requestBody.result.action == "light.on") {
+                     speech += 'light is now on';
+                 }
+                 if (requestBody.result.action == "light.off") {
+                     speech += 'light is now off';
+                 }
+                 if (requestBody.result.action == "astenas.power.status") {
+                     getLatestValue(33, function(result){
 
-                            speech = "Power is now:" + result[0].value + " watts";
-                        })
-                    }
-                }
-            }
-        }
+                         speech = "Power in Astenas is now:" + result.latest_value + " watts";
+                         return res.json({
+                             speech: speech,
+                             displayText: speech,
+                             source: 'apiai-webhook-sample'
+                         });
 
-        console.log('result: ', speech);
+                     })
+                 }
+                 if (requestBody.result.action == "kil.power.status") {
+                     getLatestValue(49, function(result){
 
-        return res.json({
-            speech: speech,
-            displayText: speech,
-            source: 'apiai-webhook-sample'
-        });
-    } catch (err) {
-        console.error("Can't process request", err);
+                         speech = "Power in Kil is now:" + result.latest_value + " watts";
+                         return res.json({
+                             speech: speech,
+                             displayText: speech,
+                             source: 'apiai-webhook-sample'
+                         });
+                     })
+                 }
+             }
+         }
+     }
+: 'apiai-webhook-sample'
+//        });
+ } catch (err) {
+     console.error("Can't process request", err);
 
-        return res.status(400).json({
-            status: {
-                code: 400,
-                errorType: err.message
-            }
-        });
-    }
+     return res.status(400).json({
+         status: {
+             code: 400,
+             errorType: err.message
+         }
+     });
+ }
 });
 
 restService.listen((7777), function () {
-    console.log("Server listening");
+ console.log("Server listening");
 });
+                                                                                112,1         Bot
