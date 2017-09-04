@@ -98,7 +98,6 @@ restService.post('/', function (req, res) {
              }
          }
      }
-: 'apiai-webhook-sample'
 //        });
  } catch (err) {
      console.error("Can't process request", err);
