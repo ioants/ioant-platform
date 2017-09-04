@@ -34,15 +34,14 @@ restService.post('/', function (req, res) {
             var requestBody = req.body;
 
             if (requestBody.result) {
-                speech = '';
-
-                if (requestBody.result.fulfillment) {
-                    speech += requestBody.result.fulfillment.speech;
-                    speech += ' ';
-                }
 
                 if (requestBody.result.action) {
-                    speech += 'action: ' + requestBody.result.action;
+                    if (requestBody.result.action == "light.on") {
+                        speech += 'light is now on';
+                    }
+                    if (requestBody.result.action == "light.off") {
+                        speech += 'light is now off';
+                    }
                 }
             }
         }
