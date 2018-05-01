@@ -1,5 +1,6 @@
 import ioant.proto as proto
 import sys
+import os
 
 file_path = os.path.abspath(os.path.dirname(__file__))
 proto_path = os.path.join("..", "generated_proto")
