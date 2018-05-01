@@ -23,7 +23,7 @@
     "google-protobuf": "^3.1.1",
     "hashcode": "^1.0.3",
     "ioant-loader": ">=0.1.1",
-    "ioant-logger": ">=0.1.0",
+    "ioant-logger": ">=0.1.1",
     "ioant-proto": ">=0.1.1",
     "moment": "^2.16.0",
     "mongodb": "^2.2.11",

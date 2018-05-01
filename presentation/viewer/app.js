@@ -6,7 +6,7 @@
  *  Main file for Viewer application
  */
  var Logger = require('ioant-logger');
- Logger.setup('logs/', 'info', 'info', 'info');
+ Logger.setup(__dirname + 'logs/', 'info', 'info', 'info');
  var Proto = require('ioant-proto');
  var Loader = require('ioant-loader');
 

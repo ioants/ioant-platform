@@ -27,6 +27,6 @@
     "winston": "^2.3.0",
     "ioant-proto" : ">=0.1.1",
     "ioant-loader": ">=0.1.1",
-    "ioant-logger": ">=0.1.0"
+    "ioant-logger": ">=0.1.1"
   }
 }
