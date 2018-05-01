@@ -17,7 +17,7 @@ var app = express();
 
 
 // Determine what configuration file to load
-var configuration_path = __dirname + '/configuration.json';
+var configuration_path = 'configuration.json';
 
 if (typeof process.argv[2] !== 'undefined'){
     //IF started with npm without specifying configuration file, then argv[2] will be 'index.js'
