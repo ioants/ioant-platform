@@ -4,7 +4,9 @@ from ioant import utils
 import os
 import logging
 
-logging.basicConfig(filename='logs/output.log',
+file_path = os.path.abspath(os.path.dirname(__file__))
+
+logging.basicConfig(filename=os.path.join(file_path, "logs") + 'output.log',
                     level=logging.INFO,
                     format='%(asctime)s %(name)-5s %(levelname)-8s %(message)s',
                     datefmt='%m-%d %H:%M')
@@ -26,15 +28,19 @@ if __name__ == "__main__":
     argument_list = sys.argv
     logging.info('Starting application')
     script_dir = os.path.dirname(os.path.realpath(__file__))
+
+
     if number_of_arguments is not 1:
+        configuration_path = os.path.join(file_path, argument_list[1])
         configuration_path = utils.return_absolut_path(os.path.dirname(__file__),
                                                        argument_list[1])
     else:
-        configuration_path = utils.return_absolut_path(os.path.dirname(__file__),
-                                                       'configuration.json')
+        configuration_path = os.path.join(file_path, 'configuration.json')
+
     configuration = utils.fetch_json_file_as_dict(configuration_path)
-    db_schema_path = utils.return_absolut_path(script_dir, "../"
-                                               + "schema.json")
+    db_schema_path = os.path.join(file_path, "..")
+    db_schema_path = os.path.join(db_schema_path, 'schema.json')
+    
     schema = utils.fetch_json_file_as_dict(db_schema_path)
     collector.setup(configuration, schema)
     logging.info('Application running')
