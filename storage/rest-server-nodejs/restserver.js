@@ -8,7 +8,7 @@
 var express = require('express');
 var Promise = require('bluebird');
 const Logger = require('ioant-logger');
-Logger.setup('logs/', 'debug', 'debug', 'debug');
+Logger.setup(__dirname + '/logs/', 'debug', 'debug', 'debug');
 var Loader = require('ioant-loader');
 var modelIndex = require('./models/index.js');
 
